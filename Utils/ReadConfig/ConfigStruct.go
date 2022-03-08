@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:25:31
- * @LastEditTime: 2022-03-08 21:55:24
+ * @LastEditTime: 2022-03-08 22:18:03
  * @LastEditors: NyanCatda
  * @Description: 配置文件结构体
  * @FilePath: \Momizi\Utils\ReadConfig\ConfigStruct.go
@@ -33,9 +33,5 @@ type Config struct {
 			APIToken   string `yaml:"APIToken"`   // Line Bot API Token
 			BotAPILink string `yaml:"BotAPILink"` // Line Bot API地址
 		} `yaml:"Line"`
-		KaiHeiLa struct {
-			Switch   bool   `yaml:"Switch"`   // 开黑啦处理开关
-			APIToken string `yaml:"APIToken"` // 开黑啦Bot API Token
-		} `yaml:"KaiHeiLa"`
 	} `yaml:"ChatSoftware"`
 }
