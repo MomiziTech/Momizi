@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:25:31
- * @LastEditTime: 2022-03-08 21:34:24
+ * @LastEditTime: 2022-03-08 21:55:24
  * @LastEditors: NyanCatda
  * @Description: 配置文件结构体
  * @FilePath: \Momizi\Utils\ReadConfig\ConfigStruct.go
@@ -25,17 +25,17 @@ type Config struct {
 		} `yaml:"QQ"`
 		Telegram struct {
 			Switch     bool   `yaml:"Switch"`     // Telegram处理开关
-			Token      string `yaml:"Token"`      // Telegram Bot Token
+			APIToken   string `yaml:"APIToken"`   // Telegram Bot API Token
 			BotAPILink string `yaml:"BotAPILink"` // Telegram Bot API地址
 		} `yaml:"Telegram"`
 		Line struct {
-			Switch             bool   `yaml:"Switch"`             // Line处理开关
-			ChannelAccessToken string `yaml:"ChannelAccessToken"` // Line账号令牌
-			BotAPILink         string `yaml:"BotAPILink"`         // Line Bot API地址
+			Switch     bool   `yaml:"Switch"`     // Line处理开关
+			APIToken   string `yaml:"APIToken"`   // Line Bot API Token
+			BotAPILink string `yaml:"BotAPILink"` // Line Bot API地址
 		} `yaml:"Line"`
 		KaiHeiLa struct {
-			Switch bool   `yaml:"Switch"` // 开黑啦处理开关
-			Token  string `yaml:"Token"`  // 开黑啦API Token
+			Switch   bool   `yaml:"Switch"`   // 开黑啦处理开关
+			APIToken string `yaml:"APIToken"` // 开黑啦Bot API Token
 		} `yaml:"KaiHeiLa"`
 	} `yaml:"ChatSoftware"`
 }

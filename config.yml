@@ -1,0 +1,22 @@
+# 配置文件示例
+Run:
+  WebHook:
+    Port: 8000
+    Key: 32eeAme5lwEG0KL
+ChatSoftware:
+  QQ:
+    Switch: true
+    APILink: http://127.0.0.1:8888
+    BotQQNumber: 1000000000
+    VerifyKey: 5eadce46qw58
+  Telegram:
+    Switch: true
+    APIToken: 688975899:DDFqpsdMwunUvwAsxzDTzl8z_......
+    BotAPILink: https://api.telegram.org/
+  Line:
+    Switch: true
+    APIToken: Qik9O7sP49vCeY/b6zWaDa0......
+    BotAPILink: https://api.line.me/
+  KaiHeiLa:
+    Switch: true
+    APIToken: 5/SYT1Jxy=/mSkjHYtj......
