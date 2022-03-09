@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-09 16:37:11
+ * @LastEditTime: 2022-03-09 16:50:25
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
@@ -44,8 +44,9 @@ type MessageStruct struct {
 		Username string `json:"username"` // 消息发送者用户名
 		// 群聊信息
 		Group struct {
-			ID    string `json:"id"`    // 群聊ID
-			Title string `json:"title"` // 群聊名称
+			ID      string `json:"id"`       // 群聊ID
+			Title   string `json:"title"`    // 群聊名称
+			IsAdmin string `json:"is_admin"` // 是否为管理员
 		}
 	}
 }
