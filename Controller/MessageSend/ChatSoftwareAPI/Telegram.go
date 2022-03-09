@@ -1,1 +1,5 @@
 package ChatSoftwareAPI
+
+func SendMessage() {
+	
+}
