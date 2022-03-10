@@ -1,10 +1,10 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-09 16:50:25
+ * @LastEditTime: 2022-03-10 14:04:24
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
- * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
+ * @FilePath: /Momizi/Controller/MessageReceiving/MessageReceiving.go
  */
 package MessageReceiving
 
@@ -51,6 +51,11 @@ type MessageStruct struct {
 	}
 }
 
+/**
+ * @description: 消息接收处理
+ * @param {*gin.Context} c
+ * @return {*}
+ */
 func MessageReceiving(c *gin.Context) error {
 	// 解析得到的Json
 	var JsonBody WebHookStruct.WebHook
