@@ -1,12 +1,12 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 15:53:21
- * @LastEditTime: 2022-03-09 15:57:52
+ * @LastEditTime: 2022-03-12 22:43:42
  * @LastEditors: NyanCatda
  * @Description: WebHook解析结构体
- * @FilePath: \Momizi\Controller\MessageReceiving\WebHookStruct\WebHook.go
+ * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Struct\WebHook.go
  */
-package WebHookStruct
+package Struct
 
 type WebHook struct {
 	// 注册TelegramWebHook接收

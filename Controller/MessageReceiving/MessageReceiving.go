@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-09 16:50:25
+ * @LastEditTime: 2022-03-12 22:45:45
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
@@ -11,7 +11,7 @@ package MessageReceiving
 import (
 	"fmt"
 
-	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHookStruct"
+	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
 	"github.com/gin-gonic/gin"
 )
 
@@ -53,7 +53,7 @@ type MessageStruct struct {
 
 func MessageReceiving(c *gin.Context) error {
 	// 解析得到的Json
-	var JsonBody WebHookStruct.WebHook
+	var JsonBody Struct.WebHook
 	if err := c.ShouldBindJSON(&JsonBody); err != nil {
 		return err
 	}

@@ -6,7 +6,7 @@
  * @Description: Telegram WebHook结构体
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHookStruct\Telegram.go
  */
-package WebHookStruct
+package Struct
 
 type Telegram struct {
 	UpdateID int `json:"update_id"` // 更新ID

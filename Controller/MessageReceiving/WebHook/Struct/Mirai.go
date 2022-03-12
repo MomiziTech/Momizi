@@ -1,12 +1,12 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 14:21:12
- * @LastEditTime: 2022-03-09 16:10:06
+ * @LastEditTime: 2022-03-12 22:43:38
  * @LastEditors: NyanCatda
  * @Description: Telegram WebHook结构体
- * @FilePath: \Momizi\Controller\MessageReceiving\WebHookStruct\Mirai.go
+ * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Struct\Mirai.go
  */
-package WebHookStruct
+package Struct
 
 type Mirai struct {
 	Type         string `json:"type"` // 聊天类型，可能类型："FriendMessage"，"GroupMessage"，"TempMessage"，"OtherClientMessage"

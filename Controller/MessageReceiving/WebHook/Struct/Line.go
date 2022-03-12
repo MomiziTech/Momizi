@@ -6,7 +6,7 @@
  * @Description: Line WebHook结构体
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHookStruct\Line.go
  */
-package WebHookStruct
+package Struct
 
 type Line struct {
 	Destination string `json:"destination"` // 消息接收者
