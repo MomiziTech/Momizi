@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 14:21:12
- * @LastEditTime: 2022-03-12 22:43:38
+ * @LastEditTime: 2022-03-12 23:15:11
  * @LastEditors: NyanCatda
  * @Description: Telegram WebHook结构体
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Struct\Mirai.go
