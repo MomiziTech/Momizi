@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-13 00:04:16
+ * @LastEditTime: 2022-03-13 12:33:09
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Mirai.go
@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	SaveFilePath = "data/File/Mirai/"
+	SaveFilePath = "/data/file/Mirai/"
 )
 
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {

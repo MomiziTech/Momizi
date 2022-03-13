@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-12 23:47:49
+ * @LastEditTime: 2022-03-13 12:33:27
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Utils\DownloadFile.go
@@ -31,7 +31,7 @@ func DownloadFile(URL string, SavePath string, timeOut int) (string, int64, erro
 	client := http.Client{
 		Timeout: time.Duration(timeOut) * time.Second,
 	}
-	res, err := client.Get(SavePath)
+	res, err := client.Get(URL)
 	if err != nil {
 		return "", 0, err
 	}
