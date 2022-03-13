@@ -9,6 +9,7 @@ import (
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
 	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
 )
 
@@ -72,7 +73,9 @@ func main() {
 
 	// 注册WebHook接收地址
 	r.POST("/"+WebHookKey, func(c *gin.Context) {
-		MessageReceiving.MessageReceiving(c)
+		if err := MessageReceiving.MessageReceiving(c); err != nil {
+			Log.ErrorWrite(err)
+		}
 	})
 
 	// 启动WebHook接收
