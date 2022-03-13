@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-13 12:33:09
+ * @LastEditTime: 2022-03-13 12:58:53
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Mirai.go
@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	SaveFilePath = "/data/file/Mirai/"
+	SaveFilePath = "data/file/Mirai/"
 )
 
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
@@ -66,7 +66,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		if Message.Type == "Image" {
 			// 将文件下载至本地
 			timeUnix := time.Now().Unix()
-			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", 120)
+			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
 			if err != nil {
 				return MessageStruct.MessageStruct{}, err
 			}
@@ -90,7 +90,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		// 解析语音消息
 		if Message.Type == "Voice" {
 			timeUnix := time.Now().Unix()
-			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", 120)
+			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
 			if err != nil {
 				return MessageStruct.MessageStruct{}, err
 			}

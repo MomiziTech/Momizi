@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-13 12:33:27
+ * @LastEditTime: 2022-03-13 12:55:21
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Utils\DownloadFile.go
@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 	"time"
 )
 
@@ -23,10 +24,12 @@ import (
  * @param {string} SavePath 保存路径
  * @param {int} timeOut 超时时间(秒)
  * @return {string} 文件保存路径
+ * @param {bool} RandomFileName 是否生成随机文件名
+ * @param {int} timeOut 超时时间(秒)
+ * @return {string} 文件保存路径
  * @return {error} 错误信息
  */
-func DownloadFile(URL string, SavePath string, timeOut int) (string, int64, error) {
-	fileName := path.Base(URL)
+func DownloadFile(URL string, SavePath string, RandomFileName bool, timeOut int) (string, int64, error) {
 	//设置超时
 	client := http.Client{
 		Timeout: time.Duration(timeOut) * time.Second,
@@ -44,7 +47,17 @@ func DownloadFile(URL string, SavePath string, timeOut int) (string, int64, erro
 		return "", 0, err
 	}
 
-	FilePath := path.Join(SavePath, fileName)
+	// 按照时间戳生成文件
+	var FileName string
+	if RandomFileName {
+		Time := strconv.FormatInt(time.Now().Unix(), 10)
+		FileSuffix := path.Ext(URL)
+		FileName = Time + FileSuffix
+	} else {
+		FileName = path.Base(URL)
+	}
+
+	FilePath := path.Join(SavePath, FileName)
 	file, err := os.Create(FilePath)
 	if err != nil {
 		return "", 0, err
