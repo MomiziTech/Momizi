@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-09 13:11:32
- * @LastEditTime: 2022-03-14 18:48:53
+ * @LastEditTime: 2022-03-14 19:02:13
  * @LastEdit: McPlus
  * @Description:
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\File.go
@@ -29,11 +29,11 @@ func NewFile(ID string) *File {
 
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getFile"
 
-	DataMap := map[string]string {
+	DataMap := map[string]string{
 		"file_id": ID,
 	}
 
-	Buffer, Response, _:= HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, Response, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
 	var JsonData *File
 	if Response.StatusCode == 200 {
 		json.Unmarshal(Buffer, &JsonData)

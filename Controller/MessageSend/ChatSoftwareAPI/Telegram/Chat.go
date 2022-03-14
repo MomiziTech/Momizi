@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-14 18:56:47
+ * @LastEditTime: 2022-03-14 19:32:56
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -39,6 +39,11 @@ type Chat struct {
 	// PinnedMessage         Message   `json:"pinned_message"`           // Optional. The most recent pinned message (by sending date). Returned only in getChat.
 }
 
+/**
+ * @description: 构建Chat
+ * @param {int} ID ChatID
+ * @return {*Chat}
+ */
 func NewChat(ID int) *Chat {
 	Config := ReadConfig.GetConfig
 
@@ -60,6 +65,11 @@ func NewChat(ID int) *Chat {
 	}
 }
 
+/**
+ * @description: 获取管理员列表
+ * @param {*}
+ * @return {[]ChatMemberAdministrator, error}
+ */
 func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 	Config := ReadConfig.GetConfig
 
@@ -78,5 +88,67 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 		return JsonData, Error
 	} else {
 		return []ChatMemberAdministrator{}, Error
+	}
+}
+
+/**
+ * @description:
+ * @param {string} Text
+ * @param {string} ParseMode *可选
+ * @param {[]MessageEntity} Entities *可选
+ * @param {bool} DisableWebPagePreview *可选
+ * @param {bool} DisableNotification *可选
+ * @param {bool} ProtectContent *可选
+ * @param {int} ReplyToMessaggeID *可选
+ * @param {bool} AllowSendingWithoutReply *可选
+ * @return {*}
+ */
+func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool, DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (Message, error) {
+	DataMap := map[string]string{
+		"text": Text,
+	}
+
+	if ParseMode != "" {
+		DataMap["parse_mode"] = ParseMode
+	}
+
+	if Entities != nil {
+		data, _ := json.Marshal(Entities)
+		DataMap["entities"] = string(data)
+	}
+
+	if DisableWebPagePreview {
+		DataMap["disable_web_page_preview"] = strconv.FormatBool(DisableWebPagePreview)
+	}
+
+	if DisableNotification {
+		DataMap["disable_notification"] = strconv.FormatBool(DisableNotification)
+	}
+
+	if ProtectContent {
+		DataMap["protect_content"] = strconv.FormatBool(ProtectContent)
+	}
+
+	if ReplyToMessaggeID != -1 {
+		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessaggeID)
+	}
+
+	if AllowSendingWithoutReply {
+		DataMap["allow_sending_without_reply"] = strconv.FormatBool(AllowSendingWithoutReply)
+	}
+
+	Config := ReadConfig.GetConfig
+
+	ConfigTelegram := Config.ChatSoftware.Telegram
+
+	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
+
+	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData Message
+	if Response.StatusCode == 200 {
+		json.Unmarshal(Buffer, &JsonData)
+		return JsonData, Error
+	} else {
+		return Message{}, Error
 	}
 }
