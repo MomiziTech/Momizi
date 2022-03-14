@@ -7,7 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
 	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
 )
 
@@ -69,8 +71,11 @@ func main() {
 	Port := Config.Run.WebHook.Port
 	WebHookKey := Config.Run.WebHook.Key
 
+	// 注册WebHook接收地址
 	r.POST("/"+WebHookKey, func(c *gin.Context) {
-		c.String(200, "Hello Momizi!")
+		if err := MessageReceiving.MessageReceiving(c); err != nil {
+			Log.ErrorWrite(err)
+		}
 	})
 
 	// 启动WebHook接收

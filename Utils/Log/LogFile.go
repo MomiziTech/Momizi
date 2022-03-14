@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-08 21:33:08
+ * @LastEditTime: 2022-03-13 12:24:31
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	LogPath = "./Log/backend/"
+	LogPath = "./logs/"
 )
 
 /**
