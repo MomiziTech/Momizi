@@ -1,19 +1,12 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-14 18:06:05
+ * @LastEditTime: 2022-03-14 18:33:32
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
  */
 package Telegram
-
-import (
-	"encoding/json"
-
-	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
-	"github.com/nyancatda/HttpRequest"
-)
 
 type Chat struct {
 	ID                    int             `json:"id"`                       // Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
@@ -38,23 +31,3 @@ type Chat struct {
 	// PinnedMessage         Message   `json:"pinned_message"`           // Optional. The most recent pinned message (by sending date). Returned only in getChat.
 }
 
-func GetAdministrators(ChatID string) ([]ChatMemberAdministrator, error) {
-	Config := ReadConfig.GetConfig
-
-	ConfigTelegram := Config.ChatSoftware.Telegram
-
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
-
-	DataMap := map[string]string{
-		"chat_id": ChatID,
-	}
-
-	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData []ChatMemberAdministrator
-	if Response.StatusCode == 200 {
-		json.Unmarshal(Buffer, &JsonData)
-		return JsonData, Error
-	} else {
-		return []ChatMemberAdministrator{}, Error
-	}
-}
