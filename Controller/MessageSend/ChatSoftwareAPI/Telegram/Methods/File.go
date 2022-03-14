@@ -17,6 +17,6 @@ import (
  * @param {string} FileID
  * @return {FileStruct, error}
  */
-func GetFile(FileID string) (Telegram.File, error) {
-	return Telegram.NewFile(FileID).GetFile()
+func GetFile(FileID string) *Telegram.File {
+	return Telegram.NewFile(FileID)
 }

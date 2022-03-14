@@ -22,11 +22,7 @@ type File struct {
 	Path     string `json:"file_path"`
 }
 
-func NewFile(FileID string) *File {
-	return &File{ID: FileID}
-}
-
-func (f File) GetFile() (File, error) {
+func NewFile(ID string) *File {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -34,15 +30,15 @@ func (f File) GetFile() (File, error) {
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getFile"
 
 	DataMap := map[string]string {
-		"file_id": f.ID,
+		"file_id": ID,
 	}
 
-	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData File
+	Buffer, Response, _:= HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData *File
 	if Response.StatusCode == 200 {
 		json.Unmarshal(Buffer, &JsonData)
-		return JsonData, Error
+		return JsonData
 	} else {
-		return f, Error
+		return &File{}
 	}
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-14 18:45:59
+ * @LastEditTime: 2022-03-14 18:56:47
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -40,7 +40,24 @@ type Chat struct {
 }
 
 func NewChat(ID int) *Chat {
-	return &Chat{ID: ID}
+	Config := ReadConfig.GetConfig
+
+	ConfigTelegram := Config.ChatSoftware.Telegram
+
+	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChat"
+
+	DataMap := map[string]string{
+		"chat_id": strconv.Itoa(ID),
+	}
+
+	Buffer, Response, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData *Chat
+	if Response.StatusCode == 200 {
+		json.Unmarshal(Buffer, &JsonData)
+		return JsonData
+	} else {
+		return &Chat{}
+	}
 }
 
 func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
