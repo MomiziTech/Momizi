@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-13 12:58:53
+ * @LastEditTime: 2022-03-19 16:15:25
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Mirai.go
@@ -18,12 +18,9 @@ import (
 	"github.com/MomiziTech/Momizi/Utils"
 )
 
-var (
-	SaveFilePath = "data/file/Mirai/"
-)
-
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	ChatSoftwareName := "QQ"
+	SaveFilePath := "data/file/Mirai/"
 
 	var Type string
 	switch WebHookJson.Mirai.Type {

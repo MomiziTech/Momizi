@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-13 12:55:21
+ * @LastEditTime: 2022-03-19 16:18:17
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Utils\DownloadFile.go
@@ -27,6 +27,7 @@ import (
  * @param {bool} RandomFileName 是否生成随机文件名
  * @param {int} timeOut 超时时间(秒)
  * @return {string} 文件保存路径
+ * @return {int64} 文件大小
  * @return {error} 错误信息
  */
 func DownloadFile(URL string, SavePath string, RandomFileName bool, timeOut int) (string, int64, error) {
