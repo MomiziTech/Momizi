@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-19 17:33:12
+ * @LastEditTime: 2022-03-19 18:07:03
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -10,7 +10,7 @@ package Telegram
 
 import (
 	"encoding/json"
-	"net/http"
+	"errors"
 	"strconv"
 
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
@@ -43,7 +43,7 @@ type Chat struct {
 type GetChatReturn struct {
 	BasicReturn
 
-	Result *Chat `json:"result"`
+	Chat *Chat `json:"result"`
 }
 
 /**
@@ -51,7 +51,7 @@ type GetChatReturn struct {
  * @param {int} ID ChatID
  * @return {*Chat}
  */
-func NewChat(ID int) (GetChatReturn, *http.Response, error) {
+func NewChat(ID int) *Chat {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -62,16 +62,19 @@ func NewChat(ID int) (GetChatReturn, *http.Response, error) {
 		"chat_id": strconv.Itoa(ID),
 	}
 
-	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
 	var JsonData GetChatReturn
 	json.Unmarshal(Buffer, &JsonData)
-	return JsonData, Response, Error
+	if JsonData.Success {
+		return JsonData.Chat
+	}
+	return &Chat{}
 }
 
 type GetAdministratorsReturn struct {
 	BasicReturn
 
-	Result []ChatMemberAdministrator `json:"result"`
+	Administrators []ChatMemberAdministrator `json:"result"`
 }
 
 /**
@@ -79,7 +82,7 @@ type GetAdministratorsReturn struct {
  * @param {*}
  * @return {[]ChatMemberAdministrator, error}
  */
-func (Chat Chat) GetAdministrators() (GetAdministratorsReturn, *http.Response, error) {
+func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -90,16 +93,26 @@ func (Chat Chat) GetAdministrators() (GetAdministratorsReturn, *http.Response, e
 		"chat_id": strconv.Itoa(Chat.ID),
 	}
 
-	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
 	var JsonData GetAdministratorsReturn
 	json.Unmarshal(Buffer, &JsonData)
-	return JsonData, Response, Error
+
+	if Error != nil {
+		return []ChatMemberAdministrator{}, Error
+	}
+
+	if JsonData.Success {
+		return JsonData.Administrators, nil
+	}
+
+	return []ChatMemberAdministrator{}, errors.New(string(Buffer))
+
 }
 
 type SendMessageReturn struct {
 	BasicReturn
 
-	Result Message `json:"result"`
+	Message Message `json:"result"`
 }
 
 /**
@@ -114,7 +127,8 @@ type SendMessageReturn struct {
  * @param {bool} AllowSendingWithoutReply *可选
  * @return {*}
  */
-func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool, DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (SendMessageReturn, *http.Response, error) {
+func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool,
+	DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (Message, error) {
 	DataMap := map[string]string{
 		"text": Text,
 	}
@@ -154,8 +168,17 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
 
-	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
-	return JsonData, Response, Error
+
+	if Error != nil {
+		return Message{}, Error
+	}
+
+	if JsonData.Success {
+		return JsonData.Message, nil
+	}
+
+	return Message{}, errors.New(string(Buffer))
 }
