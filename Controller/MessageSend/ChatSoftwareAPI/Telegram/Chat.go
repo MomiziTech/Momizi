@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-14 19:32:56
+ * @LastEditTime: 2022-03-19 17:33:12
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -10,6 +10,7 @@ package Telegram
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
@@ -36,7 +37,13 @@ type Chat struct {
 	CanSetStickerSet      bool            `json:"can_set_sticker_set"`      // Optional. True, if the bot can change the group sticker set. Returned only in getChat.
 	LinkedChatID          int             `json:"linked_chat_id"`           // Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
 	Location              ChatLocation    `json:"location"`                 // 	Optional. For supergroups, the location to which the supergroup is connected. Returned only in getChat.
-	// PinnedMessage         Message   `json:"pinned_message"`           // Optional. The most recent pinned message (by sending date). Returned only in getChat.
+	PinnedMessage         PinnedMessage   `json:"pinned_message"`           // Optional. The most recent pinned message (by sending date). Returned only in getChat.
+}
+
+type GetChatReturn struct {
+	BasicReturn
+
+	Result *Chat `json:"result"`
 }
 
 /**
@@ -44,7 +51,7 @@ type Chat struct {
  * @param {int} ID ChatID
  * @return {*Chat}
  */
-func NewChat(ID int) *Chat {
+func NewChat(ID int) (GetChatReturn, *http.Response, error) {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -55,14 +62,16 @@ func NewChat(ID int) *Chat {
 		"chat_id": strconv.Itoa(ID),
 	}
 
-	Buffer, Response, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData *Chat
-	if Response.StatusCode == 200 {
-		json.Unmarshal(Buffer, &JsonData)
-		return JsonData
-	} else {
-		return &Chat{}
-	}
+	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData GetChatReturn
+	json.Unmarshal(Buffer, &JsonData)
+	return JsonData, Response, Error
+}
+
+type GetAdministratorsReturn struct {
+	BasicReturn
+
+	Result []ChatMemberAdministrator `json:"result"`
 }
 
 /**
@@ -70,7 +79,7 @@ func NewChat(ID int) *Chat {
  * @param {*}
  * @return {[]ChatMemberAdministrator, error}
  */
-func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
+func (Chat Chat) GetAdministrators() (GetAdministratorsReturn, *http.Response, error) {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -82,13 +91,15 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 	}
 
 	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData []ChatMemberAdministrator
-	if Response.StatusCode == 200 {
-		json.Unmarshal(Buffer, &JsonData)
-		return JsonData, Error
-	} else {
-		return []ChatMemberAdministrator{}, Error
-	}
+	var JsonData GetAdministratorsReturn
+	json.Unmarshal(Buffer, &JsonData)
+	return JsonData, Response, Error
+}
+
+type SendMessageReturn struct {
+	BasicReturn
+
+	Result Message `json:"result"`
 }
 
 /**
@@ -103,7 +114,7 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
  * @param {bool} AllowSendingWithoutReply *可选
  * @return {*}
  */
-func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool, DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (Message, error) {
+func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool, DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (SendMessageReturn, *http.Response, error) {
 	DataMap := map[string]string{
 		"text": Text,
 	}
@@ -144,11 +155,7 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
 
 	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData Message
-	if Response.StatusCode == 200 {
-		json.Unmarshal(Buffer, &JsonData)
-		return JsonData, Error
-	} else {
-		return Message{}, Error
-	}
+	var JsonData SendMessageReturn
+	json.Unmarshal(Buffer, &JsonData)
+	return JsonData, Response, Error
 }

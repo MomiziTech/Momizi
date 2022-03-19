@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-09 13:11:32
- * @LastEditTime: 2022-03-14 19:02:13
+ * @LastEditTime: 2022-03-19 17:38:50
  * @LastEdit: McPlus
  * @Description:
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\File.go
@@ -10,6 +10,7 @@ package Telegram
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
 	"github.com/nyancatda/HttpRequest"
@@ -22,7 +23,13 @@ type File struct {
 	Path     string `json:"file_path"`
 }
 
-func NewFile(ID string) *File {
+type GetFileReturn struct {
+	BasicReturn
+
+	Result *File `json:"result"`
+}
+
+func NewFile(ID string) (GetFileReturn, *http.Response, error) {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
@@ -33,12 +40,8 @@ func NewFile(ID string) *File {
 		"file_id": ID,
 	}
 
-	Buffer, Response, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
-	var JsonData *File
-	if Response.StatusCode == 200 {
-		json.Unmarshal(Buffer, &JsonData)
-		return JsonData
-	} else {
-		return &File{}
-	}
+	Buffer, Response, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData GetFileReturn
+	json.Unmarshal(Buffer, &JsonData)
+	return JsonData, Response, Error
 }
