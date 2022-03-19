@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-19 17:06:15
+ * @LastEditTime: 2022-03-19 18:36:26
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Telegram.go
@@ -17,6 +17,7 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
 	TelegramMethods "github.com/MomiziTech/Momizi/Controller/MessageSend/ChatSoftwareAPI/Telegram/Methods"
 	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
 )
 
 func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
@@ -50,42 +51,48 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 	// 如果为图片消息
 	if WebHookJson.Message.Photo != nil {
-		for _, PhotoInfo := range WebHookJson.Message.Photo {
-			// 获取图片链接
-			PhotoID := PhotoInfo.FileID
-			PhotoFileInfo := TelegramMethods.GetFile(PhotoID)
-			PhotoURL := PhotoFileInfo.Path
-			// 下载图片
-			timeUnix := time.Now().Unix()
-			FilePath, _, err := Utils.DownloadFile(PhotoURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
-			if err != nil {
-				return MessageStruct.MessageStruct{}, err
-			}
-
-			_, FileName := filepath.Split(FilePath)
-
-			// 组成图片消息链
-			FileMessage := MessageStruct.MessageChainFile{
-				MimeType: "image/jpeg",
-				Path:     FilePath,
-				URL:      PhotoURL,
-				Name:     FileName,
-				Size:     PhotoFileInfo.Size,
-			}
-			PhotoMessage := MessageStruct.MessageChain{
-				Type: "Image",
-				File: FileMessage,
-			}
-			MessageChain = append(MessageChain, PhotoMessage)
+		// 获取最清晰的图片
+		PhotoInfo := WebHookJson.Message.Photo[len(WebHookJson.Message.Photo)-1]
+		// 获取图片链接
+		PhotoID := PhotoInfo.FileID
+		PhotoFileInfo, err := TelegramMethods.GetFile(PhotoID)
+		if err != nil {
+			return MessageStruct.MessageStruct{}, err
 		}
+		PhotoURL := GetTelegramFileURL(PhotoFileInfo.Path)
+		// 下载图片
+		timeUnix := time.Now().Unix()
+		FilePath, _, err := Utils.DownloadFile(PhotoURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		if err != nil {
+			return MessageStruct.MessageStruct{}, err
+		}
+
+		_, FileName := filepath.Split(FilePath)
+
+		// 组成图片消息链
+		FileMessage := MessageStruct.MessageChainFile{
+			MimeType: "image/jpeg",
+			Path:     FilePath,
+			URL:      PhotoURL,
+			Name:     FileName,
+			Size:     PhotoFileInfo.Size,
+		}
+		PhotoMessage := MessageStruct.MessageChain{
+			Type: "Image",
+			File: FileMessage,
+		}
+		MessageChain = append(MessageChain, PhotoMessage)
 	}
 
 	// 如果为文件消息
 	if WebHookJson.Message.Document.FileID != "" {
 		// 获取文件链接
 		DocumentID := WebHookJson.Message.Document.FileID
-		DocumentFileInfo := TelegramMethods.GetFile(DocumentID)
-		DocumentURL := DocumentFileInfo.Path
+		DocumentFileInfo, err := TelegramMethods.GetFile(DocumentID)
+		if err != nil {
+			return MessageStruct.MessageStruct{}, err
+		}
+		DocumentURL := GetTelegramFileURL(DocumentFileInfo.Path)
 		// 下载文件
 		timeUnix := time.Now().Unix()
 		FilePath, _, err := Utils.DownloadFile(DocumentURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
@@ -112,8 +119,11 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	if WebHookJson.Message.Voice.FileID != "" {
 		// 获取语音链接
 		VoiceID := WebHookJson.Message.Voice.FileID
-		VoiceFileInfo := TelegramMethods.GetFile(VoiceID)
-		VoiceURL := VoiceFileInfo.Path
+		VoiceFileInfo, err := TelegramMethods.GetFile(VoiceID)
+		if err != nil {
+			return MessageStruct.MessageStruct{}, err
+		}
+		VoiceURL := GetTelegramFileURL(VoiceFileInfo.Path)
 		// 下载语音
 		timeUnix := time.Now().Unix()
 		FilePath, _, err := Utils.DownloadFile(VoiceURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
@@ -178,4 +188,12 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	}
 
 	return Message, nil
+}
+
+func GetTelegramFileURL(FilePath string) string {
+	APIToken := ReadConfig.GetConfig.ChatSoftware.Telegram.APIToken
+	APIURL := ReadConfig.GetConfig.ChatSoftware.Telegram.BotAPILink
+
+	FileURL := APIURL + "file/bot" + APIToken + "/" + FilePath
+	return FileURL
 }
