@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:46:55
- * @LastEditTime: 2022-03-14 18:01:14
+ * @LastEditTime: 2022-03-17 23:54:17
  * @LastEdit: McPlus
  * @Description: Message结构体
  * @FilePath: \Momizi\Controller\MessageSend\ChatSoftwareAPI\Telegram\Message.go
@@ -65,6 +65,28 @@ type Message struct {
 	VoiceChatEnded                VoiceChatEnded                `json:"voice_chat_ended"`                  // Optional. Service message: voice chat ended
 	VoiceChatParticipantsInvited  VoiceChatParticipantsInvited  `json:"voice_chat_participants_invited"`   // Optional. Service message: new participants invited to a voice chat
 	ReplyMarkup                   InlineKeyboardMarkup          `json:"reply_markup"`                      // Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+	PinnedMessage                 PinnedMessage                 `json:"pinned_message"`                    // Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
 	// ReplyToMessage                Message                       `json:"reply_to_message"`                  // Optional. For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
-	// PinnedMessage                 Message                       `json:"pinned_message"`                    // Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
+}
+
+type PinnedMessage struct {
+	Id            int    `json:"id"`
+	FirstName     string `json:"first_name"`
+	LastName      string `json:"last_name"`
+	Username      string `json:"username"`
+	Type          string `json:"type"`
+	PinnedMessage struct {
+		MessageId int  `json:"message_id"`
+		From      User `json:"from"`
+		Chat      struct {
+			Id           int    `json:"id"`
+			IsBot        bool   `json:"is_bot"`
+			FirstName    string `json:"first_name"`
+			LastName     string `json:"last_name"`
+			Username     string `json:"username"`
+			LanguageCode string `json:"language_code"`
+		} `json:"chat"`
+		Date int    `json:"date"`
+		Text string `json:"text"`
+	} `json:"pinned_message"`
 }
