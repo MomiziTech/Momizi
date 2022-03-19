@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-19 18:36:26
+ * @LastEditTime: 2022-03-19 19:34:59
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Telegram.go
@@ -100,12 +100,14 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 			return MessageStruct.MessageStruct{}, err
 		}
 
+		_, FileName := filepath.Split(FilePath)
+
 		// 组成文件消息链
 		FileMessage := MessageStruct.MessageChainFile{
 			MimeType: WebHookJson.Message.Document.MimeType,
 			Path:     FilePath,
 			URL:      DocumentURL,
-			Name:     WebHookJson.Message.Document.FileName,
+			Name:     FileName,
 			Size:     DocumentFileInfo.Size,
 		}
 		DocumentMessage := MessageStruct.MessageChain{
