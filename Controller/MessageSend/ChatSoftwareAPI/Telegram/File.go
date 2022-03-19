@@ -18,7 +18,7 @@ import (
 type File struct {
 	ID       string `json:"file_id"`
 	UniqueID string `json:"file_unique_id"`
-	Size     int    `json:"file_size"`
+	Size     int64  `json:"file_size"`
 	Path     string `json:"file_path"`
 }
 

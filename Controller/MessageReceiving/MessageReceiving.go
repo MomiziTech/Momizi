@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-13 00:06:23
+ * @LastEditTime: 2022-03-19 16:45:35
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
@@ -39,7 +39,10 @@ func MessageReceiving(c *gin.Context) error {
 	// 判断消息来源
 	if JsonBody.Telegram.UpdateID != 0 {
 		// 消息为Telegram消息
-		fmt.Println(JsonBody)
+		Message, err = WebHook.Telegram(JsonBody)
+		if err != nil {
+			return err
+		}
 	}
 	if JsonBody.Mirai.Type != "" {
 		// 消息为Mirai消息
