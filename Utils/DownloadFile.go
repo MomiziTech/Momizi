@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-19 16:18:17
+ * @LastEditTime: 2022-03-19 19:43:26
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Utils\DownloadFile.go
@@ -64,6 +64,7 @@ func DownloadFile(URL string, SavePath string, RandomFileName bool, timeOut int)
 		return "", 0, err
 	}
 	writer := bufio.NewWriter(file)
+	defer file.Close()
 	Size, err := io.Copy(writer, reader)
 	if err != nil {
 		return "", 0, err
