@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-19 19:45:02
+ * @LastEditTime: 2022-03-21 00:38:13
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Telegram.go
@@ -36,6 +36,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		MessageType = "Group"
 	default:
 		MessageType = "Other"
+		return MessageStruct.MessageStruct{}, nil
 	}
 
 	// 根据消息类型组成消息链

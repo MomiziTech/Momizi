@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-19 16:15:25
+ * @LastEditTime: 2022-03-21 00:38:05
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Controller\MessageReceiving\WebHook\Mirai.go
@@ -32,6 +32,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		Type = "User"
 	default:
 		Type = "Other"
+		return MessageStruct.MessageStruct{}, nil
 	}
 
 	var Time int
