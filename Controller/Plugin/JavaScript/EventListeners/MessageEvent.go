@@ -1,15 +1,14 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 21:24:44
- * @LastEditTime: 2022-03-20 22:49:31
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-21 00:00:05
+ * @LastEditors: Please set LastEditors
  * @Description: 消息监听器
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\EventListeners\MessageEvent.go
  */
 package EventListeners
 
 import (
-	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/dop251/goja"
 )
 
@@ -19,18 +18,18 @@ import (
  * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {*}
  */
-func MessageEvent(VM *goja.Runtime, Message MessageStruct.MessageStruct) error {
-	err := VM.Set("MessageListeners", func(FuncName string, Func goja.Callable) {
+func (L Listener) Message(FuncName string, Func goja.Callable) error {
+	err := L.VM.Set("MessageListeners", func(FuncName string, Func goja.Callable) {
 		switch FuncName {
 		case "AllMessage":
-			Func(nil, VM.ToValue(Message))
+			Func(nil, L.VM.ToValue(L.Message))
 		case "UserMessage":
-			if Message.Type == "User" {
-				Func(nil, VM.ToValue(Message))
+			if L.MessageStruct.Type == "User" {
+				Func(nil, L.VM.ToValue(L.MessageStruct))
 			}
 		case "GroupMessage":
-			if Message.Type == "Group" {
-				Func(nil, VM.ToValue(Message))
+			if L.MessageStruct.Type == "Group" {
+				Func(nil, L.VM.ToValue(L.MessageStruct))
 			}
 		}
 	})
