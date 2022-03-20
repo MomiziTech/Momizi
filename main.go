@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
+	"github.com/MomiziTech/Momizi/Controller/Plugin"
 	"github.com/MomiziTech/Momizi/Utils"
 	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
@@ -36,7 +37,7 @@ func Initialization() error {
 		return err
 	}
 	// 初始化插件文件夹
-	if _, err := Utils.PathExists("./plugin"); err != nil {
+	if _, err := Utils.PathExists("./plugins"); err != nil {
 		return err
 	}
 	// 初始化数据文件夹
@@ -63,6 +64,11 @@ func main() {
 		Error(err)
 	}
 	Config := ReadConfig.GetConfig
+
+	// 初始化插件
+	if err := Plugin.InitPlugin(); err != nil {
+		Error(err)
+	}
 
 	// 初始化Gin
 	gin.SetMode(gin.DebugMode)

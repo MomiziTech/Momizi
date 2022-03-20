@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/dop251/goja v0.0.0-20220214123719-b09a6bfa842f
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
@@ -24,4 +25,9 @@ require (
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
+)
+
+require (
+	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 )
