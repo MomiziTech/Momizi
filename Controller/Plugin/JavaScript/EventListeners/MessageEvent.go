@@ -19,19 +19,21 @@ import (
  * @return {*}
  */
 func (L Listener) Message(FuncName string, Func goja.Callable) error {
-	switch FuncName {
-	case "AllMessage":
-		_, err := Func(nil, L.VM.ToValue(L.Message))
-		return err
-	case "UserMessage":
-		if L.MessageStruct.Type == "User" {
-			_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
+	if L.MessageStruct.ID != "" {
+		switch FuncName {
+		case "AllMessage":
+			_, err := Func(nil, L.VM.ToValue(L.Message))
 			return err
-		}
-	case "GroupMessage":
-		if L.MessageStruct.Type == "Group" {
-			_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
-			return err
+		case "UserMessage":
+			if L.MessageStruct.Type == "User" {
+				_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
+				return err
+			}
+		case "GroupMessage":
+			if L.MessageStruct.Type == "Group" {
+				_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
+				return err
+			}
 		}
 	}
 	return nil

@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-20 22:39:41
+ * @LastEditTime: 2022-03-21 00:14:23
  * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
@@ -32,10 +32,10 @@ func RunJavaScriptPlugin(Message MessageStruct.MessageStruct) error {
 	// 初始化加载器
 	VM := goja.New()
 
-	// 注册监听器函数
-	EventListeners.Listeners(VM, Message)
-	// 注册工具函数
-	Tools.Tools(VM)
+	// 注册函数
+	if err := RegistrationFunction(VM, Message); err != nil {
+		return err
+	}
 
 	// 遍历数组获取预编译的插件
 	for _, Program := range Programs {
@@ -57,6 +57,11 @@ func RunJavaScriptPlugin(Message MessageStruct.MessageStruct) error {
 func InitJavaScriptPlugin() error {
 	// 初始化加载器
 	VM := goja.New()
+
+	// 注册函数
+	if err := RegistrationFunction(VM, MessageStruct.MessageStruct{}); err != nil {
+		return err
+	}
 
 	// 从文件中读取插件
 	Files, err := ioutil.ReadDir("./plugins/")
@@ -97,6 +102,19 @@ func InitJavaScriptPlugin() error {
 	}
 
 	fmt.Println("插件加载完毕！")
+
+	return nil
+}
+
+func RegistrationFunction(VM *goja.Runtime, Message MessageStruct.MessageStruct) error {
+	// 注册监听器函数
+	if err := EventListeners.Listeners(VM, Message); err != nil {
+		return err
+	}
+	// 注册工具函数
+	if err := Tools.Tools(VM); err != nil {
+		return err
+	}
 
 	return nil
 }
