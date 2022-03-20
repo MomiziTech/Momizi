@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 21:24:44
- * @LastEditTime: 2022-03-21 00:00:05
+ * @LastEditTime: 2022-03-21 00:04:05
  * @LastEditors: Please set LastEditors
  * @Description: 消息监听器
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\EventListeners\MessageEvent.go
@@ -19,23 +19,20 @@ import (
  * @return {*}
  */
 func (L Listener) Message(FuncName string, Func goja.Callable) error {
-	err := L.VM.Set("MessageListeners", func(FuncName string, Func goja.Callable) {
-		switch FuncName {
-		case "AllMessage":
-			Func(nil, L.VM.ToValue(L.Message))
-		case "UserMessage":
-			if L.MessageStruct.Type == "User" {
-				Func(nil, L.VM.ToValue(L.MessageStruct))
-			}
-		case "GroupMessage":
-			if L.MessageStruct.Type == "Group" {
-				Func(nil, L.VM.ToValue(L.MessageStruct))
-			}
-		}
-	})
-	if err != nil {
+	switch FuncName {
+	case "AllMessage":
+		_, err := Func(nil, L.VM.ToValue(L.Message))
 		return err
+	case "UserMessage":
+		if L.MessageStruct.Type == "User" {
+			_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
+			return err
+		}
+	case "GroupMessage":
+		if L.MessageStruct.Type == "Group" {
+			_, err := Func(nil, L.VM.ToValue(L.MessageStruct))
+			return err
+		}
 	}
-
 	return nil
 }
