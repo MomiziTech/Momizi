@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 21:24:44
- * @LastEditTime: 2022-03-21 08:47:39
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-03-21 08:53:26
+ * @LastEditors: NyanCatda
  * @Description: 消息监听器
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\EventListeners\MessageEvent.go
  */
@@ -22,7 +22,7 @@ type MessageListener struct {
 var MessageListenerList []MessageListener
 
 /**
- * @description: 消息监听器
+ * @description: 消息监听器注册
  * @param {*goja.Runtime} VM 加载器
  * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {*}
@@ -32,8 +32,7 @@ func (L Listener) Message(FuncName string, Func goja.Callable) {
 }
 
 func MessageListenerHandle(Message MessageStruct.MessageStruct) {
-	for i := 0; i < len(MessageListenerList); i++ {
-		MessageListener := MessageListenerList[i]
+	for _, MessageListener := range MessageListenerList {
 		Listener := MessageListener.Listener
 		if Message.ID != "" {
 			switch MessageListener.FuncName {
