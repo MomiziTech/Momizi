@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-21 08:32:11
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-03-21 09:48:33
+ * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
 	"github.com/dop251/goja"
@@ -23,27 +24,13 @@ var (
 )
 
 /**
- * @description: 运行插件
- * @param {*} MessageStruct 消息结构体
+ * @description: 执行消息监听器
+ * @param {MessageStruct.MessageStruct} Message
  * @return {*}
  */
-func RunJavaScriptPlugin() error {
-	// 初始化加载器
-	VM := goja.New()
-
-	// 注册函数
-	if err := RegistrationFunction(VM); err != nil {
-		return err
-	}
-
-	// 遍历数组获取预编译的插件
-	for _, Program := range Programs {
-		// 执行插件
-		_, err := VM.RunProgram(Program)
-		if err != nil {
-			return err
-		}
-	}
+func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
+	// 执行消息监听器
+	EventListeners.MessageListenerHandle(Message)
 
 	return nil
 }
@@ -96,11 +83,9 @@ func InitJavaScriptPlugin() error {
 			PluginName := VM.Get("PLUGIN_NAME")
 			PluginVersion := VM.Get("PLUGIN_VERSION")
 			PluginAuthor := VM.Get("PLUGIN_AUTHOR")
-			fmt.Println("[插件加载]", PluginName.String(), PluginVersion.String(), PluginAuthor.String())
+			fmt.Println("[Plugin]", PluginName.String(), PluginVersion.String(), PluginAuthor.String())
 		}
 	}
-
-	fmt.Println("插件加载完毕！")
 
 	return nil
 }

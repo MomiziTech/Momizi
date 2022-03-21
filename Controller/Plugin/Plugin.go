@@ -1,32 +1,35 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:58:27
- * @LastEditTime: 2022-03-21 08:32:38
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-03-21 09:48:47
+ * @LastEditors: NyanCatda
  * @Description: 插件加载模块
  * @FilePath: \Momizi\Controller\Plugin\Plugin.go
  */
 package Plugin
 
 import (
+	"fmt"
+
+	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript"
 	"github.com/MomiziTech/Momizi/Utils/Log"
 )
 
 /**
- * @description: 执行插件
- * @param {MessageStruct.MessageStruct} Message
+ * @description: 运行插件消息监听器
+ * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {error} 错误信息
  */
-func RunPlugin() error {
+func RunPluginMessageListener(Message MessageStruct.MessageStruct) error {
 	// 运行JavaScript插件
-	err := JavaScript.RunJavaScriptPlugin()
+	err := JavaScript.ExecutionMessageListener(Message)
 	if err != nil {
 		Log.ErrorWrite(err)
 		return err
 	}
 
-	return err
+	return nil
 }
 
 /**
@@ -41,6 +44,8 @@ func InitPlugin() error {
 		Log.ErrorWrite(err)
 		return err
 	}
+
+	fmt.Println("插件加载完毕！")
 
 	return nil
 }

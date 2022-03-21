@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-21 09:28:28
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-03-21 09:43:29
+ * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
  */
@@ -14,7 +14,7 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
-	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
+	"github.com/MomiziTech/Momizi/Controller/Plugin"
 	"github.com/gin-gonic/gin"
 )
 
@@ -59,8 +59,7 @@ func MessageReceiving(c *gin.Context) error {
 
 	// 将消息传递给插件
 	if Message.ID != "" {
-		fmt.Println(Message.ID)
-		EventListeners.MessageListenerHandle(Message)
+		Plugin.RunPluginMessageListener(Message)
 	}
 
 	return nil
