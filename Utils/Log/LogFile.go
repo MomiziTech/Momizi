@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-21 10:21:57
+ * @LastEditTime: 2022-03-21 19:57:52
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -71,7 +71,7 @@ func ErrorWrite(Source string, Error error) {
 /**
  * @description:  标准日志打印
  * @param {string} Source 日志来源
- * @param {string} level 日志等级 INFO/WARNING/ERROR
+ * @param {string} level 日志等级 INFO/WARNING/ERROR/DEBUG
  * @param {...interface{}} Text 日志内容
  * @return {*}
  */
@@ -81,8 +81,22 @@ func Print(Source string, level string, Text ...interface{}) error {
 	// Source拼接
 	Source = "[" + Source + "]"
 
+	// 判断level颜色
+	switch level {
+	case "INFO":
+		level = Blue(level)
+	case "WARNING":
+		level = Yellow(level)
+	case "ERROR":
+		level = Red(level)
+	case "DEBUG":
+		level = Green(level)
+	default:
+		level = Magenta(level)
+	}
+
 	// 打印日志
-	Text = append([]interface{}{NowTime, level, Source}, Text...)
+	Text = append([]interface{}{Cyan(NowTime), level, Source}, Text...)
 	_, err := fmt.Println(Text...)
 	if err != nil {
 		return err
