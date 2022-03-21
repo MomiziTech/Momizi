@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-21 10:17:02
+ * @LastEditTime: 2022-03-21 14:31:28
  * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
@@ -83,7 +83,7 @@ func InitJavaScriptPlugin() error {
 			PluginName := VM.Get("PLUGIN_NAME")
 			PluginVersion := VM.Get("PLUGIN_VERSION")
 			PluginAuthor := VM.Get("PLUGIN_AUTHOR")
-			Log.Print("Plugin", "INFO", "Loading <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
+			Log.Print("Plugin", "INFO", "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
 		}
 	}
 
