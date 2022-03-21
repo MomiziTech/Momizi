@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-13 12:24:31
+ * @LastEditTime: 2022-03-21 10:21:57
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -52,9 +52,9 @@ func LogFile() (*os.File, error) {
  * @param {error} Error 错误信息
  * @return {*}
  */
-func ErrorWrite(Error error) {
+func ErrorWrite(Source string, Error error) {
 	// 打印错误
-	fmt.Println(Error)
+	Print(Source, "ERROR", Error)
 	// 将错误写入日志
 	logFile, err := LogFile()
 	if err != nil {
@@ -66,4 +66,26 @@ func ErrorWrite(Error error) {
 
 	write.WriteString("Error: " + Error.Error() + "\n")
 	write.Flush()
+}
+
+/**
+ * @description:  标准日志打印
+ * @param {string} Source 日志来源
+ * @param {string} level 日志等级 INFO/WARNING/ERROR
+ * @param {...interface{}} Text 日志内容
+ * @return {*}
+ */
+func Print(Source string, level string, Text ...interface{}) error {
+	NowTime := time.Now().Format("2006-01-02 15:04:05")
+
+	// Source拼接
+	Source = "[" + Source + "]"
+
+	// 打印日志
+	Text = append([]interface{}{NowTime, level, Source}, Text...)
+	_, err := fmt.Println(Text...)
+	if err != nil {
+		return err
+	}
+	return nil
 }

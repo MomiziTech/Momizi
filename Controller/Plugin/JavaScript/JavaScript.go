@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-21 09:48:33
+ * @LastEditTime: 2022-03-21 10:17:02
  * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
@@ -9,13 +9,13 @@
 package JavaScript
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strings"
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
+	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/dop251/goja"
 )
 
@@ -83,7 +83,7 @@ func InitJavaScriptPlugin() error {
 			PluginName := VM.Get("PLUGIN_NAME")
 			PluginVersion := VM.Get("PLUGIN_VERSION")
 			PluginAuthor := VM.Get("PLUGIN_AUTHOR")
-			fmt.Println("[Plugin]", PluginName.String(), PluginVersion.String(), PluginAuthor.String())
+			Log.Print("Plugin", "INFO", "Loading <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
 		}
 	}
 

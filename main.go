@@ -1,3 +1,11 @@
+/*
+ * @Author: NyanCatda
+ * @Date: 2022-03-08 21:19:51
+ * @LastEditTime: 2022-03-21 10:22:51
+ * @LastEditors: NyanCatda
+ * @Description:
+ * @FilePath: \Momizi\main.go
+ */
 package main
 
 import (
@@ -80,12 +88,12 @@ func main() {
 	// 注册WebHook接收地址
 	r.POST("/"+WebHookKey, func(c *gin.Context) {
 		if err := MessageReceiving.MessageReceiving(c); err != nil {
-			Log.ErrorWrite(err)
+			Log.ErrorWrite("System", err)
 		}
 	})
 
 	// 启动WebHook接收
-	fmt.Println("WebHook接收已启动，地址：http://0.0.0.0:" + Port + "/" + WebHookKey)
+	Log.Print("System", "INFO", "WebHook接收已启动，地址：http://0.0.0.0:"+Port+"/"+WebHookKey)
 	if err := r.Run(":" + Port); err != nil {
 		Error(err)
 	}
