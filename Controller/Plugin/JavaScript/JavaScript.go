@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 00:51:13
+ * @LastEditTime: 2022-03-22 01:24:31
  * @LastEditors: McPlus
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
@@ -58,6 +58,8 @@ func InitJavaScriptPlugin() error {
 	for _, File := range Files {
 		FileName := File.Name()
 		if strings.HasSuffix(FileName, ".momizi.js") {
+			RegistrationFileFunction(VM)
+			
 			ScriptBuffer, err := ioutil.ReadFile("./plugins/" + FileName)
 			if err != nil {
 				return err
@@ -128,6 +130,6 @@ func (Console Console) logDefault(Level int, Text string) error {
 	return Log.Print(Console.VM.Get("PLUGIN_NAME").String(), Level, Text)
 }
 
-func RegistrationFileFunction(VM *goja.Runtime, PluginName string) error {
-	return VM.Set("Console", Console{VM: VM, PluginName: PluginName})
+func RegistrationFileFunction(VM *goja.Runtime) error {
+	return VM.Set("Console", Console{VM: VM})
 }
