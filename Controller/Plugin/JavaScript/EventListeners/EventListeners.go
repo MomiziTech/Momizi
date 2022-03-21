@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 21:18:09
- * @LastEditTime: 2022-03-20 23:59:48
+ * @LastEditTime: 2022-03-21 08:31:53
  * @LastEditors: Please set LastEditors
  * @Description: 事件监听器
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\EventListeners\EventListeners.go
@@ -9,7 +9,6 @@
 package EventListeners
 
 import (
-	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/dop251/goja"
 )
 
@@ -18,7 +17,6 @@ import (
  */
 type Listener struct {
 	VM            *goja.Runtime
-	MessageStruct MessageStruct.MessageStruct
 }
 
 /**
@@ -27,9 +25,9 @@ type Listener struct {
  * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {*}
  */
-func Listeners(VM *goja.Runtime, Message MessageStruct.MessageStruct) error {
+func Listeners(VM *goja.Runtime) error {
 	// 注册消息事件
-	err := VM.Set("Listener", Listener{VM, Message})
+	err := VM.Set("Listener", Listener{VM})
 	if err != nil {
 		return err
 	}

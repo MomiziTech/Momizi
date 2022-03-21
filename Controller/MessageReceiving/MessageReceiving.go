@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-21 00:36:30
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-21 08:32:43
+ * @LastEditors: Please set LastEditors
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
  */
@@ -60,7 +60,7 @@ func MessageReceiving(c *gin.Context) error {
 	// 将消息传递给插件
 	if Message.ID != "" {
 		fmt.Println(Message.ID)
-		Plugin.RunPlugin(Message)
+		Plugin.RunPlugin()
 	}
 
 	return nil

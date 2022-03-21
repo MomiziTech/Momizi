@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-21 00:14:23
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-21 08:32:11
+ * @LastEditors: Please set LastEditors
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -13,7 +13,6 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
 	"github.com/dop251/goja"
@@ -28,12 +27,12 @@ var (
  * @param {*} MessageStruct 消息结构体
  * @return {*}
  */
-func RunJavaScriptPlugin(Message MessageStruct.MessageStruct) error {
+func RunJavaScriptPlugin() error {
 	// 初始化加载器
 	VM := goja.New()
 
 	// 注册函数
-	if err := RegistrationFunction(VM, Message); err != nil {
+	if err := RegistrationFunction(VM); err != nil {
 		return err
 	}
 
@@ -59,7 +58,7 @@ func InitJavaScriptPlugin() error {
 	VM := goja.New()
 
 	// 注册函数
-	if err := RegistrationFunction(VM, MessageStruct.MessageStruct{}); err != nil {
+	if err := RegistrationFunction(VM); err != nil {
 		return err
 	}
 
@@ -106,9 +105,9 @@ func InitJavaScriptPlugin() error {
 	return nil
 }
 
-func RegistrationFunction(VM *goja.Runtime, Message MessageStruct.MessageStruct) error {
+func RegistrationFunction(VM *goja.Runtime) error {
 	// 注册监听器函数
-	if err := EventListeners.Listeners(VM, Message); err != nil {
+	if err := EventListeners.Listeners(VM); err != nil {
 		return err
 	}
 	// 注册工具函数
