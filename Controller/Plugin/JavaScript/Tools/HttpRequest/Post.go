@@ -22,7 +22,7 @@ import (
  * @param {string} requestBody 请求内容(Json)
  * @return {*}
  */
-func (HttpRequest HttpRequest) PostRequestJson(URL string, Header []string, requestBody string) (string, *http.Response) {
+func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody string) (string, *http.Response) {
 	Body, HttpResponse, err := HttpRequestFunc.PostRequestJson(URL, Header, requestBody)
 	if err != nil {
 		Log.ErrorWrite("Plugin", err)
@@ -41,7 +41,7 @@ func (HttpRequest HttpRequest) PostRequestJson(URL string, Header []string, requ
  * @param {map[string]string} Data 请求内容(x-www-from-urlencoded)
  * @return {*}
  */
-func (HttpRequest HttpRequest) PostRequestXWWWForm(URL string, Header []string, Data map[string]string) (string, *http.Response) {
+func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data map[string]string) (string, *http.Response) {
 	Body, HttpResponse, err := HttpRequestFunc.PostRequestXWWWForm(URL, Header, Data)
 	if err != nil {
 		Log.ErrorWrite("Plugin", err)
@@ -60,7 +60,7 @@ func (HttpRequest HttpRequest) PostRequestXWWWForm(URL string, Header []string, 
  * @param {map[string]string} Data 请求内容(multipart/form-data)
  * @return {*}
  */
-func (HttpRequest HttpRequest) PostRequestFormData(URL string, Header []string, Data map[string]string) (string, *http.Response) {
+func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data map[string]string) (string, *http.Response) {
 	Body, HttpResponse, err := HttpRequestFunc.PostRequestFormData(URL, Header, Data)
 	if err != nil {
 		Log.ErrorWrite("Plugin", err)
@@ -81,7 +81,7 @@ func (HttpRequest HttpRequest) PostRequestFormData(URL string, Header []string, 
  * @param {[]string} FilePath 文件路径
  * @return {*}
  */
-func (HttpRequest HttpRequest) PostRequestFormDataFile(URL string, Header []string, Data map[string]string, FileKey string, FilePath []string) (string, *http.Response) {
+func (HttpRequest HttpRequest) PostFormDataFile(URL string, Header []string, Data map[string]string, FileKey string, FilePath []string) (string, *http.Response) {
 	Body, HttpResponse, err := HttpRequestFunc.PostRequestFormDataFile(URL, Header, Data, FileKey, FilePath)
 	if err != nil {
 		Log.ErrorWrite("Plugin", err)
