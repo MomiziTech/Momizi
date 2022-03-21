@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 01:24:31
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-22 01:27:54
+ * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -15,6 +15,7 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
+	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools/Console"
 	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/dop251/goja"
 )
@@ -58,8 +59,9 @@ func InitJavaScriptPlugin() error {
 	for _, File := range Files {
 		FileName := File.Name()
 		if strings.HasSuffix(FileName, ".momizi.js") {
-			RegistrationFileFunction(VM)
-			
+			// 控制台函数注册
+			Console.RegistrationFileFunction(VM)
+
 			ScriptBuffer, err := ioutil.ReadFile("./plugins/" + FileName)
 			if err != nil {
 				return err
@@ -103,33 +105,4 @@ func RegistrationFunction(VM *goja.Runtime) error {
 	}
 
 	return nil
-}
-
-type Console struct {
-	VM         *goja.Runtime
-	PluginName string
-}
-
-func (Console Console) Log(Text string) error {
-	return Console.logDefault(Log.INFO, Text)
-}
-
-func (Console Console) Warning(Text string) error {
-	return Console.logDefault(Log.WARNING, Text)
-}
-
-func (Console Console) Error(Text string) error {
-	return Console.logDefault(Log.ERROR, Text)
-}
-
-func (Console Console) Debug(Text string) error {
-	return Console.logDefault(Log.DEBUG, Text)
-}
-
-func (Console Console) logDefault(Level int, Text string) error {
-	return Log.Print(Console.VM.Get("PLUGIN_NAME").String(), Level, Text)
-}
-
-func RegistrationFileFunction(VM *goja.Runtime) error {
-	return VM.Set("Console", Console{VM: VM})
 }
