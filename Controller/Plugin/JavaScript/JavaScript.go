@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-21 21:24:23
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-22 00:51:13
+ * @LastEditors: McPlus
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -101,4 +101,33 @@ func RegistrationFunction(VM *goja.Runtime) error {
 	}
 
 	return nil
+}
+
+type Console struct {
+	VM         *goja.Runtime
+	PluginName string
+}
+
+func (Console Console) Log(Text string) error {
+	return Console.logDefault(Log.INFO, Text)
+}
+
+func (Console Console) Warning(Text string) error {
+	return Console.logDefault(Log.WARNING, Text)
+}
+
+func (Console Console) Error(Text string) error {
+	return Console.logDefault(Log.ERROR, Text)
+}
+
+func (Console Console) Debug(Text string) error {
+	return Console.logDefault(Log.DEBUG, Text)
+}
+
+func (Console Console) logDefault(Level int, Text string) error {
+	return Log.Print(Console.VM.Get("PLUGIN_NAME").String(), Level, Text)
+}
+
+func RegistrationFileFunction(VM *goja.Runtime, PluginName string) error {
+	return VM.Set("Console", Console{VM: VM, PluginName: PluginName})
 }
