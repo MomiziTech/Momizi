@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-21 10:39:04
+ * @LastEditTime: 2022-03-21 21:24:33
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
@@ -80,16 +80,16 @@ func PrintMessage(Message MessageStruct.MessageStruct) {
 		switch MessageChain.Type {
 		case "Text":
 			LogText := LogHeader + Message.MessageChain[Num].Text
-			Log.Print("Message", "INFO", LogText)
+			Log.Print("Message", Log.INFO, LogText)
 		case "Image":
 			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", "INFO", LogText)
+			Log.Print("Message", Log.INFO, LogText)
 		case "Audio":
 			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", "INFO", LogText)
+			Log.Print("Message", Log.INFO, LogText)
 		case "Video":
 			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", "INFO", LogText)
+			Log.Print("Message", Log.INFO, LogText)
 		}
 	}
 }

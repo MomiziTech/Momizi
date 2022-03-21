@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-21 10:22:51
+ * @LastEditTime: 2022-03-21 21:24:01
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -93,7 +93,7 @@ func main() {
 	})
 
 	// 启动WebHook接收
-	Log.Print("System", "INFO", "WebHook接收已启动，地址：http://0.0.0.0:"+Port+"/"+WebHookKey)
+	Log.Print("System", Log.INFO, "WebHook接收已启动，地址：http://0.0.0.0:"+Port+"/"+WebHookKey)
 	if err := r.Run(":" + Port); err != nil {
 		Error(err)
 	}

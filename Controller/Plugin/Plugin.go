@@ -43,7 +43,7 @@ func InitPlugin() error {
 		return err
 	}
 
-	Log.Print("Plugin", "INFO", "插件加载完成")
+	Log.Print("Plugin", Log.INFO, "插件加载完成")
 
 	return nil
 }

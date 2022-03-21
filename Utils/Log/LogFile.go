@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-21 19:57:52
+ * @LastEditTime: 2022-03-21 21:23:53
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -54,7 +54,7 @@ func LogFile() (*os.File, error) {
  */
 func ErrorWrite(Source string, Error error) {
 	// 打印错误
-	Print(Source, "ERROR", Error)
+	Print(Source, ERROR, Error)
 	// 将错误写入日志
 	logFile, err := LogFile()
 	if err != nil {
@@ -68,35 +68,43 @@ func ErrorWrite(Source string, Error error) {
 	write.Flush()
 }
 
+const (
+	INFO = iota + 0
+	WARNING
+	ERROR
+	DEBUG
+)
+
 /**
  * @description:  标准日志打印
  * @param {string} Source 日志来源
- * @param {string} level 日志等级 INFO/WARNING/ERROR/DEBUG
+ * @param {string} Level 日志等级 INFO/WARNING/ERROR/DEBUG
  * @param {...interface{}} Text 日志内容
  * @return {*}
  */
-func Print(Source string, level string, Text ...interface{}) error {
+func Print(Source string, Level int, Text ...interface{}) error {
 	NowTime := time.Now().Format("2006-01-02 15:04:05")
 
 	// Source拼接
 	Source = "[" + Source + "]"
 
 	// 判断level颜色
-	switch level {
-	case "INFO":
-		level = Blue(level)
-	case "WARNING":
-		level = Yellow(level)
-	case "ERROR":
-		level = Red(level)
-	case "DEBUG":
-		level = Green(level)
+	var LevelStr string
+	switch Level {
+	case 0:
+		LevelStr = Blue("INFO")
+	case 1:
+		LevelStr = Yellow("WARNING")
+	case 2:
+		LevelStr = Red("ERROR")
+	case 3:
+		LevelStr = Green("DEBUG")
 	default:
-		level = Magenta(level)
+		LevelStr = Magenta("Other")
 	}
 
 	// 打印日志
-	Text = append([]interface{}{Cyan(NowTime), level, Source}, Text...)
+	Text = append([]interface{}{Cyan(NowTime), LevelStr, Source}, Text...)
 	_, err := fmt.Println(Text...)
 	if err != nil {
 		return err
