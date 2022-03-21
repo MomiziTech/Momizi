@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-21 09:43:29
+ * @LastEditTime: 2022-03-21 10:39:04
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Controller\MessageReceiving\MessageReceiving.go
@@ -15,6 +15,7 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin"
+	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -57,10 +58,38 @@ func MessageReceiving(c *gin.Context) error {
 		fmt.Println(JsonBody)
 	}
 
-	// 将消息传递给插件
 	if Message.ID != "" {
+		// 打印消息内容
+		PrintMessage(Message)
+
+		// 将消息传递给插件
 		Plugin.RunPluginMessageListener(Message)
 	}
 
 	return nil
+}
+
+/**
+ * @description: 打印消息内容
+ * @param {MessageStruct.MessageStruct} Message 消息结构体
+ * @return {*}
+ */
+func PrintMessage(Message MessageStruct.MessageStruct) {
+	LogHeader := Message.ChatSoftware + ": " + Message.Sender.Username + "(" + Message.Sender.ID + ") -> "
+	for Num, MessageChain := range Message.MessageChain {
+		switch MessageChain.Type {
+		case "Text":
+			LogText := LogHeader + Message.MessageChain[Num].Text
+			Log.Print("Message", "INFO", LogText)
+		case "Image":
+			LogText := LogHeader + MessageChain.File.Name
+			Log.Print("Message", "INFO", LogText)
+		case "Audio":
+			LogText := LogHeader + MessageChain.File.Name
+			Log.Print("Message", "INFO", LogText)
+		case "Video":
+			LogText := LogHeader + MessageChain.File.Name
+			Log.Print("Message", "INFO", LogText)
+		}
+	}
 }
