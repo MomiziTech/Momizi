@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 14:52:53
- * @LastEditTime: 2022-03-21 14:59:38
+ * @LastEditTime: 2022-03-21 19:16:24
  * @LastEditors: NyanCatda
  * @Description: 请求请求函数注册
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\Tools\HttpRequest\New.go
@@ -13,6 +13,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/dop251/goja"
 )
 
 /**
@@ -21,29 +24,34 @@ import (
  * @param {string} URL 请求地址
  * @param {[]string} Header 请求头
  * @param {string} RequestBody 请求内容
- * @return {string} 返回内容
- * @return {*http.Response} 请求响应信息
+ * @return {*}
  */
-func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, RequestBody string) (string, *http.Response) {
-	RequestBodyStr := []byte(RequestBody)
-	req, err := http.NewRequest(Method, URL, bytes.NewBuffer(RequestBodyStr))
-	if err != nil {
-		return "", nil
-	}
+func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, RequestBody string, Func goja.Callable) {
+	go func() {
+		RequestBodyStr := []byte(RequestBody)
+		req, err := http.NewRequest(Method, URL, bytes.NewBuffer(RequestBodyStr))
+		if err != nil {
+			Log.ErrorWrite("Plugin", err)
+			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			return
+		}
 
-	for _, value := range Header {
-		Headervalue := strings.Split(value, ":")
-		req.Header.Set(Headervalue[0], Headervalue[1])
-	}
+		for _, value := range Header {
+			Headervalue := strings.Split(value, ":")
+			req.Header.Set(Headervalue[0], Headervalue[1])
+		}
 
-	// 发起请求
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", nil
-	}
-	defer resp.Body.Close()
-	Body, _ := ioutil.ReadAll(resp.Body)
+		// 发起请求
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			Log.ErrorWrite("Plugin", err)
+			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			return
+		}
+		defer resp.Body.Close()
+		Body, _ := ioutil.ReadAll(resp.Body)
 
-	return string(Body), resp
+		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(resp))
+	}()
 }
