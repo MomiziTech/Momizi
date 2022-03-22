@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 22:20:17
- * @LastEditTime: 2022-03-22 17:24:19
+ * @LastEditTime: 2022-03-22 18:01:14
  * @LastEditors: NyanCatda
  * @Description: 工具函数注册
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\Tools\Tools.go
@@ -14,6 +14,11 @@ import (
 	"github.com/dop251/goja"
 )
 
+/**
+ * @description: 工具函数注册
+ * @param {*goja.Runtime} VM 虚拟机
+ * @return {*}
+ */
 func Tools(VM *goja.Runtime) error {
 	// 控制台函数注册
 	if err := Console.RegistrationFunction(VM); err != nil {

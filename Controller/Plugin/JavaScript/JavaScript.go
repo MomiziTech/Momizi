@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 17:24:31
+ * @LastEditTime: 2022-03-22 18:01:37
  * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
@@ -88,6 +88,11 @@ func InitJavaScriptPlugin() error {
 	return nil
 }
 
+/**
+ * @description: 注册虚拟机
+ * @param {*}
+ * @return {*}
+ */
 func RegistrationVM() (*goja.Runtime, error) {
 	// 初始化加载器
 	VM := goja.New()
