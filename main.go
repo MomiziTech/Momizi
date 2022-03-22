@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-21 21:24:01
+ * @LastEditTime: 2022-03-22 22:09:22
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -17,7 +17,7 @@ import (
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
 	"github.com/MomiziTech/Momizi/Controller/Plugin"
-	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Utils/File"
 	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
 )
@@ -41,15 +41,15 @@ func Error(Error error) {
  */
 func Initialization() error {
 	// 初始化日志文件夹
-	if _, err := Utils.PathExists("./logs"); err != nil {
+	if _, err := File.MKDir("./logs"); err != nil {
 		return err
 	}
 	// 初始化插件文件夹
-	if _, err := Utils.PathExists("./plugins"); err != nil {
+	if _, err := File.MKDir("./plugins"); err != nil {
 		return err
 	}
 	// 初始化数据文件夹
-	if _, err := Utils.PathExists("./data"); err != nil {
+	if _, err := File.MKDir("./data"); err != nil {
 		return err
 	}
 	return nil

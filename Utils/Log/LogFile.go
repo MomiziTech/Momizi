@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-22 10:56:34
+ * @LastEditTime: 2022-03-22 22:07:53
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -15,7 +15,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Utils/File"
 )
 
 var (
@@ -30,7 +30,7 @@ var (
  */
 func LogFile() (*os.File, error) {
 	// 判断文件夹是否存在
-	Utils.PathExists(LogPath)
+	File.MKDir(LogPath)
 
 	logFileName := time.Now().Format("2006-01-02") + ".log"
 

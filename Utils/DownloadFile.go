@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-19 19:43:26
+ * @LastEditTime: 2022-03-22 22:08:02
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Utils\DownloadFile.go
@@ -16,6 +16,8 @@ import (
 	"path"
 	"strconv"
 	"time"
+
+	"github.com/MomiziTech/Momizi/Utils/File"
 )
 
 /**
@@ -43,7 +45,7 @@ func DownloadFile(URL string, SavePath string, RandomFileName bool, timeOut int)
 	reader := bufio.NewReaderSize(res.Body, 32*1024)
 
 	// 文件夹不存在则创建
-	_, err = PathExists(SavePath)
+	_, err = File.MKDir(SavePath)
 	if err != nil {
 		return "", 0, err
 	}
