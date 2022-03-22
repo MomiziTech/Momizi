@@ -24,7 +24,7 @@ func (HttpRequest HttpRequest) Get(URL string, Header []string, Func goja.Callab
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.GetRequest(URL, Header)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}

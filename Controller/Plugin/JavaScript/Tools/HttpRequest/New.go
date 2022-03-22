@@ -31,7 +31,7 @@ func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, R
 		RequestBodyStr := []byte(RequestBody)
 		req, err := http.NewRequest(Method, URL, bytes.NewBuffer(RequestBodyStr))
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -45,7 +45,7 @@ func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, R
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}

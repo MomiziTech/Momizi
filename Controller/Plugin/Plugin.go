@@ -23,7 +23,7 @@ func RunPluginMessageListener(Message MessageStruct.MessageStruct) error {
 	// 运行JavaScript插件
 	err := JavaScript.ExecutionMessageListener(Message)
 	if err != nil {
-		Log.ErrorWrite("Plugin", err)
+		Log.Error("Plugin", err)
 		return err
 	}
 
@@ -39,7 +39,7 @@ func InitPlugin() error {
 	// 初始化JavaScript插件
 	err := JavaScript.InitJavaScriptPlugin()
 	if err != nil {
-		Log.ErrorWrite("Plugin", err)
+		Log.Error("Plugin", err)
 		return err
 	}
 

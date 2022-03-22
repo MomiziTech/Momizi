@@ -88,7 +88,7 @@ func main() {
 	// 注册WebHook接收地址
 	r.POST("/"+WebHookKey, func(c *gin.Context) {
 		if err := MessageReceiving.MessageReceiving(c); err != nil {
-			Log.ErrorWrite("System", err)
+			Log.Error("System", err)
 		}
 	})
 

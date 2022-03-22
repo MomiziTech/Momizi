@@ -25,7 +25,7 @@ func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestJson(URL, Header, requestBody)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -45,7 +45,7 @@ func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data ma
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestXWWWForm(URL, Header, Data)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -65,7 +65,7 @@ func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data ma
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormData(URL, Header, Data)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -87,7 +87,7 @@ func (HttpRequest HttpRequest) PostFormDataFile(URL string, Header []string, Dat
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormDataFile(URL, Header, Data, FileKey, FilePath)
 		if err != nil {
-			Log.ErrorWrite("Plugin", err)
+			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}

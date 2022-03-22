@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-22 09:18:55
+ * @LastEditTime: 2022-03-22 10:56:34
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -48,24 +48,23 @@ func LogFile() (*os.File, error) {
 }
 
 /**
- * @description: 将错误写入日志
+ * @description: 打印错误
  * @param {error} Error 错误信息
  * @return {*}
  */
-func ErrorWrite(Source string, Error error) {
+func Error(Source string, Error error) {
 	// 打印错误
 	Print(Source, ERROR, Error)
-	// 将错误写入日志
-	logFile, err := LogFile()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer logFile.Close()
-	write := bufio.NewWriter(logFile)
+}
 
-	write.WriteString("Error: " + Error.Error() + "\n")
-	write.Flush()
+/**
+ * @description: 打印警告
+ * @param {*}
+ * @return {*}
+ */
+func Warning(Source string, Text ...any) {
+	// 打印警告
+	Print(Source, WARNING, Text...)
 }
 
 const (
@@ -109,5 +108,26 @@ func Print(Source string, Level int, Text ...any) error {
 	if err != nil {
 		return err
 	}
+
+	// 写入日志
+	logFile, err := LogFile()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer logFile.Close()
+	write := bufio.NewWriter(logFile)
+
+	// 遍历消息内容去除颜色
+	var LogText string
+	for _, v := range Text {
+		DelColorText := DelColor(fmt.Sprint(v))
+		LogText += DelColorText
+		LogText += " "
+	}
+
+	write.WriteString(LogText + "\n")
+	write.Flush()
+
 	return nil
 }
