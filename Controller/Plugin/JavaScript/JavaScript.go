@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 17:19:46
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-22 17:24:31
+ * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -15,7 +15,6 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
-	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools/Console"
 	"github.com/MomiziTech/Momizi/Utils/Log"
 	"github.com/dop251/goja"
 )
@@ -51,16 +50,9 @@ func InitJavaScriptPlugin() error {
 	for _, File := range Files {
 		FileName := File.Name()
 		if strings.HasSuffix(FileName, ".momizi.js") {
-			// 初始化加载器
-			VM := goja.New()
-
-			// 注册函数
-			if err := RegistrationFunction(VM); err != nil {
-				return err
-			}
-
-			// 控制台函数注册
-			if err := Console.RegistrationFunction(VM); err != nil {
+			// 注册虚拟机
+			VM, err := RegistrationVM()
+			if err != nil {
 				return err
 			}
 
@@ -96,15 +88,19 @@ func InitJavaScriptPlugin() error {
 	return nil
 }
 
-func RegistrationFunction(VM *goja.Runtime) error {
+func RegistrationVM() (*goja.Runtime, error) {
+	// 初始化加载器
+	VM := goja.New()
+
 	// 注册监听器函数
 	if err := EventListeners.Listeners(VM); err != nil {
-		return err
-	}
-	// 注册工具函数
-	if err := Tools.Tools(VM); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	// 注册工具函数
+	if err := Tools.Tools(VM); err != nil {
+		return nil, err
+	}
+
+	return VM, nil
 }
