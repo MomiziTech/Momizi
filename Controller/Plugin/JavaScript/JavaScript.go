@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 01:27:54
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-22 17:19:46
+ * @LastEditors: McPlus
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\JavaScript.go
  */
@@ -42,14 +42,6 @@ func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
  * @return {error} 错误信息
  */
 func InitJavaScriptPlugin() error {
-	// 初始化加载器
-	VM := goja.New()
-
-	// 注册函数
-	if err := RegistrationFunction(VM); err != nil {
-		return err
-	}
-
 	// 从文件中读取插件
 	Files, err := ioutil.ReadDir("./plugins/")
 	if err != nil {
@@ -59,8 +51,18 @@ func InitJavaScriptPlugin() error {
 	for _, File := range Files {
 		FileName := File.Name()
 		if strings.HasSuffix(FileName, ".momizi.js") {
+			// 初始化加载器
+			VM := goja.New()
+
+			// 注册函数
+			if err := RegistrationFunction(VM); err != nil {
+				return err
+			}
+
 			// 控制台函数注册
-			Console.RegistrationFileFunction(VM)
+			if err := Console.RegistrationFunction(VM); err != nil {
+				return err
+			}
 
 			ScriptBuffer, err := ioutil.ReadFile("./plugins/" + FileName)
 			if err != nil {
