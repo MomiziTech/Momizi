@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-21 21:23:53
+ * @LastEditTime: 2022-03-22 09:18:55
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Utils\Log\LogFile.go
@@ -79,10 +79,10 @@ const (
  * @description:  标准日志打印
  * @param {string} Source 日志来源
  * @param {string} Level 日志等级 INFO/WARNING/ERROR/DEBUG
- * @param {...interface{}} Text 日志内容
+ * @param {...any} Text 日志内容
  * @return {*}
  */
-func Print(Source string, Level int, Text ...interface{}) error {
+func Print(Source string, Level int, Text ...any) error {
 	NowTime := time.Now().Format("2006-01-02 15:04:05")
 
 	// Source拼接
@@ -104,7 +104,7 @@ func Print(Source string, Level int, Text ...interface{}) error {
 	}
 
 	// 打印日志
-	Text = append([]interface{}{Cyan(NowTime), LevelStr, Source}, Text...)
+	Text = append([]any{Cyan(NowTime), LevelStr, Source}, Text...)
 	_, err := fmt.Println(Text...)
 	if err != nil {
 		return err
