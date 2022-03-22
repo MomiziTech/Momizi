@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-22 17:36:42
- * @LastEditTime: 2022-03-22 17:57:03
+ * @LastEditTime: 2022-03-22 21:54:56
  * @LastEditors: NyanCatda
  * @Description: 下载文件函数
  * @FilePath: \Momizi\Controller\Plugin\JavaScript\Tools\HttpRequest\Download.go
@@ -23,7 +23,8 @@ import (
  */
 func (HttpRequest HttpRequest) Download(URL string, SavePath string, Func goja.Callable) {
 	go func() {
-		FilePath, FileSize, err := Utils.DownloadFile(URL, "./"+SavePath, false, 120)
+		PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+		FilePath, FileSize, err := Utils.DownloadFile(URL, "./data/"+PluginName+"/"+SavePath, false, 120)
 		if err != nil {
 			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(0))
