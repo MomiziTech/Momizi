@@ -13,7 +13,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
+	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
 	"github.com/nyancatda/HttpRequest"
 )
 

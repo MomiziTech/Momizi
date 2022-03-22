@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/dop251/goja"
 )
 

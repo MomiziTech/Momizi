@@ -9,7 +9,7 @@
 package Console
 
 import (
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
 /**

@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-03-08 21:31:34
  * @LastEditors: NyanCatda
  * @Description: 配置文件模块
- * @FilePath: \Momizi\Utils\ReadConfig\ReadConfig.go
+ * @FilePath: \Momizi\Tools\ReadConfig\ReadConfig.go
  */
 package ReadConfig
 

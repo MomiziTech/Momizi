@@ -15,7 +15,7 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin"
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/gin-gonic/gin"
 )
 

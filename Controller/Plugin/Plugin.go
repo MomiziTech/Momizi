@@ -11,7 +11,7 @@ package Plugin
 import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript"
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
 /**

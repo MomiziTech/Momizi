@@ -15,7 +15,7 @@ import (
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
-	"github.com/MomiziTech/Momizi/Utils"
+	"github.com/MomiziTech/Momizi/Tools"
 )
 
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
@@ -64,7 +64,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		if Message.Type == "Image" {
 			// 将文件下载至本地
 			timeUnix := time.Now().Unix()
-			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
+			FilePath, FileSize, err := Tools.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
 			if err != nil {
 				return MessageStruct.MessageStruct{}, err
 			}
@@ -88,7 +88,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		// 解析语音消息
 		if Message.Type == "Voice" {
 			timeUnix := time.Now().Unix()
-			FilePath, FileSize, err := Utils.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
+			FilePath, FileSize, err := Tools.DownloadFile(Message.URL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", true, 120)
 			if err != nil {
 				return MessageStruct.MessageStruct{}, err
 			}

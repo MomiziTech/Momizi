@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	Files "github.com/MomiziTech/Momizi/Utils/File"
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	Files "github.com/MomiziTech/Momizi/Tools/File"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
 /**

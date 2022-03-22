@@ -4,9 +4,9 @@
  * @LastEditTime: 2022-03-22 22:08:02
  * @LastEditors: NyanCatda
  * @Description:
- * @FilePath: \Momizi\Utils\DownloadFile.go
+ * @FilePath: \Momizi\Tools\DownloadFile.go
  */
-package Utils
+package Tools
 
 import (
 	"bufio"
@@ -17,7 +17,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/MomiziTech/Momizi/Utils/File"
+	"github.com/MomiziTech/Momizi/Tools/File"
 )
 
 /**

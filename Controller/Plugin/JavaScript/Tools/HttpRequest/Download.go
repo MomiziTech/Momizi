@@ -9,8 +9,8 @@
 package HttpRequest
 
 import (
-	"github.com/MomiziTech/Momizi/Utils"
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/dop251/goja"
 )
 
@@ -24,7 +24,7 @@ import (
 func (HttpRequest HttpRequest) Download(URL string, SavePath string, Func goja.Callable) {
 	go func() {
 		PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
-		FilePath, FileSize, err := Utils.DownloadFile(URL, "./data/"+PluginName+"/"+SavePath, false, 120)
+		FilePath, FileSize, err := Tools.DownloadFile(URL, "./data/"+PluginName+"/"+SavePath, false, 120)
 		if err != nil {
 			Log.Error("Plugin", err)
 			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(0))

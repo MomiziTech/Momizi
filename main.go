@@ -17,9 +17,9 @@ import (
 
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
 	"github.com/MomiziTech/Momizi/Controller/Plugin"
-	"github.com/MomiziTech/Momizi/Utils/File"
-	"github.com/MomiziTech/Momizi/Utils/Log"
-	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
+	"github.com/MomiziTech/Momizi/Tools/File"
+	"github.com/MomiziTech/Momizi/Tools/Log"
+	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
 )
 
 /**

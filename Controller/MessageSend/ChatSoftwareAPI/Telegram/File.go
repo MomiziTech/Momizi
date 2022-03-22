@@ -12,7 +12,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
+	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
 	"github.com/nyancatda/HttpRequest"
 )
 
@@ -43,7 +43,7 @@ func NewFile(ID string) (*File, error) {
 	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
 	var JsonData GetFileReturn
 	json.Unmarshal(Buffer, &JsonData)
-	
+
 	if Error != nil {
 		return &File{}, Error
 	}

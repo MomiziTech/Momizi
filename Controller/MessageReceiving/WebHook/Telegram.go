@@ -17,8 +17,8 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/WebHook/Struct"
 	TelegramMethods "github.com/MomiziTech/Momizi/Controller/MessageSend/ChatSoftwareAPI/Telegram/Methods"
-	"github.com/MomiziTech/Momizi/Utils"
-	"github.com/MomiziTech/Momizi/Utils/ReadConfig"
+	"github.com/MomiziTech/Momizi/Tools"
+	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
 )
 
 func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
@@ -64,7 +64,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		PhotoURL := GetTelegramFileURL(PhotoFileInfo.Path)
 		// 下载图片
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Utils.DownloadFile(PhotoURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(PhotoURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}
@@ -97,7 +97,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		DocumentURL := GetTelegramFileURL(DocumentFileInfo.Path)
 		// 下载文件
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Utils.DownloadFile(DocumentURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(DocumentURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}
@@ -135,7 +135,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		VoiceURL := GetTelegramFileURL(VoiceFileInfo.Path)
 		// 下载语音
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Utils.DownloadFile(VoiceURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(VoiceURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}

@@ -15,10 +15,10 @@ import (
 	"github.com/MomiziTech/Momizi/Controller/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/EventListeners"
 	"github.com/MomiziTech/Momizi/Controller/Plugin/JavaScript/Tools"
-	"github.com/MomiziTech/Momizi/Utils/Log"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/dop251/goja"
 
-	FileFunc "github.com/MomiziTech/Momizi/Utils/File"
+	FileFunc "github.com/MomiziTech/Momizi/Tools/File"
 )
 
 var (

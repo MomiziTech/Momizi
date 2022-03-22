@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-03-22 23:21:11
  * @LastEditors: NyanCatda
  * @Description: 路径检查
- * @FilePath: \Momizi\Utils\File\Dir.go
+ * @FilePath: \Momizi\Tools\File\Dir.go
  */
 package File
 

@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-03-22 23:21:06
  * @LastEditors: NyanCatda
  * @Description: 文件操作
- * @FilePath: \Momizi\Utils\File\File.go
+ * @FilePath: \Momizi\Tools\File\File.go
  */
 package File
 

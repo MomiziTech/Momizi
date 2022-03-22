@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-03-22 10:54:17
  * @LastEditors: NyanCatda
  * @Description: 终端输出颜色
- * @FilePath: \Momizi\Utils\Log\Color.go
+ * @FilePath: \Momizi\Tools\Log\Color.go
  */
 package Log
 

@@ -1,10 +1,10 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-22 22:07:53
+ * @LastEditTime: 2022-03-22 23:25:39
  * @LastEditors: NyanCatda
  * @Description: 日志模块
- * @FilePath: \Momizi\Utils\Log\LogFile.go
+ * @FilePath: \Momizi\Tools\Log\LogFile.go
  */
 
 package Log
@@ -15,7 +15,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/MomiziTech/Momizi/Utils/File"
+	"github.com/MomiziTech/Momizi/Tools/File"
 )
 
 var (
