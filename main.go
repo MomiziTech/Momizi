@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-22 22:09:22
+ * @LastEditTime: 2022-03-22 23:43:08
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -15,8 +15,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/MomiziTech/Momizi/Controller/MessageReceiving"
-	"github.com/MomiziTech/Momizi/Controller/Plugin"
+	"github.com/MomiziTech/Momizi/Internal/Controller"
+	"github.com/MomiziTech/Momizi/Internal/MessageReceiving"
+	"github.com/MomiziTech/Momizi/Internal/Plugin"
 	"github.com/MomiziTech/Momizi/Tools/File"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
@@ -41,15 +42,15 @@ func Error(Error error) {
  */
 func Initialization() error {
 	// 初始化日志文件夹
-	if _, err := File.MKDir("./logs"); err != nil {
+	if _, err := File.MKDir(Controller.LogPath); err != nil {
 		return err
 	}
 	// 初始化插件文件夹
-	if _, err := File.MKDir("./plugins"); err != nil {
+	if _, err := File.MKDir(Controller.PluginPath); err != nil {
 		return err
 	}
 	// 初始化数据文件夹
-	if _, err := File.MKDir("./data"); err != nil {
+	if _, err := File.MKDir(Controller.DataPath); err != nil {
 		return err
 	}
 	return nil
@@ -57,7 +58,7 @@ func Initialization() error {
 
 func main() {
 	// 参数解析
-	ConfigPath := flag.String("config", "./config.yml", "指定配置文件路径")
+	ConfigPath := flag.String("config", Controller.ConfigPath, "指定配置文件路径")
 	flag.Parse()
 
 	// 初始化程序

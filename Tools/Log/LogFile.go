@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-22 23:25:39
+ * @LastEditTime: 2022-03-22 23:49:48
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -15,11 +15,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Tools/File"
 )
 
 var (
-	LogPath = "./logs/"
+	LogPath = Controller.LogPath + "/"
 )
 
 /**
