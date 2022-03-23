@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 14:14:03
- * @LastEditTime: 2022-03-21 19:22:52
+ * @LastEditTime: 2022-03-23 14:56:58
  * @LastEditors: NyanCatda
  * @Description: Post请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\Post.go
@@ -19,18 +19,20 @@ import (
  * @param {string} URL 请求地址
  * @param {[]string} Header 请求头
  * @param {string} requestBody 请求内容(Json)
- * @return {*}
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody string, Func goja.Callable) {
+func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody string, Callback goja.Callable) {
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestJson(URL, Header, requestBody)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
 	}()
 }
 
@@ -39,18 +41,20 @@ func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody
  * @param {string} URL 请求地址
  * @param {[]string} Header 请求头
  * @param {map[string]string} Data 请求内容(x-www-from-urlencoded)
- * @return {*}
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data map[string]string, Func goja.Callable) {
+func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data map[string]string, Callback goja.Callable) {
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestXWWWForm(URL, Header, Data)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
 	}()
 }
 
@@ -59,18 +63,20 @@ func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data ma
  * @param {string} URL 请求地址
  * @param {[]string} Header 请求头
  * @param {map[string]string} Data 请求内容(multipart/form-data)
- * @return {*}
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data map[string]string, Func goja.Callable) {
+func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data map[string]string, Callback goja.Callable) {
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormData(URL, Header, Data)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
 	}()
 }
 
@@ -81,17 +87,19 @@ func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data ma
  * @param {map[string]string} Data 请求内容(multipart/form-data)
  * @param {string} FileKey 文件key
  * @param {[]string} FilePath 文件路径
- * @return {*}
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) PostFormDataFile(URL string, Header []string, Data map[string]string, FileKey string, FilePath []string, Func goja.Callable) {
+func (HttpRequest HttpRequest) PostFormDataFile(URL string, Header []string, Data map[string]string, FileKey string, FilePath []string, Callback goja.Callable) {
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormDataFile(URL, Header, Data, FileKey, FilePath)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
 	}()
 }

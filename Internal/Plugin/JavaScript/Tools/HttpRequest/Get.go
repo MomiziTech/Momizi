@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 13:58:24
- * @LastEditTime: 2022-03-21 19:17:23
+ * @LastEditTime: 2022-03-23 14:56:36
  * @LastEditors: NyanCatda
  * @Description: Get请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\Get.go
@@ -16,19 +16,21 @@ import (
 
 /**
  * @description: GET请求函数注册
- * @param {string} URL
- * @param {[]string} Header
- * @return {*}
+ * @param {string} URL 请求地址
+ * @param {[]string} Header 头部信息
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) Get(URL string, Header []string, Func goja.Callable) {
+func (HttpRequest HttpRequest) Get(URL string, Header []string, Callback goja.Callable) {
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.GetRequest(URL, Header)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(HttpResponse))
 	}()
 }

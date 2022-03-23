@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 21:24:44
- * @LastEditTime: 2022-03-21 08:53:26
+ * @LastEditTime: 2022-03-23 14:57:21
  * @LastEditors: NyanCatda
  * @Description: 消息监听器
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\EventListeners\MessageEvent.go
@@ -16,7 +16,7 @@ import (
 type MessageListener struct {
 	Listener Listener
 	FuncName string
-	Func     goja.Callable
+	Callback goja.Callable
 }
 
 var MessageListenerList []MessageListener
@@ -27,24 +27,29 @@ var MessageListenerList []MessageListener
  * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {*}
  */
-func (L Listener) Message(FuncName string, Func goja.Callable) {
-	MessageListenerList = append(MessageListenerList, MessageListener{Listener: L, FuncName: FuncName, Func: Func})
+func (L Listener) Message(FuncName string, Callback goja.Callable) {
+	MessageListenerList = append(MessageListenerList, MessageListener{Listener: L, FuncName: FuncName, Callback: Callback})
 }
 
+/**
+ * @description: 消息监听器调用
+ * @param {MessageStruct.MessageStruct} Message 消息结构体
+ * @return {MessageStruct.MessageStruct} 消息结构体
+ */
 func MessageListenerHandle(Message MessageStruct.MessageStruct) {
 	for _, MessageListener := range MessageListenerList {
 		Listener := MessageListener.Listener
 		if Message.ID != "" {
 			switch MessageListener.FuncName {
 			case "AllMessage":
-				MessageListener.Func(nil, Listener.VM.ToValue(Message))
+				MessageListener.Callback(nil, Listener.VM.ToValue(Message))
 			case "UserMessage":
 				if Message.Type == "User" {
-					MessageListener.Func(nil, Listener.VM.ToValue(Message))
+					MessageListener.Callback(nil, Listener.VM.ToValue(Message))
 				}
 			case "GroupMessage":
 				if Message.Type == "Group" {
-					MessageListener.Func(nil, Listener.VM.ToValue(Message))
+					MessageListener.Callback(nil, Listener.VM.ToValue(Message))
 				}
 			}
 		}
