@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-19 18:07:03
+ * @LastEditTime: 2022-03-23 20:14:58
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -18,7 +18,7 @@ import (
 )
 
 type Chat struct {
-	ID                    int             `json:"id"`                       // Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+	ID                    string          `json:"id"`                       // Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
 	Type                  string          `json:"type"`                     // Type of chat, can be either "private", "group", "supergroup" or "channel"
 	Title                 string          `json:"title"`                    // 	Optional. Title, for supergroups, channels and group chats
 	UserName              string          `json:"username"`                 // Optional. Username, for private chats, supergroups and channels if available
@@ -90,7 +90,7 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
 
 	DataMap := map[string]string{
-		"chat_id": strconv.Itoa(Chat.ID),
+		"chat_id": Chat.ID,
 	}
 
 	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
@@ -128,7 +128,7 @@ type SendMessageReturn struct {
  * @return {*}
  */
 func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool,
-	DisableNotification bool, ProtectContent bool, ReplyToMessaggeID int, AllowSendingWithoutReply bool) (Message, error) {
+	DisableNotification bool, ProtectContent bool, ReplyToMessageID int, AllowSendingWithoutReply bool) (Message, error) {
 	DataMap := map[string]string{
 		"text": Text,
 	}
@@ -154,8 +154,8 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 		DataMap["protect_content"] = strconv.FormatBool(ProtectContent)
 	}
 
-	if ReplyToMessaggeID != -1 {
-		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessaggeID)
+	if ReplyToMessageID != -1 {
+		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessageID)
 	}
 
 	if AllowSendingWithoutReply {
@@ -169,6 +169,226 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
 
 	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	var JsonData SendMessageReturn
+	json.Unmarshal(Buffer, &JsonData)
+
+	if Error != nil {
+		return Message{}, Error
+	}
+
+	if JsonData.Success {
+		return JsonData.Message, nil
+	}
+
+	return Message{}, errors.New(string(Buffer))
+}
+
+/**
+ * @description:
+ * @param {string} Photo
+ * @param {string} Caption *可选
+ * @param {string} ParseMode *可选
+ * @param {[]MessageEntity} CaptionEntities *可选
+ * @param {bool} DisableNotification *可选
+ * @param {bool} ProtectContent *可选
+ * @param {int} ReplyToMessageID *可选
+ * @param {bool} AllowSendingWithoutReply *可选
+ * @return {*}
+ */
+func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities []MessageEntity, DisableNotification bool,
+	ProtectContent bool, ReplyToMessageID int, AllowSendingWithoutReply bool) (Message, error) {
+	DataMap := make(map[string]string)
+
+	if Caption != "" {
+		DataMap["caption"] = Caption
+	}
+
+	if ParseMode != "" {
+		DataMap["parse_mode"] = ParseMode
+	}
+
+	if CaptionEntities != nil {
+		data, _ := json.Marshal(CaptionEntities)
+		DataMap["disable_web_page_preview"] = string(data)
+	}
+
+	if DisableNotification {
+		DataMap["disable_notification"] = strconv.FormatBool(DisableNotification)
+	}
+
+	if ProtectContent {
+		DataMap["protect_content"] = strconv.FormatBool(ProtectContent)
+	}
+
+	if ReplyToMessageID != -1 {
+		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessageID)
+	}
+
+	if AllowSendingWithoutReply {
+		DataMap["allow_sending_without_reply"] = strconv.FormatBool(AllowSendingWithoutReply)
+	}
+
+	Config := ReadConfig.GetConfig
+
+	ConfigTelegram := Config.ChatSoftware.Telegram
+
+	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendPhoto"
+
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "photo", []string{Photo})
+	var JsonData SendMessageReturn
+	json.Unmarshal(Buffer, &JsonData)
+
+	if Error != nil {
+		return Message{}, Error
+	}
+
+	if JsonData.Success {
+		return JsonData.Message, nil
+	}
+
+	return Message{}, errors.New(string(Buffer))
+}
+
+/**
+ * @description:
+ * @param {string} Audio
+ * @param {string} Caption *可选
+ * @param {string} ParseMode *可选
+ * @param {[]MessageEntity} CaptionEntities *可选
+ * @param {int} Duration *可选
+ * @param {string} Performer *可选
+ * @param {string} Title *可选
+ * @param {bool} DisableNotification *可选
+ * @param {bool} ProtectContent *可选
+ * @param {int} ReplyToMessageID *可选
+ * @param {bool} AllowSendingWithoutReply *可选
+ * @return {*}
+ */
+func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities []MessageEntity, Duration int,
+	Performer string, Title string, DisableNotification bool, ProtectContent bool, ReplyToMessageID int,
+	AllowSendingWithoutReply bool) (Message, error) {
+	DataMap := make(map[string]string)
+
+	if Caption != "" {
+		DataMap["caption"] = Caption
+	}
+
+	if ParseMode != "" {
+		DataMap["parse_mode"] = ParseMode
+	}
+
+	if CaptionEntities != nil {
+		data, _ := json.Marshal(CaptionEntities)
+		DataMap["disable_web_page_preview"] = string(data)
+	}
+
+	if Duration != -1 {
+		DataMap["duration"] = strconv.Itoa(Duration)
+	}
+
+	if Performer != "" {
+		DataMap["performer"] = Performer
+	}
+
+	if Title != "" {
+		DataMap["title"] = Title
+	}
+
+	if DisableNotification {
+		DataMap["disable_notification"] = strconv.FormatBool(DisableNotification)
+	}
+
+	if ProtectContent {
+		DataMap["protect_content"] = strconv.FormatBool(ProtectContent)
+	}
+
+	if ReplyToMessageID != -1 {
+		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessageID)
+	}
+
+	if AllowSendingWithoutReply {
+		DataMap["allow_sending_without_reply"] = strconv.FormatBool(AllowSendingWithoutReply)
+	}
+
+	Config := ReadConfig.GetConfig
+
+	ConfigTelegram := Config.ChatSoftware.Telegram
+
+	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendAudio"
+
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "audio", []string{Audio})
+	var JsonData SendMessageReturn
+	json.Unmarshal(Buffer, &JsonData)
+
+	if Error != nil {
+		return Message{}, Error
+	}
+
+	if JsonData.Success {
+		return JsonData.Message, nil
+	}
+
+	return Message{}, errors.New(string(Buffer))
+}
+
+/**
+ * @description:
+ * @param {string} Document
+ * @param {string} Caption *可选
+ * @param {string} ParseMode *可选
+ * @param {[]MessageEntity} CaptionEntities *可选
+ * @param {bool} DisableContentTypeDetection *可选
+ * @param {bool} DisableNotification *可选
+ * @param {bool} ProtectContent *可选
+ * @param {int} ReplyToMessageID *可选
+ * @param {bool} AllowSendingWithoutReply *可选
+ * @return {*}
+ */
+func SendDocument(Document string, Caption string, ParseMode string, CaptionEntities []MessageEntity,
+	DisableContentTypeDetection bool, DisableNotification bool, ProtectContent bool, ReplyToMessageID int,
+	AllowSendingWithoutReply bool) (Message, error) {
+	DataMap := make(map[string]string)
+
+	if Caption != "" {
+		DataMap["caption"] = Caption
+	}
+
+	if ParseMode != "" {
+		DataMap["parse_mode"] = ParseMode
+	}
+
+	if CaptionEntities != nil {
+		data, _ := json.Marshal(CaptionEntities)
+		DataMap["disable_web_page_preview"] = string(data)
+	}
+
+	if DisableContentTypeDetection {
+		DataMap["disable_content_type_detection"] = strconv.FormatBool(DisableContentTypeDetection)
+	}
+
+	if DisableNotification {
+		DataMap["disable_notification"] = strconv.FormatBool(DisableNotification)
+	}
+
+	if ProtectContent {
+		DataMap["protect_content"] = strconv.FormatBool(ProtectContent)
+	}
+
+	if ReplyToMessageID != -1 {
+		DataMap["reply_to_message_id"] = strconv.Itoa(ReplyToMessageID)
+	}
+
+	if AllowSendingWithoutReply {
+		DataMap["allow_sending_without_reply"] = strconv.FormatBool(AllowSendingWithoutReply)
+	}
+
+	Config := ReadConfig.GetConfig
+
+	ConfigTelegram := Config.ChatSoftware.Telegram
+
+	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendDocument"
+
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "document", []string{Document})
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
 
