@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 14:52:53
- * @LastEditTime: 2022-03-21 19:16:24
+ * @LastEditTime: 2022-03-23 14:56:53
  * @LastEditors: NyanCatda
  * @Description: 请求请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\New.go
@@ -24,15 +24,17 @@ import (
  * @param {string} URL 请求地址
  * @param {[]string} Header 请求头
  * @param {string} RequestBody 请求内容
- * @return {*}
+ * @param {goja.Callable} Callback 回调函数
+ * @return {[]byte} Body 请求返回内容
+ * @return {*http.Response} HttpResponse Http响应
  */
-func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, RequestBody string, Func goja.Callable) {
+func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, RequestBody string, Callback goja.Callable) {
 	go func() {
 		RequestBodyStr := []byte(RequestBody)
 		req, err := http.NewRequest(Method, URL, bytes.NewBuffer(RequestBodyStr))
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 
@@ -46,12 +48,12 @@ func (HttpRequest HttpRequest) New(Method string, URL string, Header []string, R
 		resp, err := client.Do(req)
 		if err != nil {
 			Log.Error("Plugin", err)
-			Func(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
+			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
 		defer resp.Body.Close()
 		Body, _ := ioutil.ReadAll(resp.Body)
 
-		Func(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(resp))
+		Callback(nil, HttpRequest.VM.ToValue(string(Body)), HttpRequest.VM.ToValue(resp))
 	}()
 }
