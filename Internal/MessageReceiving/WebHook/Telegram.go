@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-21 00:38:13
+ * @LastEditTime: 2022-03-23 20:39:47
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Telegram.go
@@ -64,7 +64,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		PhotoURL := GetTelegramFileURL(PhotoFileInfo.Path)
 		// 下载图片
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Tools.DownloadFile(PhotoURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(PhotoURL, []string{}, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}
@@ -97,7 +97,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		DocumentURL := GetTelegramFileURL(DocumentFileInfo.Path)
 		// 下载文件
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Tools.DownloadFile(DocumentURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(DocumentURL, []string{}, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}
@@ -135,7 +135,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		VoiceURL := GetTelegramFileURL(VoiceFileInfo.Path)
 		// 下载语音
 		timeUnix := time.Now().Unix()
-		FilePath, _, err := Tools.DownloadFile(VoiceURL, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
+		FilePath, _, err := Tools.DownloadFile(VoiceURL, []string{}, SaveFilePath+strconv.FormatInt(timeUnix, 10)+"/", false, 120)
 		if err != nil {
 			return MessageStruct.MessageStruct{}, err
 		}

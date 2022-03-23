@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-22 22:08:02
+ * @LastEditTime: 2022-03-23 20:40:22
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Tools\DownloadFile.go
@@ -15,6 +15,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/MomiziTech/Momizi/Tools/File"
@@ -23,6 +24,7 @@ import (
 /**
  * @description: 下载文件
  * @param {string} URL 文件地址
+ * @param {string} Header 请求头
  * @param {string} SavePath 保存路径
  * @param {int} timeOut 超时时间(秒)
  * @return {string} 文件保存路径
@@ -32,12 +34,21 @@ import (
  * @return {int64} 文件大小
  * @return {error} 错误信息
  */
-func DownloadFile(URL string, SavePath string, RandomFileName bool, timeOut int) (string, int64, error) {
-	//设置超时
+func DownloadFile(URL string, Header []string, SavePath string, RandomFileName bool, timeOut int) (string, int64, error) {
+	req, err := http.NewRequest("GET", URL, nil)
+	if err != nil {
+		return "", 0, err
+	}
+
+	for _, value := range Header {
+		Headervalue := strings.Split(value, ":")
+		req.Header.Set(Headervalue[0], Headervalue[1])
+	}
+
 	client := http.Client{
 		Timeout: time.Duration(timeOut) * time.Second,
 	}
-	res, err := client.Get(URL)
+	res, err := client.Do(req)
 	if err != nil {
 		return "", 0, err
 	}
