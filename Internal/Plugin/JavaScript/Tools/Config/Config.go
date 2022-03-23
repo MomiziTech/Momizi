@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-23 21:01:14
- * @LastEditTime: 2022-03-23 21:30:17
+ * @LastEditTime: 2022-03-23 21:36:53
  * @LastEditors: NyanCatda
  * @Description: 读取配置项
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\Config\Config.go
@@ -36,14 +36,14 @@ func RegistrationFunction(VM *goja.Runtime) error {
  * @param {map[string]any} Default 默认配置
  * @return {bool} 是否初始化成功
  */
-func (Config Config) Init(Path string, Default map[string]any) bool {
+func (Config Config) Init(Path string, Default map[string]any) *JsonConfig.Config {
 	PluginName := Config.VM.Get("PLUGIN_NAME").String()
 	conf := JsonConfig.New(PluginPath+PluginName+"/"+Path, Default)
 	if err := conf.Init(); err != nil {
 		Log.Error("Plugin", err)
-		return false
+		return nil
 	}
-	return true
+	return conf
 }
 
 /**
@@ -53,13 +53,11 @@ func (Config Config) Init(Path string, Default map[string]any) bool {
  * @param {string} Name 配置项名称
  * @return {*}
  */
-func (Config Config) Get(Path string, Default map[string]any, Name string) any {
-	PluginName := Config.VM.Get("PLUGIN_NAME").String()
-	conf := JsonConfig.New(PluginPath+PluginName+"/"+Path, Default)
-	Body, err := conf.Get(Name)
+func (Config Config) Get(Conf *JsonConfig.Config, Name string) any {
+	Body, err := Conf.Get(Name)
 	if err != nil {
 		Log.Error("Plugin", err)
-		return Default[Name]
+		return Conf.Default[Name]
 	}
 	return Body
 }
@@ -72,10 +70,8 @@ func (Config Config) Get(Path string, Default map[string]any, Name string) any {
  * @param {any} Value 配置项值
  * @return {bool} 是否设置成功
  */
-func (Config Config) Set(Path string, Default map[string]any, Name string, Value any) bool {
-	PluginName := Config.VM.Get("PLUGIN_NAME").String()
-	conf := JsonConfig.New(PluginPath+PluginName+"/"+Path, Default)
-	if err := conf.Set(Name, Value); err != nil {
+func (Config Config) Set(Conf *JsonConfig.Config, Name string, Value any) bool {
+	if err := Conf.Set(Name, Value); err != nil {
 		Log.Error("Plugin", err)
 		return false
 	}
@@ -89,10 +85,8 @@ func (Config Config) Set(Path string, Default map[string]any, Name string, Value
  * @param {string} Name 配置项名称
  * @return {bool} 是否删除成功
  */
-func (Config Config) Delete(Path string, Default map[string]any, Name string) bool {
-	PluginName := Config.VM.Get("PLUGIN_NAME").String()
-	conf := JsonConfig.New(PluginPath+PluginName+"/"+Path, Default)
-	if err := conf.Delete(Name); err != nil {
+func (Config Config) Delete(Conf *JsonConfig.Config, Name string) bool {
+	if err := Conf.Delete(Name); err != nil {
 		Log.Error("Plugin", err)
 		return false
 	}
