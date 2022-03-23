@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-23 13:57:19
- * @LastEditTime: 2022-03-23 14:46:01
+ * @LastEditTime: 2022-03-23 21:44:07
  * @LastEditors: NyanCatda
  * @Description:文件读写操作
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\File\ReadWrite.go
@@ -23,7 +23,7 @@ func (File File) Read(Path string) any {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	Str, err := Files.Read(DataPath + PluginName + "/" + Path)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return nil
 	}
 	return Str
@@ -39,7 +39,7 @@ func (File File) WriteTo(Path string, Content string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	err := Files.WriteTo(DataPath+PluginName+"/"+Path, Content)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true
@@ -55,7 +55,7 @@ func (File File) WriteAppend(Path string, Content string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	err := Files.WriteAppend(DataPath+PluginName+"/"+Path, Content)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true

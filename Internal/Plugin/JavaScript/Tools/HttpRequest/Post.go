@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 14:14:03
- * @LastEditTime: 2022-03-23 14:56:58
+ * @LastEditTime: 2022-03-23 21:45:16
  * @LastEditors: NyanCatda
  * @Description: Post请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\Post.go
@@ -27,7 +27,8 @@ func (HttpRequest HttpRequest) PostJson(URL string, Header []string, requestBody
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestJson(URL, Header, requestBody)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -49,7 +50,8 @@ func (HttpRequest HttpRequest) PostXWWWForm(URL string, Header []string, Data ma
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestXWWWForm(URL, Header, Data)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -71,7 +73,8 @@ func (HttpRequest HttpRequest) PostFormData(URL string, Header []string, Data ma
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormData(URL, Header, Data)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}
@@ -95,7 +98,8 @@ func (HttpRequest HttpRequest) PostFormDataFile(URL string, Header []string, Dat
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.PostRequestFormDataFile(URL, Header, Data, FileKey, FilePath)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}

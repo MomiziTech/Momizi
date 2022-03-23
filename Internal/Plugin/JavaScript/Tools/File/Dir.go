@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-22 21:59:31
- * @LastEditTime: 2022-03-22 23:16:55
+ * @LastEditTime: 2022-03-23 21:43:03
  * @LastEditors: NyanCatda
  * @Description: 目录操作
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\File\Dir.go
@@ -25,6 +25,7 @@ func (File File) MKDir(Path string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	_, err := Files.MKDir(DataPath + PluginName + "/" + Path)
 	if err != nil {
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true
@@ -45,7 +46,7 @@ func (File File) GetFilesList(Path string) []string {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	Files, err := Files.GetFilesList(DataPath + PluginName + "/" + Path)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return nil
 	}
 

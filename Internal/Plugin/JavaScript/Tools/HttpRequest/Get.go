@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 13:58:24
- * @LastEditTime: 2022-03-23 14:56:36
+ * @LastEditTime: 2022-03-23 21:44:55
  * @LastEditors: NyanCatda
  * @Description: Get请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\Get.go
@@ -26,7 +26,8 @@ func (HttpRequest HttpRequest) Get(URL string, Header []string, Callback goja.Ca
 	go func() {
 		Body, HttpResponse, err := HttpRequestFunc.GetRequest(URL, Header)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(nil))
 			return
 		}

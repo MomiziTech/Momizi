@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-22 17:36:42
- * @LastEditTime: 2022-03-23 20:40:45
+ * @LastEditTime: 2022-03-23 21:44:44
  * @LastEditors: NyanCatda
  * @Description: 下载文件函数
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\HttpRequest\Download.go
@@ -29,7 +29,8 @@ func (HttpRequest HttpRequest) Download(URL string, Header []string, SavePath st
 		PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
 		FilePath, FileSize, err := Tools.DownloadFile(URL, Header, Controller.DataPath+"/"+PluginName+"/"+SavePath, false, 120)
 		if err != nil {
-			Log.Error("Plugin", err)
+			PluginName := HttpRequest.VM.Get("PLUGIN_NAME").String()
+			Log.Error(PluginName, err)
 			Callback(nil, HttpRequest.VM.ToValue(""), HttpRequest.VM.ToValue(0))
 			return
 		}

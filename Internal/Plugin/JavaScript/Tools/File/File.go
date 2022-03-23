@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-22 21:57:52
- * @LastEditTime: 2022-03-22 23:48:04
+ * @LastEditTime: 2022-03-23 21:43:24
  * @LastEditors: NyanCatda
  * @Description: 文件操作函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\File\File.go
@@ -39,7 +39,7 @@ func (File File) Delete(Path string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	OK, err := Files.Delete(DataPath + PluginName + "/" + Path)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return false
 	}
 	return OK
@@ -66,7 +66,7 @@ func (File File) Copy(Path string, NewPath string) (int64, bool) {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	FileSize, err := Files.Copy(DataPath+PluginName+"/"+Path, DataPath+PluginName+"/"+NewPath)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return 0, false
 	}
 	return FileSize, true
@@ -82,7 +82,7 @@ func (File File) Move(Path string, NewPath string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	err := Files.Move(DataPath+PluginName+"/"+Path, DataPath+PluginName+"/"+NewPath)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true
@@ -97,7 +97,7 @@ func (File File) GetFileSize(FilePath string) int64 {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
 	FileSize, err := Files.GetFileSize(DataPath + PluginName + "/" + FilePath)
 	if err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return 0
 	}
 	return FileSize

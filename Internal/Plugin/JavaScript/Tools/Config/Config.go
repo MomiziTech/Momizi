@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-23 21:01:14
- * @LastEditTime: 2022-03-23 21:36:53
+ * @LastEditTime: 2022-03-23 21:41:50
  * @LastEditors: NyanCatda
  * @Description: 读取配置项
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\Config\Config.go
@@ -40,7 +40,7 @@ func (Config Config) Init(Path string, Default map[string]any) *JsonConfig.Confi
 	PluginName := Config.VM.Get("PLUGIN_NAME").String()
 	conf := JsonConfig.New(PluginPath+PluginName+"/"+Path, Default)
 	if err := conf.Init(); err != nil {
-		Log.Error("Plugin", err)
+		Log.Error(PluginName, err)
 		return nil
 	}
 	return conf
@@ -56,7 +56,8 @@ func (Config Config) Init(Path string, Default map[string]any) *JsonConfig.Confi
 func (Config Config) Get(Conf *JsonConfig.Config, Name string) any {
 	Body, err := Conf.Get(Name)
 	if err != nil {
-		Log.Error("Plugin", err)
+		PluginName := Config.VM.Get("PLUGIN_NAME").String()
+		Log.Error(PluginName, err)
 		return Conf.Default[Name]
 	}
 	return Body
@@ -72,7 +73,8 @@ func (Config Config) Get(Conf *JsonConfig.Config, Name string) any {
  */
 func (Config Config) Set(Conf *JsonConfig.Config, Name string, Value any) bool {
 	if err := Conf.Set(Name, Value); err != nil {
-		Log.Error("Plugin", err)
+		PluginName := Config.VM.Get("PLUGIN_NAME").String()
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true
@@ -87,7 +89,8 @@ func (Config Config) Set(Conf *JsonConfig.Config, Name string, Value any) bool {
  */
 func (Config Config) Delete(Conf *JsonConfig.Config, Name string) bool {
 	if err := Conf.Delete(Name); err != nil {
-		Log.Error("Plugin", err)
+		PluginName := Config.VM.Get("PLUGIN_NAME").String()
+		Log.Error(PluginName, err)
 		return false
 	}
 	return true
