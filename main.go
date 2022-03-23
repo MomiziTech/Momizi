@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-22 23:43:08
+ * @LastEditTime: 2022-03-24 00:58:46
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -11,7 +11,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -90,7 +92,9 @@ func main() {
 	r.POST("/"+WebHookKey, func(c *gin.Context) {
 		if err := MessageReceiving.MessageReceiving(c); err != nil {
 			Log.Error("System", err)
+			c.JSONP(http.StatusInternalServerError, gin.H{"success": false, "time": time.Now().Unix()})
 		}
+		c.JSONP(http.StatusOK, gin.H{"success": true, "time": time.Now().Unix()})
 	})
 
 	// 启动WebHook接收
