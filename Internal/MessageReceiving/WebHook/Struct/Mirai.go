@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 14:21:12
- * @LastEditTime: 2022-03-12 23:15:11
+ * @LastEditTime: 2022-03-24 21:10:26
  * @LastEditors: NyanCatda
  * @Description: Telegram WebHook结构体
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Struct\Mirai.go
@@ -11,8 +11,8 @@ package Struct
 type Mirai struct {
 	Type         string `json:"type"` // 聊天类型，可能类型："FriendMessage"，"GroupMessage"，"TempMessage"，"OtherClientMessage"
 	MessageChain []struct {
-		Type string `json:"type"` // 消息类型，可能类型："Source"，"Quote"，"At"，"AtAll"，"Plain"，"Image，"Voice"，"Xml"，"Json"，"App"，"Poke"，"Forward"
-		ID   int    `json:"id"`   // 消息ID
+		Type string `json:"type"` // 消息类型，可能类型："Source"，"Quote"，"At"，"AtAll"，"Plain"，"Image，"Voice"，"Xml"，"Json"，"App"，"Poke"，"Forward"，"File"
+		ID   any    `json:"id"`   // 消息ID
 		Time int    `json:"time"` // 消息时间戳
 
 		// 文字消息
@@ -25,13 +25,17 @@ type Mirai struct {
 		VoiceID string `json:"voiceId"` // 语音消息ID
 		Length  int    `json:"length"`  // 语音消息长度(ms)
 
+		// 文件消息
+		Name string `json:"name"` // 文件名称
+		Size int64  `json:"size"` // 文件大小(Byte)
+
 		// 回复消息
 		SenderID int `json:"senderId"` // 被引用回复的原消息的发送者的QQ号
 		TargetID int `json:"targetId"` // 被引用回复的原消息的发送者的QQ号
 		GroupID  int `json:"groupId"`
 		Origin   []struct {
 			Type string `json:"type"` // 消息类型，可能类型："Source"，"Quote"，"At"，"AtAll"，"Plain"，"Image，"Voice"，"Xml"，"Json"，"App"，"Poke"，"Forward"
-			ID   int    `json:"id"`   // 消息ID
+			ID   int    `json:"id"`   // 消息ID(文件消息下为文件ID)
 			Time int    `json:"time"` // 消息时间戳
 
 			// 文字消息

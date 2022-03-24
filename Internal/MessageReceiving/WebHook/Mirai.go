@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-23 20:39:37
+ * @LastEditTime: 2022-03-24 21:07:49
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Mirai.go
@@ -9,6 +9,7 @@
 package WebHook
 
 import (
+	"fmt"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -36,7 +37,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	}
 
 	var Time int
-	var MessageID int
+	var MessageID any
 
 	var Text string
 
@@ -108,6 +109,11 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 			}
 			MessageChain = append(MessageChain, VoiceMessage)
 		}
+
+		// 解析文件消息
+		if Message.Type == "File" {
+			
+		}
 	}
 
 	// 如果文本消息不为空则添加进入消息链
@@ -130,7 +136,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	}
 
 	Message := MessageStruct.MessageStruct{
-		ID:           strconv.Itoa(MessageID),
+		ID:           fmt.Sprintln(MessageID),
 		Type:         Type,
 		ChatSoftware: ChatSoftwareName,
 		Time:         Time,
