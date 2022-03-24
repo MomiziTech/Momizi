@@ -6,6 +6,7 @@ require (
 	github.com/dop251/goja v0.0.0-20220214123719-b09a6bfa842f
 	github.com/gin-gonic/gin v1.7.7
 	github.com/nyancatda/HttpRequest v1.0.1
+	github.com/syndtr/goleveldb v1.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -17,6 +18,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/golang/protobuf v1.3.3 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect

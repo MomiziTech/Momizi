@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 22:20:17
- * @LastEditTime: 2022-03-23 21:22:43
+ * @LastEditTime: 2022-03-24 14:40:03
  * @LastEditors: NyanCatda
  * @Description: 工具函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\Tools.go
@@ -13,6 +13,7 @@ import (
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScript/Tools/Console"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScript/Tools/File"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScript/Tools/HttpRequest"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScript/Tools/LevelDB"
 	"github.com/dop251/goja"
 )
 
@@ -39,6 +40,11 @@ func Tools(VM *goja.Runtime) error {
 
 	// 注册配置文件类
 	if err := Config.RegistrationFunction(VM); err != nil {
+		return err
+	}
+
+	// 注册LevelDB类
+	if err := LevelDB.RegistrationFunction(VM); err != nil {
 		return err
 	}
 
