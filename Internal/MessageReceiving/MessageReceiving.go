@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-21 21:24:33
+ * @LastEditTime: 2022-03-25 21:03:01
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Internal\MessageReceiving\MessageReceiving.go
@@ -75,21 +75,25 @@ func MessageReceiving(c *gin.Context) error {
  * @return {*}
  */
 func PrintMessage(Message MessageStruct.MessageStruct) {
-	LogHeader := Message.ChatSoftware + ": " + Message.Sender.Username + "(" + Message.Sender.ID + ") -> "
+	var ChatID string
+	if Message.Type == "Group" {
+		ChatID = Message.Sender.Group.ID
+	} else {
+		ChatID = Message.Sender.ID
+	}
+
+	var Content string
 	for Num, MessageChain := range Message.MessageChain {
 		switch MessageChain.Type {
 		case "Text":
-			LogText := LogHeader + Message.MessageChain[Num].Text
-			Log.Print("Message", Log.INFO, LogText)
+			Content = Message.MessageChain[Num].Text
 		case "Image":
-			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", Log.INFO, LogText)
+			Content = MessageChain.File.Name
 		case "Audio":
-			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", Log.INFO, LogText)
+			Content = MessageChain.File.Name
 		case "Video":
-			LogText := LogHeader + MessageChain.File.Name
-			Log.Print("Message", Log.INFO, LogText)
+			Content = MessageChain.File.Name
 		}
+		Log.ReceivedMessage(Message.ChatSoftware, Message.Type, ChatID, Message.Sender.Username, Message.Sender.ID, Content)
 	}
 }

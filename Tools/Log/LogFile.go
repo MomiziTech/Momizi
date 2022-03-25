@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-22 23:49:48
+ * @LastEditTime: 2022-03-25 21:06:19
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -23,30 +23,12 @@ var (
 	LogPath = Controller.LogPath + "/"
 )
 
-/**
- * @description: 读写Log文件，按天分割日志
- * @param {*}
- * @return {*os.File}
- * @return {error}
- */
-func LogFile() (*os.File, error) {
-	// 判断文件夹是否存在
-	File.MKDir(LogPath)
-
-	logFileName := time.Now().Format("2006-01-02") + ".log"
-
-	logfile, err := os.OpenFile(LogPath+logFileName, os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		// 如果文件不存在则创建
-		logfile, err := os.Create(LogPath + logFileName)
-		if err != nil {
-			return logfile, err
-		}
-		return logfile, nil
-	}
-
-	return logfile, nil
-}
+const (
+	INFO = iota + 0
+	WARNING
+	ERROR
+	DEBUG
+)
 
 /**
  * @description: 打印错误
@@ -68,12 +50,35 @@ func Warning(Source string, Text ...any) {
 	Print(Source, WARNING, Text...)
 }
 
-const (
-	INFO = iota + 0
-	WARNING
-	ERROR
-	DEBUG
-)
+/**
+ * @description: 打印发送的消息
+ * @param {string} ChatSoftware 聊天软件, QQ/Telegram/Line
+ * @param {string} ChatType 聊天类型, User/Group/Other
+ * @param {string} ChatID 聊天ID
+ * @param {string} Content 消息内容
+ * @return {*}
+ */
+func SendMessage(ChatSoftware string, ChatType string, ChatID string, Content string) {
+	LogText := fmt.Sprintf("%s: %s[%s] <- %s", ChatSoftware, ChatType, ChatID, Content)
+
+	Print("Message", INFO, LogText)
+}
+
+/**
+ * @description: 打印接收到的消息
+ * @param {string} ChatSoftware 聊天软件, QQ/Telegram/Line
+ * @param {string} ChatType 聊天类型, User/Group/Other
+ * @param {string} ChatID 聊天ID
+ * @param {string} UserName 用户名
+ * @param {string} SenderID 发送者ID
+ * @param {string} Content 消息内容
+ * @return {*}
+ */
+func ReceivedMessage(ChatSoftware string, ChatType string, ChatID string, UserName string, SenderID string, Content string) {
+	LogText := fmt.Sprintf("%s: %s[%s] %s(%s) -> %s", ChatSoftware, ChatType, ChatID, UserName, SenderID, Content)
+
+	Print("Message", INFO, LogText)
+}
 
 /**
  * @description:  标准日志打印
@@ -131,4 +136,29 @@ func Print(Source string, Level int, Text ...any) error {
 	write.Flush()
 
 	return nil
+}
+
+/**
+ * @description: 读写Log文件，按天分割日志
+ * @param {*}
+ * @return {*os.File}
+ * @return {error}
+ */
+func LogFile() (*os.File, error) {
+	// 判断文件夹是否存在
+	File.MKDir(LogPath)
+
+	logFileName := time.Now().Format("2006-01-02") + ".log"
+
+	logfile, err := os.OpenFile(LogPath+logFileName, os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		// 如果文件不存在则创建
+		logfile, err := os.Create(LogPath + logFileName)
+		if err != nil {
+			return logfile, err
+		}
+		return logfile, nil
+	}
+
+	return logfile, nil
 }
