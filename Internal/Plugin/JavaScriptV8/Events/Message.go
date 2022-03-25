@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:58:57
- * @LastEditTime: 2022-03-25 22:47:31
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-25 23:56:01
+ * @LastEditors: McPlus
  * @Description: MessageEvent
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Events\Message.go
  */
@@ -52,7 +52,12 @@ func HandleMessageEvent(Message MessageStruct.MessageStruct) error {
 	if err != nil {
 		return err
 	}
-	Object, err := v8go.JSONParse(nil, string(Json))
+	Context, err := v8go.NewContext()
+	if err != nil {
+		return err
+	}
+
+	Object, err := v8go.JSONParse(Context, string(Json))
 	if err != nil {
 		return err
 	}
