@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-25 05:22:32
- * @LastEditTime: 2022-03-25 22:40:25
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-26 01:24:34
+ * @LastEditors: McPlus
  * @Description: 控制台方法
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Console\Console.go
  */
@@ -30,6 +30,9 @@ func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 
 	Debug := RegisterDebugPrint(Isolate, Context)
 	Console.Set("Debug", Debug)
+
+	SetColor := ResisterSetColorFunction(Isolate, Context)
+	Console.Set("SetColor", SetColor)
 
 	ConsoleObject, _ := Console.NewInstance(Context)
 

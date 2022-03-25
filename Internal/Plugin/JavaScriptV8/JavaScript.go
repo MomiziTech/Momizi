@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-03-26 01:03:55
+ * @LastEditTime: 2022-03-26 01:23:42
  * @LastEditors: McPlus
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
@@ -51,14 +51,20 @@ func InitJavaScriptPlugin() error {
 	}
 
 	// 注册虚拟机
-	Isolate, _ := v8go.NewIsolate()
+	Isolate, Error := v8go.NewIsolate()
+	if Error != nil {
+		return Error
+	}
 
 	// 遍历插件
 	for _, File := range Files {
 		FileName := File.Name()
 		if strings.HasSuffix(FileName, ".momizi.js") {
 			// 注册虚拟机
-			Context, _ := v8go.NewContext(Isolate)
+			Context, err := v8go.NewContext(Isolate)
+			if err != nil {
+				return Error
+			}
 
 			Global := Context.Global()
 
@@ -74,13 +80,20 @@ func InitJavaScriptPlugin() error {
 			}
 			Script := string(ScriptBuffer)
 
-			Context.RunScript(Script, FileName)
+			_, err = Context.RunScript(Script, FileName)
 
 			// 打印插件信息
 			PluginName, _ := Context.RunScript("PLUGIN_NAME", FileName)
 			PluginVersion, _ := Context.RunScript("PLUGIN_VERSION", FileName)
 			PluginAuthor, _ := Context.RunScript("PLUGIN_AUTHOR", FileName)
 			Log.Print("Plugin", Log.INFO, "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
+
+			if err != nil {
+				e := err.(*v8go.JSError)
+				Log.Print(PluginName.String(), Log.ERROR, e.Message)
+				Log.Print(PluginName.String(), Log.ERROR, e.Location)
+				Log.Print(PluginName.String(), Log.ERROR, e.StackTrace)
+			}
 
 			// 创建插件数据文件夹与配置文件夹
 			if _, err := FileFunc.MKDir(Controller.DataPath + "/" + PluginName.String() + "/"); err != nil {
