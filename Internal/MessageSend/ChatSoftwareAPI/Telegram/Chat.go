@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-23 20:14:58
+ * @LastEditTime: 2022-03-23 20:43:06
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -56,13 +56,13 @@ func NewChat(ID int) *Chat {
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChat"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChat"
 
 	DataMap := map[string]string{
 		"chat_id": strconv.Itoa(ID),
 	}
 
-	Buffer, _, _ := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, _ := HttpRequest.PostRequestXWWWForm(APIAddress, []string{}, DataMap)
 	var JsonData GetChatReturn
 	json.Unmarshal(Buffer, &JsonData)
 	if JsonData.Success {
@@ -87,13 +87,13 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
 
 	DataMap := map[string]string{
 		"chat_id": Chat.ID,
 	}
 
-	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAddress, []string{}, DataMap)
 	var JsonData GetAdministratorsReturn
 	json.Unmarshal(Buffer, &JsonData)
 
@@ -118,13 +118,13 @@ type SendMessageReturn struct {
 /**
  * @description:
  * @param {string} Text
- * @param {string} ParseMode *可选
- * @param {[]MessageEntity} Entities *可选
- * @param {bool} DisableWebPagePreview *可选
- * @param {bool} DisableNotification *可选
- * @param {bool} ProtectContent *可选
- * @param {int} ReplyToMessaggeID *可选
- * @param {bool} AllowSendingWithoutReply *可选
+ * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the message text
+ * @param {[]MessageEntity} Entities *可选 -- A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
+ * @param {bool} DisableWebPagePreview *可选 -- Disables link previews for links in this message
+ * @param {bool} DisableNotification *可选 -- Sends the message silently. Users will receive a notification with no sound.
+ * @param {bool} ProtectContent *可选 -- Protects the contents of the sent message from forwarding and saving
+ * @param {int} ReplyToMessaggeID *可选 -- If the message is a reply, ID of the original message
+ * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
 func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEntity, DisableWebPagePreview bool,
@@ -166,9 +166,9 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
 
-	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAdress, []string{}, DataMap)
+	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAddress, []string{}, DataMap)
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
 
@@ -185,14 +185,14 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 
 /**
  * @description:
- * @param {string} Photo
- * @param {string} Caption *可选
- * @param {string} ParseMode *可选
- * @param {[]MessageEntity} CaptionEntities *可选
- * @param {bool} DisableNotification *可选
- * @param {bool} ProtectContent *可选
- * @param {int} ReplyToMessageID *可选
- * @param {bool} AllowSendingWithoutReply *可选
+ * @param {string} Photo 图片路径
+ * @param {string} Caption *可选 -- Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing
+ * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the photo caption
+ * @param {[]MessageEntity} CaptionEntities *可选 -- A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param {bool} DisableNotification *可选 -- Sends the message silently. Users will receive a notification with no sound.
+ * @param {bool} ProtectContent *可选 -- Protects the contents of the sent message from forwarding and saving
+ * @param {int} ReplyToMessageID *可选 -- If the message is a reply, ID of the original message
+ * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
 func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities []MessageEntity, DisableNotification bool,
@@ -232,9 +232,9 @@ func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities [
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendPhoto"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendPhoto"
 
-	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "photo", []string{Photo})
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "photo", []string{Photo})
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
 
@@ -251,17 +251,17 @@ func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities [
 
 /**
  * @description:
- * @param {string} Audio
- * @param {string} Caption *可选
- * @param {string} ParseMode *可选
- * @param {[]MessageEntity} CaptionEntities *可选
- * @param {int} Duration *可选
- * @param {string} Performer *可选
- * @param {string} Title *可选
- * @param {bool} DisableNotification *可选
- * @param {bool} ProtectContent *可选
- * @param {int} ReplyToMessageID *可选
- * @param {bool} AllowSendingWithoutReply *可选
+ * @param {string} Audio 音频文件路径
+ * @param {string} Caption *可选 -- Audio caption, 0-1024 characters after entities parsing
+ * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the audio caption. See formatting options for more details.
+ * @param {[]MessageEntity} CaptionEntities *可选 -- A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param {int} Duration *可选 -- Duration of the audio in seconds
+ * @param {string} Performer *可选 -- Performer
+ * @param {string} Title *可选 -- Track name
+ * @param {bool} DisableNotification *可选 -- Sends the message silently. Users will receive a notification with no sound.
+ * @param {bool} ProtectContent *可选 -- Protects the contents of the sent message from forwarding and saving
+ * @param {int} ReplyToMessageID *可选 -- If the message is a reply, ID of the original message
+ * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
 func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities []MessageEntity, Duration int,
@@ -314,9 +314,9 @@ func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities [
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendAudio"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendAudio"
 
-	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "audio", []string{Audio})
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "audio", []string{Audio})
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
 
@@ -333,15 +333,15 @@ func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities [
 
 /**
  * @description:
- * @param {string} Document
- * @param {string} Caption *可选
- * @param {string} ParseMode *可选
- * @param {[]MessageEntity} CaptionEntities *可选
- * @param {bool} DisableContentTypeDetection *可选
- * @param {bool} DisableNotification *可选
- * @param {bool} ProtectContent *可选
- * @param {int} ReplyToMessageID *可选
- * @param {bool} AllowSendingWithoutReply *可选
+ * @param {string} Document 文件路径
+ * @param {string} Caption *可选 -- Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing
+ * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the document caption.
+ * @param {[]MessageEntity} CaptionEntities *可选 -- A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param {bool} DisableContentTypeDetection *可选 -- Disables automatic server-side content type detection for files uploaded using multipart/form-data
+ * @param {bool} DisableNotification *可选 -- Sends the message silently. Users will receive a notification with no sound.
+ * @param {bool} ProtectContent *可选 -- Protects the contents of the sent message from forwarding and saving
+ * @param {int} ReplyToMessageID *可选 -- If the message is a reply, ID of the original message
+ * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
 func SendDocument(Document string, Caption string, ParseMode string, CaptionEntities []MessageEntity,
@@ -386,9 +386,9 @@ func SendDocument(Document string, Caption string, ParseMode string, CaptionEnti
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendDocument"
+	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendDocument"
 
-	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAdress, []string{}, DataMap, "document", []string{Document})
+	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "document", []string{Document})
 	var JsonData SendMessageReturn
 	json.Unmarshal(Buffer, &JsonData)
 
