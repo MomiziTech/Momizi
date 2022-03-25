@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-03-25 22:49:54
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-26 01:03:55
+ * @LastEditors: McPlus
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
  */
@@ -15,7 +15,7 @@ import (
 	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Events"
-	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Listeners"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Listener"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 	"rogchap.com/v8go"
@@ -64,7 +64,7 @@ func InitJavaScriptPlugin() error {
 
 			// 函数注册
 			// 监听器初始化
-			Global.Set("Listeners", Listeners.InitListeners(Isolate, Context))
+			Global.Set("Listener", Listener.InitListener(Isolate, Context))
 
 			Tools.Register(Isolate, Context)
 

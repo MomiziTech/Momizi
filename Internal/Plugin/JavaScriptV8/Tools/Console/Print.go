@@ -1,10 +1,10 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-25 05:22:47
- * @LastEditTime: 2022-03-25 05:37:31
+ * @LastEditTime: 2022-03-26 00:03:26
  * @LastEditors: McPlus
  * @Description:
- * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Console\Log.go
+ * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Console\Print.go
  */
 
 package Console
@@ -68,4 +68,44 @@ func RegisterDebugPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Func
 	})
 
 	return Debug
+}
+
+func ResisterSetColorFunction(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	SetColor, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
+		Color := Info.Args()[0].String()
+		Text := Info.Args()[1].String()
+
+		Isolate, _ := v8go.NewIsolate()
+
+		switch Color {
+		case "Black":
+			Value, _ := v8go.NewValue(Isolate, Log.Black(Text))
+			return Value
+		case "Red":
+			Value, _ := v8go.NewValue(Isolate, Log.Red(Text))
+			return Value
+		case "Green":
+			Value, _ := v8go.NewValue(Isolate, Log.Green(Text))
+			return Value
+		case "Yellow":
+			Value, _ := v8go.NewValue(Isolate, Log.Yellow(Text))
+			return Value
+		case "Blue":
+			Value, _ := v8go.NewValue(Isolate, Log.Blue(Text))
+			return Value
+		case "Magenta":
+			Value, _ := v8go.NewValue(Isolate, Log.Magenta(Text))
+			return Value
+		case "Cyan":
+			Value, _ := v8go.NewValue(Isolate, Log.Cyan(Text))
+			return Value
+		case "White":
+			Value, _ := v8go.NewValue(Isolate, Log.White(Text))
+			return Value
+		}
+
+		return nil
+	})
+
+	return SetColor
 }

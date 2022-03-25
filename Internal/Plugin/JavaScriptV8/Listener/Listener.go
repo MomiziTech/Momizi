@@ -1,12 +1,12 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:54:07
- * @LastEditTime: 2022-03-25 22:35:04
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-03-26 01:03:43
+ * @LastEditors: McPlus
  * @Description: 监听器
- * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Listeners\Listeners.go
+ * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Listener\Listener.go
  */
-package Listeners
+package Listener
 
 import (
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Events"
@@ -20,9 +20,9 @@ import (
  * @param {*v8go.Context} Context 上下文
  * @return {*v8go.Object} 监听器
  */
-func InitListeners(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
+func InitListener(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 	Listener, _ := v8go.NewObjectTemplate(Isolate)
-	MessageEvent := Events.InitMessageEvent(Isolate)
+	MessageEvent := Events.InitMessageEvent(Isolate, Context)
 
 	// 注册消息监听器
 	Listener.Set("Message", MessageEvent)
