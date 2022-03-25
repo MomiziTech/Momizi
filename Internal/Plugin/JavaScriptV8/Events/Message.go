@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:58:57
- * @LastEditTime: 2022-03-24 21:45:52
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-25 22:37:13
+ * @LastEditors: NyanCatda
  * @Description: MessageEvent
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Events\Message.go
  */
@@ -22,6 +22,11 @@ type EventCallback struct {
 
 var EventCallbacks []EventCallback
 
+/**
+ * @description: 初始化消息监听函数
+ * @param {*v8go.Isolate} Isolate 虚拟机
+ * @return {*v8go.FunctionTemplate}
+ */
 func InitMessageEvent(Isolate *v8go.Isolate) *v8go.FunctionTemplate {
 	Message, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		FuncName := Info.Args()[0]
@@ -37,6 +42,11 @@ func InitMessageEvent(Isolate *v8go.Isolate) *v8go.FunctionTemplate {
 	return Message
 }
 
+/**
+ * @description: 调用消息监听函数
+ * @param {MessageStruct.MessageStruct} Message 消息结构体
+ * @return {*}
+ */
 func HandleMessageEvent(Message MessageStruct.MessageStruct) {
 	Json, _ := json.Marshal(Message)
 	Object, _ := v8go.JSONParse(nil, string(Json))
