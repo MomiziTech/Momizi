@@ -1,8 +1,8 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:58:27
- * @LastEditTime: 2022-03-24 20:50:48
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-25 22:50:03
+ * @LastEditors: NyanCatda
  * @Description: 插件加载模块
  * @FilePath: \Momizi\Internal\Plugin\Plugin.go
  */
@@ -10,8 +10,7 @@ package Plugin
 
 import (
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
-	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScript"
-	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8"
+	JavascriptV8 "github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
@@ -22,7 +21,7 @@ import (
  */
 func RunPluginMessageListener(Message MessageStruct.MessageStruct) error {
 	// 运行JavaScript插件
-	err := JavaScript.ExecutionMessageListener(Message)
+	err := JavascriptV8.ExecutionMessageListener(Message)
 	if err != nil {
 		Log.Error("Plugin", err)
 		return err

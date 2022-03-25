@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-03-25 19:56:04
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-25 22:49:54
+ * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
  */
@@ -13,6 +13,8 @@ import (
 	"strings"
 
 	"github.com/MomiziTech/Momizi/Internal/Controller"
+	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Events"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Listeners"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools"
 	"github.com/MomiziTech/Momizi/Tools/Log"
@@ -21,6 +23,26 @@ import (
 	FileFunc "github.com/MomiziTech/Momizi/Tools/File"
 )
 
+/**
+ * @description: 执行消息监听器
+ * @param {MessageStruct.MessageStruct} Message
+ * @return {*}
+ */
+func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
+	// 执行消息监听器
+	err := Events.HandleMessageEvent(Message)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/**
+ * @description: 初始化JavaScript插件
+ * @param {*}
+ * @return {error} 错误信息
+ */
 func InitJavaScriptPlugin() error {
 	// 从文件中读取插件
 	Files, err := ioutil.ReadDir(Controller.PluginPath + "/")
@@ -43,7 +65,7 @@ func InitJavaScriptPlugin() error {
 			// 函数注册
 			// 监听器初始化
 			Global.Set("Listeners", Listeners.InitListeners(Isolate, Context))
-			
+
 			Tools.Register(Isolate, Context)
 
 			ScriptBuffer, err := ioutil.ReadFile(Controller.PluginPath + "/" + FileName)

@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:58:57
- * @LastEditTime: 2022-03-25 22:37:13
+ * @LastEditTime: 2022-03-25 22:47:31
  * @LastEditors: NyanCatda
  * @Description: MessageEvent
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Events\Message.go
@@ -47,23 +47,37 @@ func InitMessageEvent(Isolate *v8go.Isolate) *v8go.FunctionTemplate {
  * @param {MessageStruct.MessageStruct} Message 消息结构体
  * @return {*}
  */
-func HandleMessageEvent(Message MessageStruct.MessageStruct) {
-	Json, _ := json.Marshal(Message)
-	Object, _ := v8go.JSONParse(nil, string(Json))
+func HandleMessageEvent(Message MessageStruct.MessageStruct) error {
+	Json, err := json.Marshal(Message)
+	if err != nil {
+		return err
+	}
+	Object, err := v8go.JSONParse(nil, string(Json))
+	if err != nil {
+		return err
+	}
 	for _, EventCallback := range EventCallbacks {
 		if Message.ID != "" {
 			switch EventCallback.FuncName {
 			case "AllMessage":
-				EventCallback.CallBack.Call(Object)
+				if _, err := EventCallback.CallBack.Call(Object); err != nil {
+					return err
+				}
 			case "UserMessage":
 				if Message.Type == "User" {
-					EventCallback.CallBack.Call(Object)
+					if _, err := EventCallback.CallBack.Call(Object); err != nil {
+						return err
+					}
 				}
 			case "GroupMessage":
 				if Message.Type == "Group" {
-					EventCallback.CallBack.Call(Object)
+					if _, err := EventCallback.CallBack.Call(Object); err != nil {
+						return err
+					}
 				}
 			}
 		}
 	}
+
+	return nil
 }
