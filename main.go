@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-24 00:58:46
+ * @LastEditTime: 2022-03-25 20:11:47
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -11,6 +11,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -60,6 +61,7 @@ func Initialization() error {
 
 func main() {
 	// 参数解析
+	RunMode := flag.String("Mode", "Release", "运行模式")
 	ConfigPath := flag.String("config", Controller.ConfigPath, "指定配置文件路径")
 	flag.Parse()
 
@@ -82,7 +84,10 @@ func main() {
 	}
 
 	// 初始化Gin
-	gin.SetMode(gin.DebugMode)
+	if *RunMode != "Dev" {
+		gin.SetMode(gin.ReleaseMode)
+		gin.DefaultWriter = ioutil.Discard
+	}
 	r := gin.Default()
 
 	Port := Config.Run.WebHook.Port
