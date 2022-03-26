@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:27:08
- * @LastEditTime: 2022-03-26 19:10:12
+ * @LastEditTime: 2022-03-26 20:43:02
  * @LastEditors: NyanCatda
  * @Description: Get请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Get.go
@@ -33,7 +33,7 @@ func Get(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 				}
 
 				// 发起请求
-				Body, HttpResponse, err := HttpRequestFunc.GetRequest(URL.String(), Headers)
+				Body, HttpResponseValue, err := HttpRequestFunc.GetRequest(URL.String(), Headers)
 				if err != nil {
 					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
@@ -46,6 +46,8 @@ func Get(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 					Log.Error(PluginName.String(), err)
 					return
 				}
+
+				HttpResponse := PointerHttpResponseToHttpResponse(HttpResponseValue)
 
 				HttpResponseObject, err := Loader.GoStructToV8Object(Context, HttpResponse)
 				if err != nil {
