@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:21:35
- * @LastEditTime: 2022-03-26 20:43:15
+ * @LastEditTime: 2022-03-27 02:10:57
  * @LastEditors: NyanCatda
  * @Description: HttpRequest函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\HttpRequest.go
@@ -11,14 +11,33 @@ package HttpRequest
 import (
 	"net/http"
 
+	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools/Loader"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"rogchap.com/v8go"
 )
 
 func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 	HttpRequest, _ := v8go.NewObjectTemplate(Isolate)
 
+	// 注册Get方法
 	Get := Get(Isolate, Context)
 	HttpRequest.Set("Get", Get)
+
+	// 注册PostJson方法
+	PostJson := PostJson(Isolate, Context)
+	HttpRequest.Set("PostJson", PostJson)
+
+	// 注册PostXWWWForm方法
+	PostXWWWForm := PostXWWWForm(Isolate, Context)
+	HttpRequest.Set("PostXWWWForm", PostXWWWForm)
+
+	// 注册PostFormData方法
+	PostForm := PostFormData(Isolate, Context)
+	HttpRequest.Set("PostFormData", PostForm)
+
+	// 注册PostFormDataFile方法
+	PostFormFile := PostFormDataFile(Isolate, Context)
+	HttpRequest.Set("PostFormDataFile", PostFormFile)
 
 	ConsoleObject, _ := HttpRequest.NewInstance(Context)
 	return ConsoleObject
@@ -104,4 +123,34 @@ func PointerHttpResponseToHttpResponse(HttpResponseValue *http.Response) HttpRes
 		Trailer:          HttpResponseValue.Trailer,
 	}
 	return HttpResponse
+}
+
+/**
+ * @description: 回调参数解析
+ * @param {*v8go.Isolate} Isolate v8实例
+ * @param {*v8go.Context} Context v8上下文
+ * @param {[]byte} Body 返回体
+ * @param {*http.Response} HttpResponseValue 请求响应信息
+ * @return {*v8go.Object } 返回回调参数(返回体)
+ * @return {*v8go.Object } 返回回调参数(请求响应信息)
+ * @return {error} 返回错误信息
+ */
+func CallbackParameter(Isolate *v8go.Isolate, Context *v8go.Context, Body []byte, HttpResponseValue *http.Response) (*v8go.Value, *v8go.Value, error) {
+	BodyValue, err := v8go.NewValue(Isolate, string(Body))
+	if err != nil {
+		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
+		Log.Error(PluginName.String(), err)
+		return nil, nil, err
+	}
+
+	HttpResponse := PointerHttpResponseToHttpResponse(HttpResponseValue)
+
+	HttpResponseObject, err := Loader.GoStructToV8Object(Context, HttpResponse)
+	if err != nil {
+		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
+		Log.Error(PluginName.String(), err)
+		return nil, nil, err
+	}
+
+	return BodyValue, HttpResponseObject, nil
 }
