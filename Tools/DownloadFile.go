@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 23:31:49
- * @LastEditTime: 2022-03-23 20:40:22
+ * @LastEditTime: 2022-03-27 02:43:45
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Tools\DownloadFile.go
@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -40,8 +41,13 @@ func DownloadFile(URL string, Header []string, SavePath string, RandomFileName b
 		return "", 0, err
 	}
 
+	// 设置请求头
 	for _, value := range Header {
 		Headervalue := strings.Split(value, ":")
+		// 如果解析失败则不设置请求头
+		if len(Headervalue) <= 0 {
+			break
+		}
 		req.Header.Set(Headervalue[0], Headervalue[1])
 	}
 
@@ -54,6 +60,9 @@ func DownloadFile(URL string, Header []string, SavePath string, RandomFileName b
 	}
 	defer res.Body.Close()
 	reader := bufio.NewReaderSize(res.Body, 32*1024)
+
+	// 规整路径
+	SavePath = filepath.Clean(SavePath)
 
 	// 文件夹不存在则创建
 	_, err = File.MKDir(SavePath)
@@ -83,5 +92,5 @@ func DownloadFile(URL string, Header []string, SavePath string, RandomFileName b
 		return "", 0, err
 	}
 
-	return FilePath, Size, nil
+	return filepath.Clean(FilePath), Size, nil
 }

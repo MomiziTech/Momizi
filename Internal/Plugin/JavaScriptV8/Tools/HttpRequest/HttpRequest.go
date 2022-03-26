@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:21:35
- * @LastEditTime: 2022-03-27 02:26:26
+ * @LastEditTime: 2022-03-27 02:40:14
  * @LastEditors: NyanCatda
  * @Description: HttpRequest函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\HttpRequest.go
@@ -42,6 +42,10 @@ func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 	// 注册PostFormDataFile方法
 	PostFormFile := PostFormDataFile(Isolate, Context)
 	HttpRequest.Set("PostFormDataFile", PostFormFile)
+
+	// 注册Download方法
+	Download := Download(Isolate, Context)
+	HttpRequest.Set("Download", Download)
 
 	ConsoleObject, _ := HttpRequest.NewInstance(Context)
 	return ConsoleObject
