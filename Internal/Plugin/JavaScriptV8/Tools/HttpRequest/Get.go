@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:27:08
- * @LastEditTime: 2022-03-27 00:22:29
+ * @LastEditTime: 2022-03-27 02:22:26
  * @LastEditors: NyanCatda
  * @Description: Get请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Get.go
@@ -24,8 +24,8 @@ import (
  */
 func Get(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 	Get, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
-		URL := Info.Args()[0]      // 请求地址
-		Header := Info.Args()[1]   // 请求头
+		URL := Info.Args()[0]      // {string}请求地址
+		Header := Info.Args()[1]   // {[]string}请求头
 		CallBack := Info.Args()[2] // 回调函数
 
 		if CallBack.IsFunction() {

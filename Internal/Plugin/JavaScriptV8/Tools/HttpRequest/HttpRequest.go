@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:21:35
- * @LastEditTime: 2022-03-27 02:10:57
+ * @LastEditTime: 2022-03-27 02:26:26
  * @LastEditors: NyanCatda
  * @Description: HttpRequest函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\HttpRequest.go
@@ -18,6 +18,10 @@ import (
 
 func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 	HttpRequest, _ := v8go.NewObjectTemplate(Isolate)
+
+	// 注册New请求方法
+	New := New(Isolate, Context)
+	HttpRequest.Set("New", New)
 
 	// 注册Get方法
 	Get := Get(Isolate, Context)
