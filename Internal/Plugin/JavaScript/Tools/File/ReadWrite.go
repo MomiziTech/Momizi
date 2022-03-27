@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-23 13:57:19
- * @LastEditTime: 2022-03-23 21:44:07
+ * @LastEditTime: 2022-03-27 21:22:48
  * @LastEditors: NyanCatda
  * @Description:文件读写操作
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\Tools\File\ReadWrite.go
@@ -9,6 +9,8 @@
 package File
 
 import (
+	"os"
+
 	Files "github.com/MomiziTech/Momizi/Tools/File"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/dop251/goja"
@@ -21,7 +23,14 @@ import (
  */
 func (File File) Read(Path string) any {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
-	Str, err := Files.Read(DataPath + PluginName + "/" + Path)
+
+	Files, err := Files.NewFileReadWrite(DataPath+PluginName+"/"+Path, os.O_RDONLY)
+	if err != nil {
+		return nil
+	}
+	defer Files.Close()
+
+	Str, err := Files.Read()
 	if err != nil {
 		Log.Error(PluginName, err)
 		return nil
@@ -37,7 +46,14 @@ func (File File) Read(Path string) any {
  */
 func (File File) WriteTo(Path string, Content string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
-	err := Files.WriteTo(DataPath+PluginName+"/"+Path, Content)
+
+	Files, err := Files.NewFileReadWrite(DataPath+PluginName+"/"+Path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
+	if err != nil {
+		return false
+	}
+	defer Files.Close()
+
+	err = Files.WriteTo(Content)
 	if err != nil {
 		Log.Error(PluginName, err)
 		return false
@@ -53,7 +69,14 @@ func (File File) WriteTo(Path string, Content string) bool {
  */
 func (File File) WriteAppend(Path string, Content string) bool {
 	PluginName := File.VM.Get("PLUGIN_NAME").String()
-	err := Files.WriteAppend(DataPath+PluginName+"/"+Path, Content)
+
+	Files, err := Files.NewFileReadWrite(DataPath+PluginName+"/"+Path, os.O_WRONLY|os.O_APPEND|os.O_CREATE)
+	if err != nil {
+		return false
+	}
+	defer Files.Close()
+
+	err = Files.WriteAppend(Content)
 	if err != nil {
 		Log.Error(PluginName, err)
 		return false

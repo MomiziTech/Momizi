@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-23 20:18:31
- * @LastEditTime: 2022-03-23 20:59:49
+ * @LastEditTime: 2022-03-27 21:33:20
  * @LastEditors: NyanCatda
  * @Description: 配置文件操作
  * @FilePath: \Momizi\Internal\Plugin\Tools\JsonConfig\Config.go
@@ -10,6 +10,7 @@ package JsonConfig
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/MomiziTech/Momizi/Tools/File"
 )
@@ -42,7 +43,14 @@ func (Config Config) Init() error {
 		if err != nil {
 			return err
 		}
-		return File.WriteTo(Config.Path, string(DefaultJson))
+
+		File, err := File.NewFileReadWrite(Config.Path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
+		if err != nil {
+			return err
+		}
+		defer File.Close()
+
+		return File.WriteTo(string(DefaultJson))
 	}
 	return nil
 }
@@ -58,8 +66,15 @@ func (Config Config) Get(Name string) (any, error) {
 	if !File.Exists(Config.Path) {
 		return Config.Default[Name], nil
 	}
+
+	File, err := File.NewFileReadWrite(Config.Path, os.O_RDONLY)
+	if err != nil {
+		return nil, err
+	}
+	defer File.Close()
+
 	// 读取配置文件
-	JsonBody, err := File.Read(Config.Path)
+	JsonBody, err := File.Read()
 	if err != nil {
 		return nil, err
 	}
@@ -91,8 +106,16 @@ func (Config Config) Set(Name string, Value any) error {
 			return err
 		}
 	}
+
+	// 以只读方式打开
+	FileRead, err := File.NewFileReadWrite(Config.Path, os.O_RDONLY)
+	if err != nil {
+		return err
+	}
+	defer FileRead.Close()
+
 	// 读取配置文件
-	JsonBody, err := File.Read(Config.Path)
+	JsonBody, err := FileRead.Read()
 	if err != nil {
 		return err
 	}
@@ -108,7 +131,15 @@ func (Config Config) Set(Name string, Value any) error {
 	if err != nil {
 		return err
 	}
-	return File.WriteTo(Config.Path, string(NewJsonBody))
+
+	// 以覆盖写入模式打开
+	FileWriteTo, err := File.NewFileReadWrite(Config.Path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
+	if err != nil {
+		return err
+	}
+	defer FileWriteTo.Close()
+
+	return FileWriteTo.WriteTo(string(NewJsonBody))
 }
 
 /**
@@ -123,8 +154,16 @@ func (Config Config) Delete(Name string) error {
 			return err
 		}
 	}
+
+	// 以只读方式打开
+	FileRead, err := File.NewFileReadWrite(Config.Path, os.O_RDONLY)
+	if err != nil {
+		return err
+	}
+	defer FileRead.Close()
+
 	// 读取配置文件
-	JsonBody, err := File.Read(Config.Path)
+	JsonBody, err := FileRead.Read()
 	if err != nil {
 		return err
 	}
@@ -140,5 +179,13 @@ func (Config Config) Delete(Name string) error {
 	if err != nil {
 		return err
 	}
-	return File.WriteTo(Config.Path, string(NewJsonBody))
+
+	// 以覆盖写入模式打开
+	FileWriteTo, err := File.NewFileReadWrite(Config.Path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
+	if err != nil {
+		return err
+	}
+	defer FileWriteTo.Close()
+
+	return FileWriteTo.WriteTo(string(NewJsonBody))
 }
