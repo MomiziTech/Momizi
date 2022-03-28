@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-24 21:07:49
+ * @LastEditTime: 2022-03-28 15:15:54
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Mirai.go
@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/WebHook/Struct"
 	"github.com/MomiziTech/Momizi/Tools"
@@ -21,7 +22,7 @@ import (
 
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	ChatSoftwareName := "QQ"
-	SaveFilePath := "data/file/Mirai/"
+	SaveFilePath := Controller.BotFilePath + ChatSoftwareName + "/"
 
 	var Type string
 	switch WebHookJson.Mirai.Type {
@@ -112,7 +113,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 		// 解析文件消息
 		if Message.Type == "File" {
-			
+
 		}
 	}
 

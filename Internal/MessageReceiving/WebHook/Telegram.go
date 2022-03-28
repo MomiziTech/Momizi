@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-23 20:39:47
+ * @LastEditTime: 2022-03-28 15:15:41
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Telegram.go
@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/WebHook/Struct"
 	TelegramMethods "github.com/MomiziTech/Momizi/Internal/MessageSend/ChatSoftwareAPI/Telegram/Methods"
@@ -23,7 +24,7 @@ import (
 
 func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	ChatSoftwareName := "Telegram"
-	SaveFilePath := "data/file/Telegram/"
+	SaveFilePath := Controller.BotFilePath + ChatSoftwareName + "/"
 
 	// 获取消息类型
 	var MessageType string
