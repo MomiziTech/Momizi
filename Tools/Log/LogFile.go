@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-28 15:39:11
+ * @LastEditTime: 2022-03-28 16:04:48
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -20,7 +20,8 @@ import (
 )
 
 var (
-	LogPath = Controller.LogPath + "/"
+	LogPath    = Controller.LogPath + "/"
+	ColorPrint bool
 )
 
 const (
@@ -130,9 +131,22 @@ func Print(Source string, Level int, Text ...any) error {
 		LevelStr = Magenta("Other")
 	}
 
-	// 打印日志
 	Text = append([]any{Cyan(NowTime), LevelStr, Source}, Text...)
-	_, err := fmt.Println(Text...)
+
+	// 如果彩色输出被关闭
+	var LogText []any
+	if !ColorPrint {
+		// 遍历消息内容去除颜色
+		for _, v := range Text {
+			DelColorText := DelColor(fmt.Sprint(v))
+			LogText = append(LogText, DelColorText)
+		}
+	} else {
+		LogText = Text
+	}
+
+	// 打印日志
+	_, err := fmt.Println(LogText...)
 	if err != nil {
 		return err
 	}
@@ -147,14 +161,14 @@ func Print(Source string, Level int, Text ...any) error {
 	write := bufio.NewWriter(logFile)
 
 	// 遍历消息内容去除颜色
-	var LogText string
+	var LogFileText string
 	for _, v := range Text {
 		DelColorText := DelColor(fmt.Sprint(v))
-		LogText += DelColorText
-		LogText += " "
+		LogFileText += DelColorText
+		LogFileText += " "
 	}
 
-	write.WriteString(LogText + "\n")
+	write.WriteString(LogFileText + "\n")
 	write.Flush()
 
 	return nil

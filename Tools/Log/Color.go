@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-21 19:51:14
- * @LastEditTime: 2022-03-22 10:54:17
+ * @LastEditTime: 2022-03-28 15:59:02
  * @LastEditors: NyanCatda
  * @Description: 终端输出颜色
  * @FilePath: \Momizi\Tools\Log\Color.go

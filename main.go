@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-28 15:45:28
+ * @LastEditTime: 2022-03-28 16:17:34
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -14,6 +14,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -62,8 +63,18 @@ func Initialization() error {
 func main() {
 	// 参数解析
 	RunMode := flag.String("Mode", "Release", "运行模式")
-	ConfigPath := flag.String("config", Controller.ConfigPath, "指定配置文件路径")
+	ConfigPath := flag.String("Config", Controller.ConfigPath, "指定配置文件路径")
+	ColorPrint := flag.String("ColorPrint", "true", "是否输出彩色文本") // 这个地方如果使用flag.Bool()会出现异常，如果默认值为true则无论如何无法修改为false，原因不明
 	flag.Parse()
+
+	// 设置是否输出彩色文本
+	Color, err := strconv.ParseBool(*ColorPrint)
+	if err != nil {
+		Error(err)
+	}
+	Log.ColorPrint = Color
+
+	Log.Info("System", "Momizi启动，当前版本："+Controller.Version+"，运行模式："+*RunMode)
 
 	// 初始化程序
 	if err := Initialization(); err != nil {
