@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:25:31
- * @LastEditTime: 2022-03-08 22:18:03
+ * @LastEditTime: 2022-03-28 14:26:36
  * @LastEditors: NyanCatda
  * @Description: 配置文件结构体
  * @FilePath: \Momizi\Tools\ReadConfig\ConfigStruct.go
@@ -24,14 +24,15 @@ type Config struct {
 			VerifyKey   string `yaml:"VerifyKey"`   // Mirai验证密钥
 		} `yaml:"QQ"`
 		Telegram struct {
-			Switch     bool   `yaml:"Switch"`     // Telegram处理开关
-			APIToken   string `yaml:"APIToken"`   // Telegram Bot API Token
-			BotAPILink string `yaml:"BotAPILink"` // Telegram Bot API地址
+			Switch   bool   `yaml:"Switch"`   // Telegram处理开关
+			APIToken string `yaml:"APIToken"` // Telegram Bot API Token
+			APILink  string `yaml:"APILink"`  // Telegram Bot API地址
 		} `yaml:"Telegram"`
 		Line struct {
-			Switch     bool   `yaml:"Switch"`     // Line处理开关
-			APIToken   string `yaml:"APIToken"`   // Line Bot API Token
-			BotAPILink string `yaml:"BotAPILink"` // Line Bot API地址
+			Switch      bool   `yaml:"Switch"`      // Line处理开关
+			APIToken    string `yaml:"APIToken"`    // Line Bot API Token
+			APILink     string `yaml:"APILink"`     // Line Bot API地址
+			DataAPILink string `yaml:"DataAPILink"` // Line Bot 数据下载API地址
 		} `yaml:"Line"`
 	} `yaml:"ChatSoftware"`
 }

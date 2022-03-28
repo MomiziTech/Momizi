@@ -201,7 +201,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 func GetTelegramFileURL(FilePath string) string {
 	APIToken := ReadConfig.GetConfig.ChatSoftware.Telegram.APIToken
-	APIURL := ReadConfig.GetConfig.ChatSoftware.Telegram.BotAPILink
+	APIURL := ReadConfig.GetConfig.ChatSoftware.Telegram.APILink
 
 	FileURL := APIURL + "file/bot" + APIToken + "/" + FilePath
 	return FileURL

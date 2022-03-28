@@ -1,10 +1,10 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 14:21:18
- * @LastEditTime: 2022-03-09 15:41:50
+ * @LastEditTime: 2022-03-28 14:38:33
  * @LastEditors: NyanCatda
  * @Description: Line WebHook结构体
- * @FilePath: \Momizi\Internal\MessageReceiving\WebHookStruct\Line.go
+ * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Struct\Line.go
  */
 package Struct
 
@@ -21,7 +21,7 @@ type Line struct {
 
 			// 文件消息
 			FileName string `json:"fileName"` // 文件名
-			FileSize int    `json:"fileSize"` // 文件大小(Byte)
+			FileSize int64  `json:"fileSize"` // 文件大小(Byte)
 
 			// 语音消息
 			Duration int `json:"duration"` // 语音时长(秒)

@@ -34,7 +34,7 @@ func NewFile(ID string) (*File, error) {
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAdress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getFile"
+	APIAdress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/getFile"
 
 	DataMap := map[string]string{
 		"file_id": ID,

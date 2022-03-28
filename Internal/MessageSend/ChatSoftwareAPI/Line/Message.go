@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-23 20:22:16
- * @LastEditTime: 2022-03-28 13:54:57
+ * @LastEditTime: 2022-03-28 14:28:16
  * @LastEditors: NyanCatda
  * @Description: Message
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Line\Message.go
@@ -17,25 +17,32 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
 )
 
-func GetContent(MessageID string) (string, error) {
+/**
+ * @description: 获取文件内容
+ * @param {string} MessageID 消息ID
+ * @return {string} 文件路径
+ * @return {int64} 文件大小
+ * @return {error} 错误信息
+ */
+func GetContent(MessageID string) (string, int64, error) {
 	Config := ReadConfig.GetConfig
 
 	ConfigTelegram := Config.ChatSoftware.Line
 
-	APIAddress := "https://api-data.line.me/v2/bot/message/" + MessageID + "/content"
+	APIAddress := ConfigTelegram.DataAPILink + "v2/bot/message/" + MessageID + "/content"
 
 	Header := []string{
 		"Authorization: Bearer " + ConfigTelegram.APIToken,
 	}
 
-	Path, _, Error := Tools.DownloadFile(APIAddress, Header, "data/File/Line/"+strconv.FormatInt(time.Now().Unix(), 10)+"/", true, 120)
+	Path, FileSize, Error := Tools.DownloadFile(APIAddress, Header, "data/File/Line/"+strconv.FormatInt(time.Now().Unix(), 10)+"/", true, 120)
 
 	// 修改文件类型
 	Path, err := File.CorrectFileType(Path)
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 
-	return Path, Error
+	return Path, FileSize, Error
 
 }

@@ -12,8 +12,9 @@ ChatSoftware:
   Telegram:
     Switch: true
     APIToken: 688975899:DDFqpsdMwunUvwAsxzDTzl8z_......
-    BotAPILink: https://api.telegram.org/
+    APILink: https://api.telegram.org/
   Line:
     Switch: true
     APIToken: Qik9O7sP49vCeY/b6zWaDa0......
-    BotAPILink: https://api.line.me/
+    APILink: https://api.line.me/
+    DataAPILink: https://api-data.line.me/

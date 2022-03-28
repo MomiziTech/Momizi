@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:57:36
- * @LastEditTime: 2022-03-25 21:03:01
+ * @LastEditTime: 2022-03-28 14:59:23
  * @LastEditors: NyanCatda
  * @Description: 消息接收模块
  * @FilePath: \Momizi\Internal\MessageReceiving\MessageReceiving.go
@@ -9,8 +9,6 @@
 package MessageReceiving
 
 import (
-	"fmt"
-
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/WebHook"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/WebHook/Struct"
@@ -55,7 +53,10 @@ func MessageReceiving(c *gin.Context) error {
 	}
 	if JsonBody.Line.Destination != "" {
 		// 消息为Line消息
-		fmt.Println(JsonBody)
+		Message, err = WebHook.Line(JsonBody)
+		if err != nil {
+			return err
+		}
 	}
 
 	if Message.ID != "" {

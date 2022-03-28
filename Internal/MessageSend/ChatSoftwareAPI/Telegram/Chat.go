@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-23 20:43:06
+ * @LastEditTime: 2022-03-28 14:27:26
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -56,7 +56,7 @@ func NewChat(ID int) *Chat {
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChat"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/getChat"
 
 	DataMap := map[string]string{
 		"chat_id": strconv.Itoa(ID),
@@ -87,7 +87,7 @@ func (Chat Chat) GetAdministrators() ([]ChatMemberAdministrator, error) {
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/getChatAdministrators"
 
 	DataMap := map[string]string{
 		"chat_id": Chat.ID,
@@ -166,7 +166,7 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/sendMessage"
 
 	Buffer, _, Error := HttpRequest.PostRequestXWWWForm(APIAddress, []string{}, DataMap)
 	var JsonData SendMessageReturn
@@ -232,7 +232,7 @@ func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities [
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendPhoto"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/sendPhoto"
 
 	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "photo", []string{Photo})
 	var JsonData SendMessageReturn
@@ -314,7 +314,7 @@ func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities [
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendAudio"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/sendAudio"
 
 	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "audio", []string{Audio})
 	var JsonData SendMessageReturn
@@ -386,7 +386,7 @@ func SendDocument(Document string, Caption string, ParseMode string, CaptionEnti
 
 	ConfigTelegram := Config.ChatSoftware.Telegram
 
-	APIAddress := ConfigTelegram.BotAPILink + "bot" + ConfigTelegram.APIToken + "/sendDocument"
+	APIAddress := ConfigTelegram.APILink + "bot" + ConfigTelegram.APIToken + "/sendDocument"
 
 	Buffer, _, Error := HttpRequest.PostRequestFormDataFile(APIAddress, []string{}, DataMap, "document", []string{Document})
 	var JsonData SendMessageReturn
