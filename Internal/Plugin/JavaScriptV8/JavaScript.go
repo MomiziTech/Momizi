@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-03-26 01:23:42
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-28 15:40:56
+ * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
  */
@@ -86,7 +86,7 @@ func InitJavaScriptPlugin() error {
 			PluginName, _ := Context.RunScript("PLUGIN_NAME", FileName)
 			PluginVersion, _ := Context.RunScript("PLUGIN_VERSION", FileName)
 			PluginAuthor, _ := Context.RunScript("PLUGIN_AUTHOR", FileName)
-			Log.Print("Plugin", Log.INFO, "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
+			Log.Info("Plugin", "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
 
 			if err != nil {
 				e := err.(*v8go.JSError)

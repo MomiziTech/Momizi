@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-25 05:22:47
- * @LastEditTime: 2022-03-26 00:03:26
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-03-28 15:44:31
+ * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Console\Print.go
  */
@@ -20,7 +20,7 @@ func RegisterInfoPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Funct
 
 		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
 
-		Log.Print(PLUGIN_NAME.String(), Log.INFO, Text)
+		Log.Info(PLUGIN_NAME.String(), Text)
 
 		return nil
 	})
@@ -34,7 +34,7 @@ func RegisterWarningPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Fu
 
 		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
 
-		Log.Print(PLUGIN_NAME.String(), Log.INFO, Text)
+		Log.Warning(PLUGIN_NAME.String(), Text)
 
 		return nil
 	})
@@ -48,7 +48,7 @@ func RegisterErrorPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Func
 
 		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
 
-		Log.Print(PLUGIN_NAME.String(), Log.INFO, Text)
+		Log.Print(PLUGIN_NAME.String(), Log.ERROR, Text)
 
 		return nil
 	})
@@ -62,7 +62,7 @@ func RegisterDebugPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Func
 
 		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
 
-		Log.Print(PLUGIN_NAME.String(), Log.INFO, Text)
+		Log.DeBug(PLUGIN_NAME.String(), Text)
 
 		return nil
 	})

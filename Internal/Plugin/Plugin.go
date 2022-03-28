@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:58:27
- * @LastEditTime: 2022-03-25 22:50:03
+ * @LastEditTime: 2022-03-28 15:45:15
  * @LastEditors: NyanCatda
  * @Description: 插件加载模块
  * @FilePath: \Momizi\Internal\Plugin\Plugin.go
@@ -43,7 +43,7 @@ func InitPlugin() error {
 		return err
 	}
 
-	Log.Print("Plugin", Log.INFO, "插件加载完成")
+	Log.Info("Plugin", "插件加载完成")
 
 	return nil
 }

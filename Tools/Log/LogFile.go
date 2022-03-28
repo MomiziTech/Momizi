@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-25 21:06:19
+ * @LastEditTime: 2022-03-28 15:39:11
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -32,6 +32,7 @@ const (
 
 /**
  * @description: 打印错误
+ * @param {string} Source 日志来源
  * @param {error} Error 错误信息
  * @return {*}
  */
@@ -42,12 +43,33 @@ func Error(Source string, Error error) {
 
 /**
  * @description: 打印警告
- * @param {*}
+ * @param {string} Source 日志来源
+ * @param {...any} Text 日志内容
  * @return {*}
  */
 func Warning(Source string, Text ...any) {
 	// 打印警告
 	Print(Source, WARNING, Text...)
+}
+
+/**
+ * @description: 打印信息
+ * @param {string} Source 日志来源
+ * @param {...any} Text 日志内容
+ * @return {*}
+ */
+func Info(Source string, Text ...any) {
+	Print(Source, INFO, Text...)
+}
+
+/**
+ * @description: 打印DeBug错误
+ * @param {string} Source 日志来源
+ * @param {...any} Text 日志内容
+ * @return {*}
+ */
+func DeBug(Source string, Text ...any) {
+	Print(Source, DEBUG, Text...)
 }
 
 /**

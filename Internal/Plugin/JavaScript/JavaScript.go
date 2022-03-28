@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-20 20:40:12
- * @LastEditTime: 2022-03-22 23:47:03
+ * @LastEditTime: 2022-03-28 15:40:19
  * @LastEditors: NyanCatda
  * @Description: JavaScript插件加载
  * @FilePath: \Momizi\Internal\Plugin\JavaScript\JavaScript.go
@@ -84,7 +84,7 @@ func InitJavaScriptPlugin() error {
 			PluginName := VM.Get("PLUGIN_NAME")
 			PluginVersion := VM.Get("PLUGIN_VERSION")
 			PluginAuthor := VM.Get("PLUGIN_AUTHOR")
-			Log.Print("Plugin", Log.INFO, "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
+			Log.Info("Plugin", "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
 
 			// 创建插件数据文件夹与配置文件夹
 			if _, err := FileFunc.MKDir(Controller.DataPath + "/" + PluginName.String() + "/"); err != nil {
