@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-28 16:04:48
+ * @LastEditTime: 2022-03-30 20:40:41
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -131,7 +131,7 @@ func Print(Source string, Level int, Text ...any) error {
 		LevelStr = Magenta("Other")
 	}
 
-	Text = append([]any{Cyan(NowTime), LevelStr, Source}, Text...)
+	Text = append([]any{"\r" + Cyan(NowTime), LevelStr, Source}, Text...)
 
 	// 如果彩色输出被关闭
 	var LogText []any
@@ -150,6 +150,7 @@ func Print(Source string, Level int, Text ...any) error {
 	if err != nil {
 		return err
 	}
+	fmt.Print(Controller.TerminalPrompt)
 
 	// 写入日志
 	logFile, err := LogFile()
