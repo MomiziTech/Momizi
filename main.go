@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-30 19:48:12
+ * @LastEditTime: 2022-03-30 20:02:51
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -15,6 +15,7 @@ import (
 
 	"github.com/MomiziTech/Momizi/Internal/Controller/Initialization"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/ReceivingStart"
+	"github.com/MomiziTech/Momizi/Tools/Terminal"
 )
 
 /**
@@ -40,6 +41,9 @@ func main() {
 	// 启动WebHook接收
 	wg.Add(1)
 	go ReceivingStart.Run(FlagConfig.RunMode)
+
+	// 启动控制台
+	Terminal.Start()
 
 	// 等待所有goroutine结束
 	wg.Wait()
