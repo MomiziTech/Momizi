@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-28 16:17:34
+ * @LastEditTime: 2022-03-30 19:48:12
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -9,22 +9,12 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
-	"strconv"
-	"time"
+	"sync"
 
-	"github.com/gin-gonic/gin"
-
-	"github.com/MomiziTech/Momizi/Internal/Controller"
-	"github.com/MomiziTech/Momizi/Internal/MessageReceiving"
-	"github.com/MomiziTech/Momizi/Internal/Plugin"
-	"github.com/MomiziTech/Momizi/Tools/File"
-	"github.com/MomiziTech/Momizi/Tools/Log"
-	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
+	"github.com/MomiziTech/Momizi/Internal/Controller/Initialization"
+	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/ReceivingStart"
 )
 
 /**
@@ -39,83 +29,18 @@ func Error(Error error) {
 	os.Exit(1)
 }
 
-/**
- * @description: 初始化程序
- * @param {*}
- * @return {*}
- */
-func Initialization() error {
-	// 初始化日志文件夹
-	if _, err := File.MKDir(Controller.LogPath); err != nil {
-		return err
-	}
-	// 初始化插件文件夹
-	if _, err := File.MKDir(Controller.PluginPath); err != nil {
-		return err
-	}
-	// 初始化数据文件夹
-	if _, err := File.MKDir(Controller.DataPath); err != nil {
-		return err
-	}
-	return nil
-}
-
 func main() {
-	// 参数解析
-	RunMode := flag.String("Mode", "Release", "运行模式")
-	ConfigPath := flag.String("Config", Controller.ConfigPath, "指定配置文件路径")
-	ColorPrint := flag.String("ColorPrint", "true", "是否输出彩色文本") // 这个地方如果使用flag.Bool()会出现异常，如果默认值为true则无论如何无法修改为false，原因不明
-	flag.Parse()
-
-	// 设置是否输出彩色文本
-	Color, err := strconv.ParseBool(*ColorPrint)
+	var wg sync.WaitGroup
+	// 初始化程序
+	FlagConfig, err := Initialization.Initialization()
 	if err != nil {
 		Error(err)
 	}
-	Log.ColorPrint = Color
-
-	Log.Info("System", "Momizi启动，当前版本："+Controller.Version+"，运行模式："+*RunMode)
-
-	// 初始化程序
-	if err := Initialization(); err != nil {
-		Error(err)
-	}
-
-	// 设置配置文件路径
-	ReadConfig.ConfigPath = *ConfigPath
-	// 加载配置文件
-	if err := ReadConfig.LoadConfig(); err != nil {
-		Error(err)
-	}
-	Config := ReadConfig.GetConfig
-
-	// 初始化插件
-	if err := Plugin.InitPlugin(); err != nil {
-		Error(err)
-	}
-
-	// 初始化Gin
-	if *RunMode != "Dev" {
-		gin.SetMode(gin.ReleaseMode)
-		gin.DefaultWriter = ioutil.Discard
-	}
-	r := gin.Default()
-
-	Port := Config.Run.WebHook.Port
-	WebHookKey := Config.Run.WebHook.Key
-
-	// 注册WebHook接收地址
-	r.POST("/"+WebHookKey, func(c *gin.Context) {
-		if err := MessageReceiving.MessageReceiving(c); err != nil {
-			Log.Error("System", err)
-			c.JSONP(http.StatusInternalServerError, gin.H{"success": false, "time": time.Now().Unix()})
-		}
-		c.JSONP(http.StatusOK, gin.H{"success": true, "time": time.Now().Unix()})
-	})
 
 	// 启动WebHook接收
-	Log.Info("System", "WebHook接收已启动，地址：http://0.0.0.0:"+Port+"/"+WebHookKey)
-	if err := r.Run(":" + Port); err != nil {
-		Error(err)
-	}
+	wg.Add(1)
+	go ReceivingStart.Run(FlagConfig.RunMode)
+
+	// 等待所有goroutine结束
+	wg.Wait()
 }
