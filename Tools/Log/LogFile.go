@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-03-30 20:40:41
+ * @LastEditTime: 2022-03-31 13:54:07
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -13,6 +13,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/MomiziTech/Momizi/Internal/Controller"
@@ -131,7 +132,8 @@ func Print(Source string, Level int, Text ...any) error {
 		LevelStr = Magenta("Other")
 	}
 
-	Text = append([]any{"\r" + Cyan(NowTime), LevelStr, Source}, Text...)
+	Text = append([]any{Cyan(NowTime), LevelStr, Source}, Text...)
+	Text[0] = "\r" + Text[0].(string)
 
 	// 如果彩色输出被关闭
 	var LogText []any
@@ -160,6 +162,8 @@ func Print(Source string, Level int, Text ...any) error {
 	}
 	defer logFile.Close()
 	write := bufio.NewWriter(logFile)
+
+	Text[0] = strings.TrimPrefix(Text[0].(string), "\r")
 
 	// 遍历消息内容去除颜色
 	var LogFileText string
