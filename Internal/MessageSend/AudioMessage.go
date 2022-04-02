@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-02 09:32:33
- * @LastEditTime: 2022-04-02 09:36:17
+ * @LastEditTime: 2022-04-02 09:38:11
  * @LastEditors: NyanCatda
  * @Description: 音频消息发送封装
  * @FilePath: \Momizi\Internal\MessageSend\AudioMessage.go
@@ -9,6 +9,7 @@
 package MessageSend
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/MomiziTech/Momizi/Internal/MessageSend/ChatSoftwareAPI/Telegram"
@@ -36,6 +37,8 @@ func (MessageSend *MessageSend) Audio(Path string) error {
 		if MessageCallback.MessageID != 0 {
 			Log.SendMessage(MessageSend.ChatSoftware, MessageSend.ChatType, MessageSend.ChatID, Path)
 		}
+	default:
+		return errors.New("未知的聊天软件")
 	}
 	return nil
 }

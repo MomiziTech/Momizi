@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-02 09:08:55
- * @LastEditTime: 2022-04-02 09:30:16
+ * @LastEditTime: 2022-04-02 09:38:06
  * @LastEditors: NyanCatda
  * @Description: 图片消息发送封装
  * @FilePath: \Momizi\Internal\MessageSend\ImageMessage.go
@@ -9,6 +9,7 @@
 package MessageSend
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/MomiziTech/Momizi/Internal/MessageSend/ChatSoftwareAPI/Telegram"
@@ -41,6 +42,8 @@ func (MessageSend *MessageSend) Image(Path string) error {
 		if MessageCallback.MessageID != 0 {
 			Log.SendMessage(MessageSend.ChatSoftware, MessageSend.ChatType, MessageSend.ChatID, Path)
 		}
+	default:
+		return errors.New("未知的聊天软件")
 	}
 
 	return nil

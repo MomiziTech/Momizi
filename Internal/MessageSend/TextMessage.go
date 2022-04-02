@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-25 20:19:59
- * @LastEditTime: 2022-03-25 21:06:41
+ * @LastEditTime: 2022-04-02 09:37:20
  * @LastEditors: NyanCatda
  * @Description: 文本消息发送模块
  * @FilePath: \Momizi\Internal\MessageSend\TextMessage.go
@@ -9,6 +9,7 @@
 package MessageSend
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/MomiziTech/Momizi/Internal/MessageSend/ChatSoftwareAPI/Telegram"
@@ -44,6 +45,8 @@ func (MessageSend *MessageSend) Text(Content string) error {
 		if MessageCallback.MessageID != 0 {
 			Log.SendMessage(MessageSend.ChatSoftware, MessageSend.ChatType, MessageSend.ChatID, Content)
 		}
+	default:
+		return errors.New("未知的聊天软件")
 	}
 
 	return nil
