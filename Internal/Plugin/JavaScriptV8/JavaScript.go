@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-03-28 15:40:56
+ * @LastEditTime: 2022-04-02 21:53:48
  * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
@@ -31,6 +31,11 @@ import (
 func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
 	// 执行消息监听器
 	err := Events.HandleMessageEvent(Message)
+	if err != nil {
+		return err
+	}
+	// 执行命令监听器
+	err = Events.HandleCommandEvent(Message)
 	if err != nil {
 		return err
 	}

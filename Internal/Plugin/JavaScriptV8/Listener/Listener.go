@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:54:07
- * @LastEditTime: 2022-03-26 01:03:43
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-04-02 21:53:04
+ * @LastEditors: NyanCatda
  * @Description: 监听器
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Listener\Listener.go
  */
@@ -22,10 +22,12 @@ import (
  */
 func InitListener(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
 	Listener, _ := v8go.NewObjectTemplate(Isolate)
-	MessageEvent := Events.InitMessageEvent(Isolate, Context)
 
 	// 注册消息监听器
-	Listener.Set("Message", MessageEvent)
+	Listener.Set("Message", Events.InitMessageEvent(Isolate, Context))
+
+	// 注册命令监听器
+	Listener.Set("Command", Events.InitCommandEvent(Isolate, Context))
 
 	ListenerObject, _ := Listener.NewInstance(Context)
 	return ListenerObject

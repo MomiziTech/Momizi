@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 18:48:29
- * @LastEditTime: 2022-03-27 02:03:23
+ * @LastEditTime: 2022-04-02 14:58:58
  * @LastEditors: NyanCatda
  * @Description: 常见类型转换封装
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Loader\TypeConversion.go
@@ -81,4 +81,21 @@ func V8ObjectToGoStringMap(Context *v8go.Context, Object v8go.Valuer) (map[strin
 		return nil, err
 	}
 	return Map, nil
+}
+
+/**
+ * @description: Go数组转V8对象(使用Json中转)
+ * @param {*v8go.Context} Context V8上下文
+ * @param {[]string|[]int} Array Go数组
+ * @return {*}
+ */
+func GoArrayToV8Object[T []string | []int](Context *v8go.Context, Array T) (*v8go.Value, error) {
+	ArrayJson, err := json.Marshal(Array)
+	if err != nil {
+		return nil, err
+	}
+
+	ObjectValue, err := v8go.JSONParse(Context, string(ArrayJson))
+
+	return ObjectValue, err
 }

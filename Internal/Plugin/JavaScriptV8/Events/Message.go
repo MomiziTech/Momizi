@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:58:57
- * @LastEditTime: 2022-03-26 01:02:29
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-04-02 14:43:55
+ * @LastEditors: NyanCatda
  * @Description: MessageEvent
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Events\Message.go
  */
@@ -15,13 +15,13 @@ import (
 	"rogchap.com/v8go"
 )
 
-type EventCallback struct {
+type MessageEventCallback struct {
 	FuncName string
 	CallBack *v8go.Function
 	Context  *v8go.Context
 }
 
-var EventCallbacks []EventCallback
+var MessageEventCallbacks []MessageEventCallback
 
 /**
  * @description: 初始化消息监听函数
@@ -35,7 +35,7 @@ func InitMessageEvent(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 
 		if FuncName.IsString() && CallBack.IsFunction() {
 			CallBack, _ := CallBack.AsFunction()
-			EventCallbacks = append(EventCallbacks, EventCallback{FuncName: FuncName.String(), CallBack: CallBack, Context: Context})
+			MessageEventCallbacks = append(MessageEventCallbacks, MessageEventCallback{FuncName: FuncName.String(), CallBack: CallBack, Context: Context})
 		}
 		return nil
 	})
@@ -53,7 +53,7 @@ func HandleMessageEvent(Message MessageStruct.MessageStruct) error {
 	if err != nil {
 		return err
 	}
-	for _, EventCallback := range EventCallbacks {
+	for _, EventCallback := range MessageEventCallbacks {
 		if Message.ID != "" {
 			Value, err := v8go.JSONParse(EventCallback.Context, string(Json))
 
