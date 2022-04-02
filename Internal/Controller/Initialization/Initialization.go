@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:29:55
- * @LastEditTime: 2022-03-30 19:47:27
+ * @LastEditTime: 2022-04-02 22:28:21
  * @LastEditors: NyanCatda
  * @Description: 初始化程序
  * @FilePath: \Momizi\Internal\Controller\Initialization\Initialization.go
@@ -16,6 +16,7 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/File"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/MomiziTech/Momizi/Tools/ReadConfig"
+	"github.com/MomiziTech/Momizi/Tools/Terminal/Command"
 )
 
 /**
@@ -60,6 +61,9 @@ func Initialization() (FlagConfig, error) {
 	if err := Plugin.InitPlugin(); err != nil {
 		return FlagConfig, err
 	}
+
+	// 初始化默认命令列表
+	Command.InitCommandList()
 
 	return FlagConfig, err
 }

@@ -1,15 +1,14 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:57:58
- * @LastEditTime: 2022-04-02 22:09:27
+ * @LastEditTime: 2022-04-02 22:28:47
  * @LastEditors: NyanCatda
  * @Description: 命令处理
- * @FilePath: \Momizi\Tools\Terminal\Command.go
+ * @FilePath: \Momizi\Tools\Terminal\Command\Command.go
  */
-package Terminal
+package Command
 
 import (
-	"os"
 	"strings"
 
 	"github.com/MomiziTech/Momizi/Tools/Log"
@@ -18,6 +17,7 @@ import (
 type CommandFunc func()
 
 var CommandList []map[string]CommandFunc
+var HelpList []map[string]string
 
 /**
  * @description: 命令处理
@@ -32,17 +32,8 @@ func Command(CommandStr string) error {
 	if len(arrCommandStr) == 0 {
 		return nil
 	}
-	// 执行命令
-	switch arrCommandStr[0] {
-	case "exit":
-		os.Exit(0)
-	case "help":
-		Log.Info("System", Log.Green("---------------- Help ----------------"))
-		Log.Info("System", "exit: 退出程序")
-		Log.Info("System", Log.Green("--------------------------------------"))
-	}
 
-	// 如果没有匹配到默认命令，则尝试匹配自定义命令
+	// 匹配命令
 	for _, Command := range CommandList {
 		if Command[arrCommandStr[0]] != nil {
 			Command[arrCommandStr[0]]()
@@ -57,11 +48,23 @@ func Command(CommandStr string) error {
 }
 
 /**
- * @description: 添加命令(优先级低于默认命令)
+ * @description: 添加命令
  * @param {string} Command 命令
+ * @param {string} Help 帮助信息
  * @param {CommandFunc} Callback 回调函数
  * @return {*}
  */
-func AddCommand(Command string, Callback CommandFunc) {
+func AddCommand(Command string, Help string, Callback CommandFunc) {
 	CommandList = append(CommandList, map[string]CommandFunc{Command: Callback})
+	HelpList = append(HelpList, map[string]string{Command: Help})
+}
+
+/**
+ * @description: 初始化默认命令列表
+ * @param {*}
+ * @return {*}
+ */
+func InitCommandList() {
+	AddCommand("help", "查看帮助", Help)
+	AddCommand("exit", "退出程序", Exit)
 }

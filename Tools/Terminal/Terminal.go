@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:57:08
- * @LastEditTime: 2022-03-30 20:40:28
+ * @LastEditTime: 2022-04-02 22:15:24
  * @LastEditors: NyanCatda
  * @Description: 终端控制台
  * @FilePath: \Momizi\Tools\Terminal\Terminal.go
@@ -14,6 +14,7 @@ import (
 	"os"
 
 	"github.com/MomiziTech/Momizi/Internal/Controller"
+	"github.com/MomiziTech/Momizi/Tools/Terminal/Command"
 )
 
 /**
@@ -32,7 +33,7 @@ func Start() {
 			fmt.Fprintln(os.Stderr, err)
 		}
 		// 执行命令
-		err = Command(cmdString)
+		err = Command.Command(cmdString)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
