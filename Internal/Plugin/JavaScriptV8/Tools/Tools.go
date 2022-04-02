@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 21:47:22
- * @LastEditTime: 2022-03-26 19:05:36
- * @LastEditors: NyanCatda
+ * @LastEditTime: 2022-04-02 02:32:21
+ * @LastEditors: McPlus
  * @Description: 工具函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Tools.go
  */
@@ -10,6 +10,7 @@ package Tools
 
 import (
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools/Console"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools/File"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools/HttpRequest"
 	"rogchap.com/v8go"
 )
@@ -23,6 +24,11 @@ func Register(Isolate *v8go.Isolate, Context *v8go.Context) error {
 	}
 	// HttpRequest函数注册
 	err = Global.Set("HttpRequest", HttpRequest.Register(Isolate, Context))
+	if err != nil {
+		return err
+	}
+
+	err = Global.Set("File", File.Register(Isolate, Context))
 	if err != nil {
 		return err
 	}
