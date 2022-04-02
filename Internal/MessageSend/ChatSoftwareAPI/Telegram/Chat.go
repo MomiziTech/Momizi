@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-14 16:11:54
- * @LastEditTime: 2022-03-28 14:27:26
+ * @LastEditTime: 2022-04-02 09:24:40
  * @LastEdit: McPlus
  * @Description: Chat功能
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Telegram\Chat.go
@@ -184,7 +184,7 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
 }
 
 /**
- * @description:
+ * @description: 发送图片消息
  * @param {string} Photo 图片路径
  * @param {string} Caption *可选 -- Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing
  * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the photo caption
@@ -195,7 +195,7 @@ func (Chat Chat) SendMessage(Text string, ParseMode string, Entities []MessageEn
  * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
-func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities []MessageEntity, DisableNotification bool,
+func (Chat Chat) SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities []MessageEntity, DisableNotification bool,
 	ProtectContent bool, ReplyToMessageID int, AllowSendingWithoutReply bool) (Message, error) {
 	DataMap := make(map[string]string)
 
@@ -250,7 +250,7 @@ func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities [
 }
 
 /**
- * @description:
+ * @description: 发送音频消息
  * @param {string} Audio 音频文件路径
  * @param {string} Caption *可选 -- Audio caption, 0-1024 characters after entities parsing
  * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the audio caption. See formatting options for more details.
@@ -264,7 +264,7 @@ func SendPhoto(Photo string, Caption string, ParseMode string, CaptionEntities [
  * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
-func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities []MessageEntity, Duration int,
+func (Chat Chat) SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities []MessageEntity, Duration int,
 	Performer string, Title string, DisableNotification bool, ProtectContent bool, ReplyToMessageID int,
 	AllowSendingWithoutReply bool) (Message, error) {
 	DataMap := make(map[string]string)
@@ -332,7 +332,7 @@ func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities [
 }
 
 /**
- * @description:
+ * @description: 发送文件消息
  * @param {string} Document 文件路径
  * @param {string} Caption *可选 -- Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing
  * @param {string} ParseMode *可选 MarkdownV2/HTML/Markdown -- Mode for parsing entities in the document caption.
@@ -344,7 +344,7 @@ func SendAudio(Audio string, Caption string, ParseMode string, CaptionEntities [
  * @param {bool} AllowSendingWithoutReply *可选 -- Pass True, if the message should be sent even if the specified replied-to message is not found
  * @return {*}
  */
-func SendDocument(Document string, Caption string, ParseMode string, CaptionEntities []MessageEntity,
+func (Chat Chat) SendDocument(Document string, Caption string, ParseMode string, CaptionEntities []MessageEntity,
 	DisableContentTypeDetection bool, DisableNotification bool, ProtectContent bool, ReplyToMessageID int,
 	AllowSendingWithoutReply bool) (Message, error) {
 	DataMap := make(map[string]string)
