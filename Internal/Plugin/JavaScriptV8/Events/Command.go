@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-02 14:25:18
- * @LastEditTime: 2022-04-02 21:54:28
+ * @LastEditTime: 2022-04-02 23:43:49
  * @LastEditors: NyanCatda
  * @Description: CommandEvent
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Events\Command.go
@@ -66,11 +66,8 @@ func HandleCommandEvent(Message MessageStruct.MessageStruct) error {
 				if len(CommandArray) > 0 {
 					// 如果包含被注册的命令
 					if CommandArray[0] == EventCallback.Command {
-						// 处理命令
-						var CommandParameters []string
-						// 修剪数组
-						Index := 0
-						CommandParameters = append(CommandArray[:Index], CommandArray[Index+1:]...)
+						// 获取命令参数
+						CommandParameters := CommandArray[1:]
 						// 转换为v8go.Value
 						CommandParametersValue, err := Loader.GoArrayToV8Object(EventCallback.Context, CommandParameters)
 						if err != nil {
