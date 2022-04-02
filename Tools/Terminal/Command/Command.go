@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:57:58
- * @LastEditTime: 2022-04-02 22:35:30
+ * @LastEditTime: 2022-04-02 23:42:27
  * @LastEditors: NyanCatda
  * @Description: 命令处理
  * @FilePath: \Momizi\Tools\Terminal\Command\Command.go
@@ -14,7 +14,7 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
-type CommandFunc func()
+type CommandFunc func([]string)
 
 var CommandList []map[string]CommandFunc
 var HelpList []map[string]string
@@ -36,7 +36,11 @@ func Command(CommandStr string) error {
 	// 匹配命令
 	for _, Command := range CommandList {
 		if Command[arrCommandStr[0]] != nil {
-			Command[arrCommandStr[0]]()
+			// 获取命令参数
+			CommandParameters := arrCommandStr[1:]
+
+			// 执行命令回调
+			Command[arrCommandStr[0]](CommandParameters)
 			return nil
 		}
 	}

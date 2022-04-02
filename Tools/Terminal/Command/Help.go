@@ -12,7 +12,12 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
-func Help() {
+/**
+ * @description: 帮助命令
+ * @param {[]string} CommandParameters 命令参数
+ * @return {*}
+ */
+func Help(CommandParameters []string) {
 	Log.Info("System", Log.Green("---------------- Help ----------------"))
 	// 遍历帮助信息列表
 	for _, Help := range HelpList {
