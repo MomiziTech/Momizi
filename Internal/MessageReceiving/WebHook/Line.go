@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-28 13:57:28
- * @LastEditTime: 2022-03-28 14:58:11
+ * @LastEditTime: 2022-04-03 16:47:42
  * @LastEditors: NyanCatda
  * @Description: Line消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Line.go
@@ -53,19 +53,27 @@ func Line(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		var GroupInfo MessageStruct.MessageSenderGroup
 		// 如果是群聊消息则获取群聊信息
 		if MessageType == "Group" {
+			GroupChatSummary, err := LineMethods.GetGroupChatSummary(Event.Source.GroupID)
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+
 			GroupInfo = MessageStruct.MessageSenderGroup{
-				ID: Event.Source.GroupID,
-				// ToDo: 获取群聊名称
-				Title:   Event.Source.GroupID,
+				ID:    Event.Source.GroupID,
+				Title: GroupChatSummary.GroupName,
+				// ToDo: 获取群管理员信息
 				IsAdmin: false,
 			}
 		}
 
 		// 获取发送者信息
+		UserInfo, err := LineMethods.GetProfile(Event.Source.UserID)
+		if err != nil {
+			return MessageStruct.MessageStruct{}, err
+		}
 		Sender = MessageStruct.MessageSender{
 			ID: Event.Source.UserID,
-			// ToDo: 获取用户名
-			Username: Event.Source.UserID,
+			Username: UserInfo.DisplayName,
 			Group:    GroupInfo,
 		}
 
