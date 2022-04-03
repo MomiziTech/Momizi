@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 16:27:55
- * @LastEditTime: 2022-04-03 16:38:03
+ * @LastEditTime: 2022-04-03 22:22:50
  * @LastEditors: NyanCatda
  * @Description: 个人资料获取
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Line\Profile.go
@@ -35,7 +35,7 @@ func GetProfile(UserID string) (UserProfile, error) {
 	ConfigLine := Config.ChatSoftware.Line
 
 	// 组成请求信息
-	APIAddress := ConfigLine.DataAPILink + "v2/bot/profile/" + UserID
+	APIAddress := ConfigLine.APILink + "v2/bot/profile/" + UserID
 	Header := []string{
 		"Authorization: Bearer " + ConfigLine.APIToken,
 	}

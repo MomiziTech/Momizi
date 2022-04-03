@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 16:39:38
- * @LastEditTime: 2022-04-03 16:42:44
+ * @LastEditTime: 2022-04-03 22:23:02
  * @LastEditors: NyanCatda
  * @Description: 群组类请求封装
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Line\Group.go
@@ -33,7 +33,7 @@ func GetGroupChatSummary(GroupID string) (GroupChatSummary, error) {
 	ConfigLine := Config.ChatSoftware.Line
 
 	// 组成请求信息
-	APIAddress := ConfigLine.DataAPILink + "v2/bot/group/" + GroupID + "/summary"
+	APIAddress := ConfigLine.APILink + "v2/bot/group/" + GroupID + "/summary"
 	Header := []string{
 		"Authorization: Bearer " + ConfigLine.APIToken,
 	}
