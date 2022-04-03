@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-13 00:03:26
- * @LastEditTime: 2022-03-26 00:21:00
+ * @LastEditTime: 2022-04-03 22:12:25
  * @LastEditors: NyanCatda
  * @Description: 消息结构体
  * @FilePath: \Momizi\Internal\MessageReceiving\MessageStruct\MessageStruct.go
@@ -61,6 +61,7 @@ type MessageSender struct {
  */
 type MessageStruct struct {
 	ID           string         `json:"ID"`           // 消息ID
+	ChatID       string         `json:"ChatID"`       // 聊天ID
 	Type         string         `json:"Type"`         // 消息来源类型，User, Group, Other
 	ChatSoftware string         `json:"ChatSoftware"` // 消息来源软件，QQ, Telegram, Line
 	Time         int            `json:"Time"`         // 消息接收时间戳

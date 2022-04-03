@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-28 13:57:28
- * @LastEditTime: 2022-04-03 16:47:42
+ * @LastEditTime: 2022-04-03 22:17:58
  * @LastEditors: NyanCatda
  * @Description: Line消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Line.go
@@ -25,6 +25,7 @@ func Line(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	var MessageType string // 消息类型
 	var MessageID string   // 消息ID
 	var Timestamp int64    // 消息接收时间
+	var ChatID string      // 聊天ID
 	var Sender MessageStruct.MessageSender
 	// 根据消息类型组成消息链
 	var MessageChain []MessageStruct.MessageChain
@@ -72,9 +73,16 @@ func Line(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 			return MessageStruct.MessageStruct{}, err
 		}
 		Sender = MessageStruct.MessageSender{
-			ID: Event.Source.UserID,
+			ID:       Event.Source.UserID,
 			Username: UserInfo.DisplayName,
 			Group:    GroupInfo,
+		}
+
+		// 获取聊天ID
+		if MessageType == "Group" {
+			ChatID = Event.Source.GroupID
+		} else {
+			ChatID = Event.Source.UserID
 		}
 
 		// 如果为文字消息
@@ -185,6 +193,7 @@ func Line(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	// 创建消息结构体
 	Message := MessageStruct.MessageStruct{
 		ID:           MessageID,
+		ChatID:       ChatID,
 		Type:         MessageType,
 		ChatSoftware: ChatSoftwareName,
 		Time:         Time,

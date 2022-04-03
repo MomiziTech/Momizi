@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-19 15:57:39
- * @LastEditTime: 2022-03-28 15:15:41
+ * @LastEditTime: 2022-04-03 22:14:38
  * @LastEditors: NyanCatda
  * @Description: Telegram消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Telegram.go
@@ -190,6 +190,7 @@ func Telegram(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 	Message := MessageStruct.MessageStruct{
 		ID:           strconv.Itoa(WebHookJson.Telegram.Message.MessageID),
+		ChatID:       strconv.Itoa(WebHookJson.Message.Chat.ID),
 		Type:         MessageType,
 		ChatSoftware: ChatSoftwareName,
 		Time:         WebHookJson.Telegram.Message.Date,

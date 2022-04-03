@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-04-03 20:56:08
+ * @LastEditTime: 2022-04-03 22:15:59
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Mirai.go
@@ -26,6 +26,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	ChatSoftwareName := "QQ"
 	SaveFilePath := Controller.BotFilePath + ChatSoftwareName + "/"
 
+	// 判断聊天类型
 	var Type string
 	switch WebHookJson.Mirai.Type {
 	case "FriendMessage":
@@ -37,6 +38,14 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 	default:
 		Type = "Other"
 		return MessageStruct.MessageStruct{}, nil
+	}
+
+	// 获取聊天ID
+	var ChatID int
+	if Type == "Group" {
+		ChatID = WebHookJson.Mirai.Sender.Group.ID
+	} else {
+		ChatID = WebHookJson.Mirai.Sender.ID
 	}
 
 	var Time int
@@ -128,13 +137,6 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		// 解析文件消息
 		if Message.Type == "File" {
 			// 获取文件URL
-			var ChatID int
-			if Type == "Group" {
-				ChatID = WebHookJson.Mirai.Sender.Group.ID
-			} else {
-				ChatID = WebHookJson.Mirai.Sender.ID
-			}
-
 			FileInfo, err := MiraiAPI.GetFileInfo(Message.ID.(string), strconv.Itoa(ChatID))
 			if err != nil {
 				return MessageStruct.MessageStruct{}, err
@@ -190,6 +192,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 	Message := MessageStruct.MessageStruct{
 		ID:           fmt.Sprintln(MessageID),
+		ChatID:       strconv.Itoa(ChatID),
 		Type:         Type,
 		ChatSoftware: ChatSoftwareName,
 		Time:         Time,
