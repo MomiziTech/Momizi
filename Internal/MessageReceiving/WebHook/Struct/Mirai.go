@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-09 14:21:12
- * @LastEditTime: 2022-03-24 21:10:26
+ * @LastEditTime: 2022-04-03 18:13:29
  * @LastEditors: NyanCatda
  * @Description: Telegram WebHook结构体
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Struct\Mirai.go
@@ -12,7 +12,7 @@ type Mirai struct {
 	Type         string `json:"type"` // 聊天类型，可能类型："FriendMessage"，"GroupMessage"，"TempMessage"，"OtherClientMessage"
 	MessageChain []struct {
 		Type string `json:"type"` // 消息类型，可能类型："Source"，"Quote"，"At"，"AtAll"，"Plain"，"Image，"Voice"，"Xml"，"Json"，"App"，"Poke"，"Forward"，"File"
-		ID   any    `json:"id"`   // 消息ID
+		ID   any    `json:"id"`   // 消息ID(文件消息时为文件ID)
 		Time int    `json:"time"` // 消息时间戳
 
 		// 文字消息

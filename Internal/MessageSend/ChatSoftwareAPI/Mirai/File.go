@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 16:49:40
- * @LastEditTime: 2022-04-03 18:03:49
+ * @LastEditTime: 2022-04-03 20:38:20
  * @LastEditors: NyanCatda
  * @Description: 文件操作API
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Mirai\File.go
@@ -45,10 +45,11 @@ type FileInfo struct {
 /**
  * @description: 获取文件信息
  * @param {string} FileID 文件ID
+ * @param {string} Target 聊天ID
  * @return {FileInfo} 文件信息
  * @return {error} 错误信息
  */
-func GetFileInfo(FileID string) (FileInfo, error) {
+func GetFileInfo(FileID string, Target string) (FileInfo, error) {
 	Config := ReadConfig.GetConfig
 	ConfigMirai := Config.ChatSoftware.Mirai
 
@@ -57,16 +58,8 @@ func GetFileInfo(FileID string) (FileInfo, error) {
 	if err != nil {
 		return FileInfo{}, err
 	}
-	RequestBody := map[string]string{
-		"sessionKey": SessionKey,
-		"id":         FileID,
-	}
-	RequestBodyJson, err := json.Marshal(RequestBody)
-	if err != nil {
-		return FileInfo{}, err
-	}
-	APIAddress := ConfigMirai.APILink + "/file/info"
-	Body, HttpResponse, err := HttpRequest.PostRequestJson(APIAddress, []string{}, string(RequestBodyJson))
+	APIAddress := ConfigMirai.APILink + "/file/info?withDownloadInfo=true&sessionKey=" + SessionKey + "&id=" + FileID + "&target=" + Target
+	Body, HttpResponse, err := HttpRequest.GetRequest(APIAddress, []string{})
 	if err != nil {
 		return FileInfo{}, err
 	}

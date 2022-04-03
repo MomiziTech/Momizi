@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-03-28 15:15:54
+ * @LastEditTime: 2022-04-03 20:56:08
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Mirai.go
@@ -17,7 +17,9 @@ import (
 	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/MessageStruct"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/WebHook/Struct"
+	MiraiAPI "github.com/MomiziTech/Momizi/Internal/MessageSend/ChatSoftwareAPI/Mirai"
 	"github.com/MomiziTech/Momizi/Tools"
+	"github.com/MomiziTech/Momizi/Tools/File"
 )
 
 func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
@@ -71,6 +73,12 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 				return MessageStruct.MessageStruct{}, err
 			}
 
+			// 纠正文件类型
+			FilePath, err = File.CorrectFileType(FilePath)
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+
 			_, fileName := filepath.Split(FilePath)
 
 			FileInfo := MessageStruct.MessageChainFile{
@@ -95,6 +103,12 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 				return MessageStruct.MessageStruct{}, err
 			}
 
+			// 纠正文件类型
+			FilePath, err = File.CorrectFileType(FilePath)
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+
 			_, fileName := filepath.Split(FilePath)
 
 			FileInfo := MessageStruct.MessageChainFile{
@@ -113,7 +127,45 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 
 		// 解析文件消息
 		if Message.Type == "File" {
+			// 获取文件URL
+			var ChatID int
+			if Type == "Group" {
+				ChatID = WebHookJson.Mirai.Sender.Group.ID
+			} else {
+				ChatID = WebHookJson.Mirai.Sender.ID
+			}
 
+			FileInfo, err := MiraiAPI.GetFileInfo(Message.ID.(string), strconv.Itoa(ChatID))
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+			URL := FileInfo.Data.DownloadInfo.URL
+			// 将文件下载至本地
+			Path, FileSize, err := Tools.DownloadFile(URL, []string{}, SaveFilePath+strconv.FormatInt(time.Now().Unix(), 10)+"/", true, 120)
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+
+			// 修正文件名字
+			CorrectionPath := filepath.Dir(Path) + "/" + FileInfo.Data.Name
+			err = File.Move(Path, CorrectionPath)
+			if err != nil {
+				return MessageStruct.MessageStruct{}, err
+			}
+
+			// 组成消息链
+			FileMessage := MessageStruct.MessageChainFile{
+				MimeType: "application/octet-stream",
+				Path:     CorrectionPath,
+				URL:      URL,
+				Name:     FileInfo.Data.Name,
+				Size:     FileSize,
+			}
+			DocumentMessage := MessageStruct.MessageChain{
+				Type: "File",
+				File: FileMessage,
+			}
+			MessageChain = append(MessageChain, DocumentMessage)
 		}
 	}
 
