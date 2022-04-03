@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-22 23:42:12
- * @LastEditTime: 2022-03-30 20:42:30
+ * @LastEditTime: 2022-04-03 17:08:42
  * @LastEditors: NyanCatda
  * @Description: 常量存放
  * @FilePath: \Momizi\Internal\Controller\Constant.go
@@ -19,7 +19,7 @@ const (
 	PluginPath = "./plugins"
 	// 数据文件夹路径
 	DataPath = "./data"
-	// 文件收到后下载位置
+	// 机器人文件存放位置
 	BotFilePath = "./data/file/"
 	// 命令提示符
 	TerminalPrompt = "\r$ "
