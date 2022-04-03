@@ -92,7 +92,7 @@ func PrintMessage(Message MessageStruct.MessageStruct) {
 			Content = MessageChain.File.Name
 		case "Audio":
 			Content = MessageChain.File.Name
-		case "Video":
+		case "File":
 			Content = MessageChain.File.Name
 		}
 		Log.ReceivedMessage(Message.ChatSoftware, Message.Type, ChatID, Message.Sender.Username, Message.Sender.ID, Content)
