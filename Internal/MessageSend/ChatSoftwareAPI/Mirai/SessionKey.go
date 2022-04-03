@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 16:56:12
- * @LastEditTime: 2022-04-03 17:42:22
+ * @LastEditTime: 2022-04-03 18:01:57
  * @LastEditors: NyanCatda
  * @Description: SessionKey处理
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Mirai\SessionKey.go
@@ -49,7 +49,7 @@ func CreateSessionKey() (string, error) {
 		return "", err
 	}
 	if HttpResponse.StatusCode != 200 {
-		return "", errors.New("请求失败，Status: " + HttpResponse.Status)
+		return "", errors.New("MiraiAPI请求失败，Status: " + HttpResponse.Status)
 	}
 
 	// 解析返回信息
@@ -60,7 +60,7 @@ func CreateSessionKey() (string, error) {
 	var VerifyInfo VerifyJson
 	json.Unmarshal([]byte(Body), &VerifyInfo)
 	if VerifyInfo.Code != 0 {
-		return "", errors.New("MiraiAPI请求失败，Code: " + strconv.Itoa(VerifyInfo.Code))
+		return "", errors.New("MiraiAPI请求失败，ResponseCode: " + strconv.Itoa(VerifyInfo.Code))
 	}
 
 	SessionKey := VerifyInfo.Session
@@ -123,7 +123,7 @@ func GetSessionKey() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	// 判断SessionKey是否过期
 	Config := ReadConfig.GetConfig
 	MessageBody := map[string]interface{}{
