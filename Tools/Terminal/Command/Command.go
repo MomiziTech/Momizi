@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:57:58
- * @LastEditTime: 2022-04-02 23:42:27
+ * @LastEditTime: 2022-04-03 13:13:59
  * @LastEditors: NyanCatda
  * @Description: 命令处理
  * @FilePath: \Momizi\Tools\Terminal\Command\Command.go
@@ -16,8 +16,13 @@ import (
 
 type CommandFunc func([]string)
 
-var CommandList []map[string]CommandFunc
-var HelpList []map[string]string
+type CommandInfo struct {
+	Command  string
+	Help     string
+	Callback CommandFunc
+}
+
+var CommandList []CommandInfo
 
 /**
  * @description: 命令处理
@@ -35,13 +40,15 @@ func Command(CommandStr string) error {
 
 	// 匹配命令
 	for _, Command := range CommandList {
-		if Command[arrCommandStr[0]] != nil {
-			// 获取命令参数
-			CommandParameters := arrCommandStr[1:]
+		if Command.Command == arrCommandStr[0] {
+			if Command.Callback != nil {
+				// 获取命令参数
+				CommandParameters := arrCommandStr[1:]
 
-			// 执行命令回调
-			Command[arrCommandStr[0]](CommandParameters)
-			return nil
+				// 执行命令回调
+				Command.Callback(CommandParameters)
+				return nil
+			}
 		}
 	}
 
@@ -59,8 +66,7 @@ func Command(CommandStr string) error {
  * @return {*}
  */
 func AddCommand(Command string, Help string, Callback CommandFunc) {
-	CommandList = append(CommandList, map[string]CommandFunc{Command: Callback})
-	HelpList = append(HelpList, map[string]string{Command: Help})
+	CommandList = append(CommandList, CommandInfo{Command: Command, Help: Help, Callback: Callback})
 }
 
 /**
