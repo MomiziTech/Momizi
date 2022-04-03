@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 16:56:12
- * @LastEditTime: 2022-04-03 18:01:57
+ * @LastEditTime: 2022-04-03 21:03:52
  * @LastEditors: NyanCatda
  * @Description: SessionKey处理
  * @FilePath: \Momizi\Internal\MessageSend\ChatSoftwareAPI\Mirai\SessionKey.go
@@ -106,6 +106,7 @@ func GetSessionKey() (string, error) {
 	// 判断文件是否存在
 	if !File.Exists(SessionKeyCacheFile) {
 		// 文件不存在则生成SessionKey并返回
+		File.MKDir(Controller.BotFilePath + "Mirai/")
 		SessionKey, err := CreateSessionKey()
 		if err != nil {
 			return "", err
