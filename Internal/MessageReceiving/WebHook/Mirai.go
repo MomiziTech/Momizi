@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-12 22:42:49
- * @LastEditTime: 2022-04-03 22:15:59
+ * @LastEditTime: 2022-04-03 22:28:54
  * @LastEditors: NyanCatda
  * @Description: Mirai消息处理
  * @FilePath: \Momizi\Internal\MessageReceiving\WebHook\Mirai.go
@@ -190,6 +190,14 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		}
 	}
 
+	// 获取消息发送者用户名
+	var Username string
+	if Type == "Group" {
+		Username = WebHookJson.Mirai.Sender.MemberName
+	} else {
+		Username = WebHookJson.Mirai.Sender.Nickname
+	}
+
 	Message := MessageStruct.MessageStruct{
 		ID:           fmt.Sprintln(MessageID),
 		ChatID:       strconv.Itoa(ChatID),
@@ -199,7 +207,7 @@ func Mirai(WebHookJson Struct.WebHook) (MessageStruct.MessageStruct, error) {
 		MessageChain: MessageChain,
 		Sender: MessageStruct.MessageSender{
 			ID:       strconv.Itoa(WebHookJson.Mirai.Sender.ID),
-			Username: WebHookJson.Mirai.Sender.Nickname,
+			Username: Username,
 			Group:    GroupInfo,
 		},
 	}
