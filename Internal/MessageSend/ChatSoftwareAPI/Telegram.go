@@ -1,5 +1,0 @@
-package ChatSoftwareAPI
-
-func SendMessage() {
-	
-}
