@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-04 12:14:09
- * @LastEditTime: 2022-04-04 12:30:17
+ * @LastEditTime: 2022-04-04 12:32:20
  * @LastEditors: NyanCatda
  * @Description: 插件操作命令
  * @FilePath: \Momizi\Tools\Terminal\Command\Plugin.go
@@ -35,6 +35,7 @@ func Plugin(CommandParameters []string) {
 		return
 	case "reload":
 		// 重载插件
+		Plugins.PluginList = []string{} // 清空插件列表
 		if err := Plugins.InitPlugin(); err != nil {
 			Log.Error("System", err)
 		}
