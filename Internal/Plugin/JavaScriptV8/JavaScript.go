@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-04-02 21:53:48
+ * @LastEditTime: 2022-04-04 12:23:05
  * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
@@ -48,19 +48,20 @@ func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
  * @param {*}
  * @return {error} 错误信息
  */
-func InitJavaScriptPlugin() error {
+func InitJavaScriptPlugin() ([]string, error) {
 	// 从文件中读取插件
 	Files, err := ioutil.ReadDir(Controller.PluginPath + "/")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// 注册虚拟机
 	Isolate, Error := v8go.NewIsolate()
 	if Error != nil {
-		return Error
+		return nil, Error
 	}
 
+	var PluginList []string
 	// 遍历插件
 	for _, File := range Files {
 		FileName := File.Name()
@@ -68,7 +69,7 @@ func InitJavaScriptPlugin() error {
 			// 注册虚拟机
 			Context, err := v8go.NewContext(Isolate)
 			if err != nil {
-				return Error
+				return nil, Error
 			}
 
 			Global := Context.Global()
@@ -81,7 +82,7 @@ func InitJavaScriptPlugin() error {
 
 			ScriptBuffer, err := ioutil.ReadFile(Controller.PluginPath + "/" + FileName)
 			if err != nil {
-				return err
+				return nil, err
 			}
 			Script := string(ScriptBuffer)
 
@@ -102,13 +103,16 @@ func InitJavaScriptPlugin() error {
 
 			// 创建插件数据文件夹与配置文件夹
 			if _, err := FileFunc.MKDir(Controller.DataPath + "/" + PluginName.String() + "/"); err != nil {
-				return err
+				return nil, err
 			}
 			if _, err := FileFunc.MKDir(Controller.PluginPath + "/" + PluginName.String() + "/"); err != nil {
-				return err
+				return nil, err
 			}
+
+			// 将插件信息写入插件列表
+			PluginList = append(PluginList, PluginName.String())
 		}
 	}
 
-	return nil
+	return PluginList, nil
 }

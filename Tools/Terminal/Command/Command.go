@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:57:58
- * @LastEditTime: 2022-04-03 13:13:59
+ * @LastEditTime: 2022-04-04 12:28:51
  * @LastEditors: NyanCatda
  * @Description: 命令处理
  * @FilePath: \Momizi\Tools\Terminal\Command\Command.go
@@ -77,5 +77,5 @@ func AddCommand(Command string, Help string, Callback CommandFunc) {
 func InitCommandList() {
 	AddCommand("help", "查看帮助", Help)
 	AddCommand("exit", "退出程序", Exit)
-	AddCommand("reload", "重新加载插件", Reload)
+	AddCommand("plugin", "<list/reload> 插件命令", Plugin)
 }
