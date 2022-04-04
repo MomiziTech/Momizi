@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:58:27
- * @LastEditTime: 2022-04-04 12:38:15
+ * @LastEditTime: 2022-04-04 13:03:52
  * @LastEditors: NyanCatda
  * @Description: 插件加载模块
  * @FilePath: \Momizi\Internal\Plugin\Plugin.go
@@ -35,15 +35,15 @@ func RunPluginMessageListener(Message MessageStruct.MessageStruct) error {
  * @param {*}
  * @return {error} 错误信息
  */
-func InitPlugin() error {
+func InitPlugin() {
 	// 初始化JavaScript插件
 	err := JavascriptV8.InitJavaScriptPlugin()
 	if err != nil {
 		Log.Error("Plugin", err)
-		return err
+		return
 	}
 
 	Log.Info("Plugin", "插件加载完成")
 
-	return nil
+	return
 }

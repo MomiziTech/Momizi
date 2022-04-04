@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:19:51
- * @LastEditTime: 2022-03-30 20:02:51
+ * @LastEditTime: 2022-04-04 13:02:56
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\main.go
@@ -9,12 +9,12 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"sync"
 
 	"github.com/MomiziTech/Momizi/Internal/Controller/Initialization"
 	"github.com/MomiziTech/Momizi/Internal/MessageReceiving/ReceivingStart"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"github.com/MomiziTech/Momizi/Tools/Terminal"
 )
 
@@ -24,7 +24,7 @@ import (
  * @return {*}
  */
 func Error(Error error) {
-	fmt.Println(Error.Error())
+	Log.Error("System", Error)
 	key := make([]byte, 1)
 	os.Stdin.Read(key)
 	os.Exit(1)

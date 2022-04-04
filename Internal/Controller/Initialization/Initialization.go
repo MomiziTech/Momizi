@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-30 19:29:55
- * @LastEditTime: 2022-04-02 22:28:21
+ * @LastEditTime: 2022-04-04 13:04:05
  * @LastEditors: NyanCatda
  * @Description: 初始化程序
  * @FilePath: \Momizi\Internal\Controller\Initialization\Initialization.go
@@ -58,9 +58,7 @@ func Initialization() (FlagConfig, error) {
 	}
 
 	// 初始化插件
-	if err := Plugin.InitPlugin(); err != nil {
-		return FlagConfig, err
-	}
+	Plugin.InitPlugin()
 
 	// 初始化默认命令列表
 	Command.InitCommandList()

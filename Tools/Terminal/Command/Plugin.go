@@ -37,9 +37,7 @@ func Plugin(CommandParameters []string) {
 	case "reload":
 		// 重载插件
 		PluginList.ClearPluginList() // 清空插件列表
-		if err := Plugins.InitPlugin(); err != nil {
-			Log.Error("System", err)
-		}
+		Plugins.InitPlugin()
 		return
 	}
 }
