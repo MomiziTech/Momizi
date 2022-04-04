@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:27:08
- * @LastEditTime: 2022-04-04 12:57:47
+ * @LastEditTime: 2022-04-04 13:10:34
  * @LastEditors: NyanCatda
  * @Description: Get请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Get.go
@@ -22,11 +22,11 @@ import (
  * @param {*v8go.Context} Context v8上下文
  * @return {*v8go.FunctionTemplate} Get请求函数
  */
-func Get(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+func Get(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.FunctionTemplate, error) {
 	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
 	if err != nil {
 		Log.Error("Plugin", err)
-		return nil
+		return nil, err
 	}
 	Get, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]      // {string}请求地址
@@ -64,8 +64,8 @@ func Get(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 	})
 	if err != nil {
 		Log.Error(PluginName.String(), err)
-		return nil
+		return nil, err
 	}
 
-	return Get
+	return Get, nil
 }

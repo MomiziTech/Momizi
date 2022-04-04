@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-27 02:31:39
- * @LastEditTime: 2022-04-04 12:57:23
+ * @LastEditTime: 2022-04-04 13:13:28
  * @LastEditors: NyanCatda
  * @Description: 下载文件函数封装
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Download.go
@@ -19,7 +19,12 @@ import (
 	"rogchap.com/v8go"
 )
 
-func Download(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+func Download(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.FunctionTemplate, error) {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil, err
+	}
 	Download, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]      // {string}请求地址
 		Header := Info.Args()[1]   // {[]string}请求头
@@ -31,20 +36,17 @@ func Download(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
 
 				// 发起请求
-				PluginName, err := Context.RunScript("PLUGIN_NAME", "")
 				if err != nil {
 					Log.Error("Plugin", err)
 					return
 				}
 				FilePath, FileSize, err := Tools.DownloadFile(URL.String(), Headers, Controller.DataPath+"/"+PluginName.String()+"/"+SavePath.String(), false, 120)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -55,14 +57,12 @@ func Download(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				// 转换返回值类型
 				FilePathValue, err := v8go.NewValue(Isolate, FilePath)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
 
 				FileSizeValue, err := v8go.NewValue(Isolate, FileSize)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -75,10 +75,9 @@ func Download(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
-		return nil
+		return nil, err
 	}
 
-	return Download
+	return Download, nil
 }

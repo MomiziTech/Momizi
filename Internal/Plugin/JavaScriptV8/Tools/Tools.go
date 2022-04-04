@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 21:47:22
- * @LastEditTime: 2022-04-03 14:08:45
+ * @LastEditTime: 2022-04-04 13:17:50
  * @LastEditors: NyanCatda
  * @Description: 工具函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Tools.go
@@ -16,6 +16,12 @@ import (
 	"rogchap.com/v8go"
 )
 
+/**
+ * @description: 工具函数注册
+ * @param {*v8go.Isolate} Isolate
+ * @param {*v8go.Context} Context
+ * @return {*}
+ */
 func Register(Isolate *v8go.Isolate, Context *v8go.Context) error {
 	Global := Context.Global()
 	// 控制台函数注册
@@ -24,9 +30,12 @@ func Register(Isolate *v8go.Isolate, Context *v8go.Context) error {
 		return err
 	}
 	// HttpRequest函数注册
-	err = Global.Set("HttpRequest", HttpRequest.Register(Isolate, Context))
-	if err != nil {
-		return err
+	HttpRequestObject, err := HttpRequest.Register(Isolate, Context)
+	if err == nil {
+		err = Global.Set("HttpRequest", HttpRequestObject)
+		if err != nil {
+			return err
+		}
 	}
 	// File函数注册
 	err = Global.Set("File", File.Register(Isolate, Context))

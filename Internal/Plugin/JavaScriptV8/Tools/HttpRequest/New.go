@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-27 02:20:17
- * @LastEditTime: 2022-03-27 02:25:58
+ * @LastEditTime: 2022-04-04 13:09:14
  * @LastEditors: NyanCatda
  * @Description: New请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\New.go
@@ -19,11 +19,11 @@ import (
 	"rogchap.com/v8go"
 )
 
-func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+func New(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.FunctionTemplate, error) {
 	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
 	if err != nil {
 		Log.Error("Plugin", err)
-		return nil
+		return nil, err
 	}
 	New, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Method := Info.Args()[0]      // {string}Method 请求方法 GET/POST/PUT/DELETE...
@@ -84,8 +84,8 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 	})
 	if err != nil {
 		Log.Error(PluginName.String(), err)
-		return nil
+		return nil, err
 	}
 
-	return New
+	return New, nil
 }

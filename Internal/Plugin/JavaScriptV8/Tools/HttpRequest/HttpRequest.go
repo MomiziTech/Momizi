@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-26 10:21:35
- * @LastEditTime: 2022-03-27 02:40:14
+ * @LastEditTime: 2022-04-04 13:15:23
  * @LastEditors: NyanCatda
  * @Description: HttpRequest函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\HttpRequest.go
@@ -16,39 +16,60 @@ import (
 	"rogchap.com/v8go"
 )
 
-func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
+func Register(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.Object, error) {
 	HttpRequest, _ := v8go.NewObjectTemplate(Isolate)
 
 	// 注册New请求方法
-	New := New(Isolate, Context)
+	New, err := New(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("New", New)
 
 	// 注册Get方法
-	Get := Get(Isolate, Context)
+	Get, err := Get(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("Get", Get)
 
 	// 注册PostJson方法
-	PostJson := PostJson(Isolate, Context)
+	PostJson, err := PostJson(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("PostJson", PostJson)
 
 	// 注册PostXWWWForm方法
-	PostXWWWForm := PostXWWWForm(Isolate, Context)
+	PostXWWWForm, err := PostXWWWForm(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("PostXWWWForm", PostXWWWForm)
 
 	// 注册PostFormData方法
-	PostForm := PostFormData(Isolate, Context)
+	PostForm, err := PostFormData(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("PostFormData", PostForm)
 
 	// 注册PostFormDataFile方法
-	PostFormFile := PostFormDataFile(Isolate, Context)
+	PostFormFile, err := PostFormDataFile(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("PostFormDataFile", PostFormFile)
 
 	// 注册Download方法
-	Download := Download(Isolate, Context)
+	Download, err := Download(Isolate, Context)
+	if err != nil {
+		return nil, err
+	}
 	HttpRequest.Set("Download", Download)
 
-	ConsoleObject, _ := HttpRequest.NewInstance(Context)
-	return ConsoleObject
+	ConsoleObject, err := HttpRequest.NewInstance(Context)
+	return ConsoleObject, err
 }
 
 /**
