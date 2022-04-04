@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:58:27
- * @LastEditTime: 2022-04-04 12:23:26
+ * @LastEditTime: 2022-04-04 12:38:15
  * @LastEditors: NyanCatda
  * @Description: 插件加载模块
  * @FilePath: \Momizi\Internal\Plugin\Plugin.go
@@ -13,8 +13,6 @@ import (
 	JavascriptV8 "github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
-
-var PluginList []string
 
 /**
  * @description: 运行插件消息监听器
@@ -39,12 +37,11 @@ func RunPluginMessageListener(Message MessageStruct.MessageStruct) error {
  */
 func InitPlugin() error {
 	// 初始化JavaScript插件
-	JSPluginList, err := JavascriptV8.InitJavaScriptPlugin()
+	err := JavascriptV8.InitJavaScriptPlugin()
 	if err != nil {
 		Log.Error("Plugin", err)
 		return err
 	}
-	PluginList = append(PluginList, JSPluginList...)
 
 	Log.Info("Plugin", "插件加载完成")
 

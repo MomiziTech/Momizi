@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-04-04 12:23:05
+ * @LastEditTime: 2022-04-04 12:38:29
  * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
@@ -17,6 +17,7 @@ import (
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Events"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Listener"
 	"github.com/MomiziTech/Momizi/Internal/Plugin/JavaScriptV8/Tools"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/Tools/PluginList"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 	"rogchap.com/v8go"
 
@@ -48,20 +49,19 @@ func ExecutionMessageListener(Message MessageStruct.MessageStruct) error {
  * @param {*}
  * @return {error} 错误信息
  */
-func InitJavaScriptPlugin() ([]string, error) {
+func InitJavaScriptPlugin() error {
 	// 从文件中读取插件
 	Files, err := ioutil.ReadDir(Controller.PluginPath + "/")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// 注册虚拟机
 	Isolate, Error := v8go.NewIsolate()
 	if Error != nil {
-		return nil, Error
+		return Error
 	}
 
-	var PluginList []string
 	// 遍历插件
 	for _, File := range Files {
 		FileName := File.Name()
@@ -69,7 +69,7 @@ func InitJavaScriptPlugin() ([]string, error) {
 			// 注册虚拟机
 			Context, err := v8go.NewContext(Isolate)
 			if err != nil {
-				return nil, Error
+				return Error
 			}
 
 			Global := Context.Global()
@@ -82,7 +82,7 @@ func InitJavaScriptPlugin() ([]string, error) {
 
 			ScriptBuffer, err := ioutil.ReadFile(Controller.PluginPath + "/" + FileName)
 			if err != nil {
-				return nil, err
+				return err
 			}
 			Script := string(ScriptBuffer)
 
@@ -103,16 +103,16 @@ func InitJavaScriptPlugin() ([]string, error) {
 
 			// 创建插件数据文件夹与配置文件夹
 			if _, err := FileFunc.MKDir(Controller.DataPath + "/" + PluginName.String() + "/"); err != nil {
-				return nil, err
+				return err
 			}
 			if _, err := FileFunc.MKDir(Controller.PluginPath + "/" + PluginName.String() + "/"); err != nil {
-				return nil, err
+				return err
 			}
 
 			// 将插件信息写入插件列表
-			PluginList = append(PluginList, PluginName.String())
+			PluginList.AddPluginInfo(PluginName.String(), PluginVersion.String(), PluginAuthor.String())
 		}
 	}
 
-	return PluginList, nil
+	return nil
 }

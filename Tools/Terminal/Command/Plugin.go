@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-04 12:14:09
- * @LastEditTime: 2022-04-04 12:32:20
+ * @LastEditTime: 2022-04-04 12:42:36
  * @LastEditors: NyanCatda
  * @Description: 插件操作命令
  * @FilePath: \Momizi\Tools\Terminal\Command\Plugin.go
@@ -10,6 +10,7 @@ package Command
 
 import (
 	Plugins "github.com/MomiziTech/Momizi/Internal/Plugin"
+	"github.com/MomiziTech/Momizi/Internal/Plugin/Tools/PluginList"
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
@@ -28,14 +29,14 @@ func Plugin(CommandParameters []string) {
 	case "list":
 		// 列出插件
 		Log.Info("System", Log.Green("---------------- Plugin List ----------------"))
-		for _, PluginInfo := range Plugins.PluginList {
-			Log.Info("System", PluginInfo)
+		for _, PluginInfo := range PluginList.PluginList {
+			Log.Info("System", PluginInfo.Name, PluginInfo.Version, "Author:"+PluginInfo.Author)
 		}
 		Log.Info("System", Log.Green("---------------------------------------------"))
 		return
 	case "reload":
 		// 重载插件
-		Plugins.PluginList = []string{} // 清空插件列表
+		PluginList.ClearPluginList() // 清空插件列表
 		if err := Plugins.InitPlugin(); err != nil {
 			Log.Error("System", err)
 		}
