@@ -20,6 +20,11 @@ import (
 )
 
 func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	New, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Method := Info.Args()[0]      // {string}Method 请求方法 GET/POST/PUT/DELETE...
 		URL := Info.Args()[1]         // {string}请求地址
@@ -32,7 +37,6 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -41,7 +45,6 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 				RequestBodyStr := []byte(RequestBody.String())
 				req, err := http.NewRequest(Method.String(), URL.String(), bytes.NewBuffer(RequestBodyStr))
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -60,7 +63,6 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 				client := &http.Client{}
 				HttpResponseValue, err := client.Do(req)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -70,7 +72,6 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 				// 解析返回值
 				BodyValue, HttpResponseObject, err := CallbackParameter(Isolate, Context, Body, HttpResponseValue)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -82,7 +83,6 @@ func New(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
 		return nil
 	}

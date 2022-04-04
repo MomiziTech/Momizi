@@ -1,8 +1,8 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-28 17:24:26
- * @LastEditTime: 2022-04-02 09:28:39
- * @LastEditors: McPlus
+ * @LastEditTime: 2022-04-04 12:56:55
+ * @LastEditors: NyanCatda
  * @Description: 文件类
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\File\File.go
  */
@@ -13,6 +13,7 @@ import (
 
 	"github.com/MomiziTech/Momizi/Internal/Controller"
 	"github.com/MomiziTech/Momizi/Tools/File"
+	"github.com/MomiziTech/Momizi/Tools/Log"
 	"rogchap.com/v8go"
 )
 
@@ -37,7 +38,11 @@ func RegisterConstructor(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Fun
 		Path := Info.Args()[0].String()
 		Flag := Info.Args()[1].Int32()
 
-		PluginName, _ := Context.Global().Get("PLUGIN_NAME")
+		PluginName, err := Context.Global().Get("PLUGIN_NAME")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 
 		ReadWrite, _ := File.NewFileReadWrite(DataPath+PluginName.String()+"/"+Path, int(Flag))
 		FileObject, _ := v8go.NewObjectTemplate(Isolate)

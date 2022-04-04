@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-27 02:31:39
- * @LastEditTime: 2022-03-27 02:45:27
+ * @LastEditTime: 2022-04-04 12:57:23
  * @LastEditors: NyanCatda
  * @Description: 下载文件函数封装
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Download.go
@@ -37,7 +37,11 @@ func Download(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				}
 
 				// 发起请求
-				PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
+				PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+				if err != nil {
+					Log.Error("Plugin", err)
+					return
+				}
 				FilePath, FileSize, err := Tools.DownloadFile(URL.String(), Headers, Controller.DataPath+"/"+PluginName.String()+"/"+SavePath.String(), false, 120)
 				if err != nil {
 					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")

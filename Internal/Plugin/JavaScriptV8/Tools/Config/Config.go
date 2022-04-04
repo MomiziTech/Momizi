@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-03 13:23:50
- * @LastEditTime: 2022-04-03 14:14:28
+ * @LastEditTime: 2022-04-04 12:55:53
  * @LastEditors: NyanCatda
  * @Description: 配置文件操作类
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Config\Config.go
@@ -54,7 +54,11 @@ func Register(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Object {
  */
 func RegisterConstructor(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.FunctionTemplate, error) {
 	Constructor, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
-		PluginName, _ := Context.Global().Get("PLUGIN_NAME")
+		PluginName, err := Context.Global().Get("PLUGIN_NAME")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 		if len(Info.Args()) < 2 {
 			Log.Error(PluginName.String(), errors.New("参数不足"))
 			return nil
@@ -98,7 +102,11 @@ func RegisterConstructor(Isolate *v8go.Isolate, Context *v8go.Context) (*v8go.Fu
  * @return {*}
  */
 func RegisterObjectFunction(Isolate *v8go.Isolate, Context *v8go.Context, Instance *v8go.Object, ObjectInfo *v8go.FunctionCallbackInfo, Config *JsonConfig.Config) error {
-	PluginName, _ := Context.Global().Get("PLUGIN_NAME")
+	PluginName, err := Context.Global().Get("PLUGIN_NAME")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	/**
 	* @description: 初始化配置文件函数
 	* @param {*}

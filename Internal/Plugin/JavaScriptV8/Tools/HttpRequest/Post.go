@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-27 00:09:06
- * @LastEditTime: 2022-03-27 02:19:09
+ * @LastEditTime: 2022-04-04 13:00:59
  * @LastEditors: NyanCatda
  * @Description: Post请求函数注册
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\HttpRequest\Post.go
@@ -25,6 +25,11 @@ import (
  * @return {*v8go.FunctionTemplate} Post请求函数
  */
 func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	PostJson, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]         // {string} 请求地址
 		Header := Info.Args()[1]      // {[]string} 请求头
@@ -36,7 +41,6 @@ func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -44,7 +48,6 @@ func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				// 发起请求
 				Body, HttpResponseValue, err := HttpRequestFunc.PostRequestJson(URL.String(), Headers, RequestBody.String())
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -52,7 +55,6 @@ func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 				// 解析返回值
 				BodyValue, HttpResponseObject, err := CallbackParameter(Isolate, Context, Body, HttpResponseValue)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -66,7 +68,6 @@ func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
 		return nil
 	}
@@ -81,6 +82,11 @@ func PostJson(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTempla
  * @return {*v8go.FunctionTemplate} Post请求函数
  */
 func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	PostXWWWForm, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]      // {string} 请求地址
 		Header := Info.Args()[1]   // {[]string} 请求头
@@ -92,7 +98,6 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -100,7 +105,6 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 解析Data
 				DataMap, err := Loader.V8ObjectToGoStringMap(Context, Data)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -108,7 +112,6 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 发起请求
 				Body, HttpResponseValue, err := HttpRequestFunc.PostRequestXWWWForm(URL.String(), Headers, DataMap)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -116,7 +119,6 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 解析返回值
 				BodyValue, HttpResponseObject, err := CallbackParameter(Isolate, Context, Body, HttpResponseValue)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -130,7 +132,6 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
 		return nil
 	}
@@ -145,6 +146,11 @@ func PostXWWWForm(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
  * @return {*v8go.FunctionTemplate} Post请求函数
  */
 func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	PostFormData, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]      // {string} 请求地址
 		Header := Info.Args()[1]   // {[]string} 请求头
@@ -156,7 +162,6 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -164,7 +169,6 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 解析Data
 				DataMap, err := Loader.V8ObjectToGoStringMap(Context, Data)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -172,7 +176,6 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 发起请求
 				Body, HttpResponseValue, err := HttpRequestFunc.PostRequestFormData(URL.String(), Headers, DataMap)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -180,7 +183,6 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 				// 解析返回值
 				BodyValue, HttpResponseObject, err := CallbackParameter(Isolate, Context, Body, HttpResponseValue)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -194,7 +196,6 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
 		return nil
 	}
@@ -209,6 +210,11 @@ func PostFormData(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTe
  * @return {*v8go.FunctionTemplate} Post请求函数
  */
 func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.FunctionTemplate {
+	PluginName, err := Context.RunScript("PLUGIN_NAME", "")
+	if err != nil {
+		Log.Error("Plugin", err)
+		return nil
+	}
 	PostFormDataFile, err := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		URL := Info.Args()[0]      // {string} 请求地址
 		Header := Info.Args()[1]   // {[]string} 请求头
@@ -222,7 +228,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				// 获取请求头
 				Headers, err := Loader.V8StringArrayToGoStringArray(Header)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -230,7 +235,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				// 解析Data
 				DataMap, err := Loader.V8ObjectToGoStringMap(Context, Data)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -238,7 +242,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				// 解析FilePath
 				FilePaths, err := Loader.V8StringArrayToGoStringArray(FilePath)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -246,7 +249,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				var FilePathArray []string
 				// 限制FilePath可以使用的位置
 				for _, FilePath := range FilePaths {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					FilePath = filepath.Clean(Controller.DataPath + "/" + PluginName.String() + "/" + FilePath)
 					FilePathArray = append(FilePathArray, FilePath)
 				}
@@ -254,7 +256,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				// 发起请求
 				Body, HttpResponseValue, err := HttpRequestFunc.PostRequestFormDataFile(URL.String(), Headers, DataMap, FileKey.String(), FilePathArray)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -262,7 +263,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 				// 解析返回值
 				BodyValue, HttpResponseObject, err := CallbackParameter(Isolate, Context, Body, HttpResponseValue)
 				if err != nil {
-					PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 					Log.Error(PluginName.String(), err)
 					return
 				}
@@ -276,7 +276,6 @@ func PostFormDataFile(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Functi
 		return nil
 	})
 	if err != nil {
-		PluginName, _ := Context.RunScript("PLUGIN_NAME", "")
 		Log.Error(PluginName.String(), err)
 		return nil
 	}

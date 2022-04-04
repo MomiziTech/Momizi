@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-25 05:22:47
- * @LastEditTime: 2022-03-28 15:44:31
+ * @LastEditTime: 2022-04-04 12:50:50
  * @LastEditors: NyanCatda
  * @Description:
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\Tools\Console\Print.go
@@ -18,7 +18,11 @@ func RegisterInfoPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Funct
 	Log, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Text := Info.Args()[0]
 
-		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
+		PLUGIN_NAME, err := Context.RunScript("PLUGIN_NAME", "")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 
 		Log.Info(PLUGIN_NAME.String(), Text)
 
@@ -32,7 +36,11 @@ func RegisterWarningPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Fu
 	Warning, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Text := Info.Args()[0]
 
-		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
+		PLUGIN_NAME, err := Context.RunScript("PLUGIN_NAME", "")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 
 		Log.Warning(PLUGIN_NAME.String(), Text)
 
@@ -46,7 +54,11 @@ func RegisterErrorPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Func
 	Error, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Text := Info.Args()[0]
 
-		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
+		PLUGIN_NAME, err := Context.RunScript("PLUGIN_NAME", "")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 
 		Log.Print(PLUGIN_NAME.String(), Log.ERROR, Text)
 
@@ -60,7 +72,11 @@ func RegisterDebugPrint(Isolate *v8go.Isolate, Context *v8go.Context) *v8go.Func
 	Debug, _ := v8go.NewFunctionTemplate(Isolate, func(Info *v8go.FunctionCallbackInfo) *v8go.Value {
 		Text := Info.Args()[0]
 
-		PLUGIN_NAME, _ := Context.RunScript("PLUGIN_NAME", "")
+		PLUGIN_NAME, err := Context.RunScript("PLUGIN_NAME", "")
+		if err != nil {
+			Log.Error("Plugin", err)
+			return nil
+		}
 
 		Log.DeBug(PLUGIN_NAME.String(), Text)
 

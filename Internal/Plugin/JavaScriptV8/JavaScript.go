@@ -1,7 +1,7 @@
 /*
  * @Author: McPlus
  * @Date: 2022-03-24 20:37:42
- * @LastEditTime: 2022-04-04 12:38:29
+ * @LastEditTime: 2022-04-04 12:52:14
  * @LastEditors: NyanCatda
  * @Description: Js插件
  * @FilePath: \Momizi\Internal\Plugin\JavaScriptV8\JavaScript.go
@@ -9,6 +9,7 @@
 package JavascriptV8
 
 import (
+	"errors"
 	"io/ioutil"
 	"strings"
 
@@ -80,7 +81,9 @@ func InitJavaScriptPlugin() error {
 
 			Tools.Register(Isolate, Context)
 
-			ScriptBuffer, err := ioutil.ReadFile(Controller.PluginPath + "/" + FileName)
+			FilePath := Controller.PluginPath + "/" + FileName
+
+			ScriptBuffer, err := ioutil.ReadFile(FilePath)
 			if err != nil {
 				return err
 			}
@@ -92,6 +95,12 @@ func InitJavaScriptPlugin() error {
 			PluginName, _ := Context.RunScript("PLUGIN_NAME", FileName)
 			PluginVersion, _ := Context.RunScript("PLUGIN_VERSION", FileName)
 			PluginAuthor, _ := Context.RunScript("PLUGIN_AUTHOR", FileName)
+
+			// 判断插件信息是否正常
+			if PluginName == nil || PluginVersion == nil || PluginAuthor == nil {
+				return errors.New(FilePath + " 插件信息异常")
+			}
+
 			Log.Info("Plugin", "Loaded <"+PluginName.String()+">", PluginVersion.String(), PluginAuthor.String())
 
 			if err != nil {
