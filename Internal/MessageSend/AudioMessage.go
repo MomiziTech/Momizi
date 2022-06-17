@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-02 09:32:33
- * @LastEditTime: 2022-04-02 09:38:11
+ * @LastEditTime: 2022-06-17 23:44:33
  * @LastEditors: NyanCatda
  * @Description: 音频消息发送封装
  * @FilePath: \Momizi\Internal\MessageSend\AudioMessage.go
@@ -16,6 +16,11 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
+/**
+ * @description: 发送音频消息
+ * @param {string} Path 音频文件路径
+ * @return {error} 错误信息
+ */
 func (MessageSend *MessageSend) Audio(Path string) error {
 	switch MessageSend.ChatSoftware {
 	case "Telegram":

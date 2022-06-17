@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-04-02 09:43:28
- * @LastEditTime: 2022-04-02 09:46:39
+ * @LastEditTime: 2022-06-17 23:44:25
  * @LastEditors: NyanCatda
  * @Description: 文件消息发送封装
  * @FilePath: \Momizi\Internal\MessageSend\FileMessage.go
@@ -16,6 +16,11 @@ import (
 	"github.com/MomiziTech/Momizi/Tools/Log"
 )
 
+/**
+ * @description: 发送文件消息
+ * @param {string} Path 文件路径
+ * @return {error} 错误信息
+ */
 func (MessageSend *MessageSend) File(Path string) error {
 	switch MessageSend.ChatSoftware {
 	case "Telegram":
