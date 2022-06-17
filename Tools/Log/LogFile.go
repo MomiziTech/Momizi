@@ -1,7 +1,7 @@
 /*
  * @Author: NyanCatda
  * @Date: 2022-03-08 21:26:02
- * @LastEditTime: 2022-04-03 21:15:17
+ * @LastEditTime: 2022-06-17 23:39:11
  * @LastEditors: NyanCatda
  * @Description: 日志模块
  * @FilePath: \Momizi\Tools\Log\LogFile.go
@@ -21,14 +21,16 @@ import (
 
 var (
 	LogPath    = Controller.LogPath + "/"
+	LogLevel   = DEBUG
 	ColorPrint bool
 )
 
 const (
-	INFO = iota + 0
+	DEBUG = iota + 0
+	INFO
 	WARNING
 	ERROR
-	DEBUG
+	OFF
 )
 
 /**
@@ -111,6 +113,16 @@ func ReceivedMessage(ChatSoftware string, ChatType string, ChatID string, UserNa
  * @return {*}
  */
 func Print(Source string, Level int, Text ...any) error {
+	// 根据日志等级判断是否打印
+	if Level < LogLevel {
+		return nil
+	}
+
+	// 等级打印OFF则不打印
+	if Level >= OFF {
+		return nil
+	}
+
 	NowTime := time.Now().Format("2006-01-02 15:04:05")
 
 	// Source拼接
@@ -120,15 +132,13 @@ func Print(Source string, Level int, Text ...any) error {
 	var LevelStr string
 	switch Level {
 	case 0:
-		LevelStr = Blue("INFO")
-	case 1:
-		LevelStr = Yellow("WARNING")
-	case 2:
-		LevelStr = Red("ERROR")
-	case 3:
 		LevelStr = Green("DEBUG")
-	default:
-		LevelStr = Magenta("Other")
+	case 1:
+		LevelStr = Blue("INFO")
+	case 2:
+		LevelStr = Yellow("WARNING")
+	case 3:
+		LevelStr = Red("ERROR")
 	}
 
 	Text = append([]any{Cyan(NowTime), LevelStr, Source}, Text...)
